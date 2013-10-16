@@ -1,21 +1,19 @@
-A frontend implementation for [`editor-backend`](https://github.com/ariatemplates/editor-backend) as an Eclipse plugin.
+An Eclipse plugin client for [`editor-backend`](https://github.com/ariatemplates/editor-backend).
 
-# Current development state
+# Current state
 
-You can launch an Eclipse application with a plugin using the external backend (see [procedure below](#setup)) and use it to edit `.tpl` files: __despite the name of the extension only the HTML syntax will be supported inside!__ (this is due to old stories and limlitations of the backend itself...)
+You can launch an Eclipse application with a plugin using __an external__ backend (see [procedure below](#setup)) and use it to edit `.tpl` files: __despite the name of the extension only the HTML syntax will be supported inside!__ (this is due to old stories and limitations of the backend itself...)
 
 # File system layout
 
-__Some of the files listed below might not appear for now, because they will be either generated or created specifically by you__
-
 * [`.gitignore`](./.gitignore): Git related file
+* [`statics`](./statics)`: folder containing some tools for development
 * `bin`: folder containing the build of the plugin
 
 Documentation:
 
 * [`README.md`](./README.md): this current file
 * [`roadmap.md`](./roadmap.md): a roadmap for the project
-* [`statics`](./statics)`: folder containing some tools for development
 
 Code:
 
@@ -37,26 +35,32 @@ To version: _everything else_.
 
 # Contribute
 
-I would first give an advice to apply everywhere: __READ CAREFULLY THE DOCS__.
+First of all: __READ CAREFULLY THE DOCS__.
 
-Please have a look at the [documentation of the documentation](https://github.com/ariatemplates/editor-backend/documentation.md) too.
+Please have a look at the [documentation of the documentation](https://github.com/ariatemplates/editor-backend/documentation.md) too (we follow the same rules as for the [backend project](https://github.com/ariatemplates/editor-backend)).
 
 ## Environment
 
 To be able to develop the project or even use the product you need to:
 
 * Install Eclipse IDE - tested with latest version (Kepler at the time of writing)
-	* Preferably choose [Java EE bundle](http://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/keplerr)
-	* Install the plugin [Google GSON](http://code.google.com/p/google-gson/) from [Orbit repository](http://download.eclipse.org/tools/orbit/downloads/) ([latest](http://download.eclipse.org/tools/orbit/downloads/drops/R20130517111416/repository/) at the time of writing)
+	* Preferably choose [Java EE bundle](http://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/keplersr1)
+	* Install the plugin [Google GSON](http://code.google.com/p/google-gson/) from [Orbit repository](http://download.eclipse.org/tools/orbit/downloads/) ([latest](http://download.eclipse.org/tools/orbit/downloads/drops/R20130827064939/repository/) at the time of writing)
 * Have a [Java SE](http://www.oracle.com/technetwork/java/javase/downloads/index.html) installation available - tested with latest version (7 at the time of writing)
 
 Tested on Microsoft Windows 7 Enterprise 64-bit SP1.
 
 ## Setup
 
-After cloning the [repository](https://github.com/ymeine/editors-frontend-eclipse.git), you will have to do some setup.
+After [cloning](http://git-scm.com/docs/git-clone) the [repository](https://github.com/ymeine/editors-frontend-eclipse.git)
 
-There are two items to setup: the Eclipse project and the backend.
+```bash
+git clone https://github.com/ymeine/editors-frontend-eclipse.git
+```
+
+you will have to do some setup.
+
+There are two items to setup: the [Eclipse project](#eclipse) and the [backend](#backend).
 
 ### Backend
 
@@ -66,7 +70,7 @@ You can theoretically put it anywhere, since it communicates through network, bu
 
 ### Eclipse
 
-Here is the full __detailed__ procedure to create the Eclipse project from the sources:
+Here is the __full detailed__ procedure to create the Eclipse project from the sources:
 
 * Create a new project __inside this current folder__:
 	* From the main menu `File>New>Other...`, select `Project` under category `General`
@@ -75,16 +79,18 @@ Here is the full __detailed__ procedure to create the Eclipse project from the s
 	* Browse the file system to select this current folder
 	* Click on `Finish`
 * Add natures to the project:
+	* __Close the project__: this procedure manually modifies the project file
 	* open the generated `.project` file under the root folder of the project (i.e. this current folder): this file is in XML format
 	* under the XML element `natures`, add natures by adding `nature` elements (example: `<natures><nature>org.eclipse.pde.PluginNature</nature></natures>`)
 	* add the following natures:
 		* `org.eclipse.pde.PluginNature`
 		* `org.eclipse.jdt.core.javanature`
+	* __Refresh the project__ (select it and press `F5` by default, or click on `Refresh` in its context menu)
 * Edit properties of the project:
 	* Open properties of the project by choosing menu `Project>Properties` (or `Properties` from contextual menu of the project with right-click on it in)
 	* Configure build path
-		* Select `Java Build Path` on the left
-		* Select tab `Source` on the right
+		* Select `Java Build Path` in the sidebar
+		* Select tab `Source` in the right panel
 			* Click on `Add Folder...`
 			* Check:
 				* `resources` (if you used it to install the backend)
@@ -96,11 +102,12 @@ Here is the full __detailed__ procedure to create the Eclipse project from the s
 			* Click `Next` then `Finish`
 	* Add builders
 		* open the `.project` file
-		* under the element `buildSpec`, add builders by adding `buildCommand` elements, each of them containing two elements: `name` and `arguments` (example: `<buildSpec><buildCommand><name>org.eclipse.jdt.core.javabuilder</name><arguments></arguments></buildCommand></buildSpec>`)
-		* add the following builders (just put the following in `name` elements):
-			* `org.eclipse.jdt.core.javabuilder`
-			* `org.eclipse.pde.ManifestBuilder`
-			* `org.eclipse.pde.SchemaBuilder`
+		* under the element `buildSpec`, add builders by adding `buildCommand` elements, each of them containing two elements: `name` and `arguments` (example: `<buildSpec><buildCommand><name>org.eclipse.jdt.core.javabuilder</name></buildCommand></buildSpec>`)
+		* add the following builders __in order__ (just put the following in `name` elements):
+			1. `org.eclipse.jdt.core.javabuilder`
+			1. `org.eclipse.pde.ManifestBuilder`
+			1. `org.eclipse.pde.SchemaBuilder`
+		* __Refresh the project__ (select it and press `F5` by default, or click on `Refresh` in its context menu)
 
 For simplicity, here is for the `.project` file the XML snippet resulting from the above procedure ( __this is not the whole file!!__ ):
 
@@ -108,18 +115,12 @@ For simplicity, here is for the `.project` file the XML snippet resulting from t
 <buildSpec>
 	<buildCommand>
 		<name>org.eclipse.jdt.core.javabuilder</name>
-		<arguments>
-		</arguments>
 	</buildCommand>
 	<buildCommand>
 		<name>org.eclipse.pde.ManifestBuilder</name>
-		<arguments>
-		</arguments>
 	</buildCommand>
 	<buildCommand>
 		<name>org.eclipse.pde.SchemaBuilder</name>
-		<arguments>
-		</arguments>
 	</buildCommand>
 </buildSpec>
 <natures>
@@ -139,7 +140,7 @@ For the following, default values should be fine:
 * Launch the Eclipse application
 	* Open the Eclipse project
 	* Launch the project as an Eclipse application
-		* Select the project and select menu `Run>Run`, or use the contextual menu of the project and select `Run As`
+		* Select the project and select menu `Run>Run As` or `Run>Debug As`, or use the contextual menu of the project and respectively select `Run As` or `Debug As`
 		* Choose `Eclipse Application`
 
 Then you can start editing files with the `.tpl` extension under a new project.
