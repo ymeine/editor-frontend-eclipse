@@ -6,11 +6,11 @@ import org.eclipse.jface.viewers.LabelProvider;
 
 public class POCOutlineLabelProvider extends LabelProvider {
 	
-	private static final String LABEL_KEY = "label";
+	private static final String KEY_LABEL = "label";
 
-	@SuppressWarnings("unchecked")
+	@Override
 	public String getText(Object element) {
-		return ((Map<String, Object>)element).get(LABEL_KEY).toString();
+		return (String) Map.class.cast(element).get(KEY_LABEL);
 	}
 
 }

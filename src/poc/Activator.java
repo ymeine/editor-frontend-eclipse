@@ -28,7 +28,13 @@ public class Activator extends AbstractUIPlugin {
 		super.start(context);
 		plugin = this;
 		
-		Backend.get().start();
+		try {
+			Backend.get().start();
+		} catch (Exception exception) {
+			System.err.println("No external server running, and could not start the backend server internally.");
+			System.err.println("Exception: ");
+			System.err.println(exception);
+		}
 	}
 
 	/*
