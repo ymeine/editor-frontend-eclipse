@@ -7,6 +7,10 @@ import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
 public class POCOutline extends ContentOutlinePage {
 
 	private Object input = null;
+	
+	/***************************************************************************
+	 * Init
+	 **************************************************************************/
 
 	@Override
 	public void createControl(Composite parent) {
@@ -17,7 +21,9 @@ public class POCOutline extends ContentOutlinePage {
 		viewer.setLabelProvider(new POCOutlineLabelProvider());
 	}
 
-
+	/***************************************************************************
+	 * Update
+	 **************************************************************************/
 
 	public void setInput(Object input) {
 		this.input = input;
@@ -25,14 +31,10 @@ public class POCOutline extends ContentOutlinePage {
 	}
 
 	public void update() {
-		if (input != null) {
-			TreeViewer viewer = this.getTreeViewer();
-			if (viewer != null) {
-				viewer.setInput(input);
-			}
+		TreeViewer viewer = this.getTreeViewer();
+		if (viewer != null) {
+			viewer.setInput(this.input);
 		}
 	}
-
-
 
 }

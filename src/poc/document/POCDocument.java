@@ -1,25 +1,18 @@
 package poc.document;
 
+import java.util.Map;
+
 import org.eclipse.jface.text.Document;
 
 public class POCDocument extends Document {
 
-	private String mode = null;
-	private String GUID = null;
+	private Map<String, Object> GUID = null;
 
-	public String getGUID() {
+	public Map<String, Object> getGUID() {
 		return this.GUID;
 	}
 
-	public void setGUID(String GUID) {
+	public void setGUID(Map<String, Object> GUID) {
 		this.GUID = GUID;
-	}
-
-	public String getMode() {
-		return this.mode;
-	}
-
-	public void setMode(String mode) {
-		this.mode = mode;
 	}
 }
