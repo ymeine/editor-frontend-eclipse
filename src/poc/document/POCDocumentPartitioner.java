@@ -7,45 +7,30 @@ import org.eclipse.jface.text.ITypedRegion;
 import org.eclipse.jface.text.TypedRegion;
 
 public class POCDocumentPartitioner implements IDocumentPartitioner {
-	
+
 	public static final String PARTITION_NAME = "MAIN" ;
-	
-	//private IDocument document = null;
+
+	private static final String[] types = {POCDocumentPartitioner.PARTITION_NAME};
+
 	private ITypedRegion region = null;
 	
-	@Override
-	public void connect(IDocument document) {
-		//this.document = document;
-	}
-
-	@Override
-	public void disconnect() {
-		//this.document = null;
-	}
-
-	@Override
-	public void documentAboutToBeChanged(DocumentEvent event) {
-	}
-
-	@Override
-	public boolean documentChanged(DocumentEvent event) {
-		return false;
-	}
+	/***************************************************************************
+	 * Partitioning
+	 **************************************************************************/
 
 	@Override
 	public String[] getLegalContentTypes() {
-		String[] types = {PARTITION_NAME};
-		return types;
+		return POCDocumentPartitioner.types;
 	}
 
 	@Override
 	public String getContentType(int offset) {
-		return PARTITION_NAME;
+		return POCDocumentPartitioner.PARTITION_NAME;
 	}
 
 	@Override
 	public ITypedRegion[] computePartitioning(int offset, int length) {
-		this.region = new TypedRegion(offset, length, PARTITION_NAME);
+		this.region = new TypedRegion(offset, length, POCDocumentPartitioner.PARTITION_NAME);
 		ITypedRegion[] regions = {this.region};
 		return regions;
 	}
@@ -54,8 +39,13 @@ public class POCDocumentPartitioner implements IDocumentPartitioner {
 	public ITypedRegion getPartition(int offset) {
 		return this.region;
 	}
+	
+	/***************************************************************************
+	 * Unused
+	 **************************************************************************/
 
-
-
-
+	@Override public void connect(IDocument document) {}
+	@Override public void disconnect() {}
+	@Override public void documentAboutToBeChanged(DocumentEvent event) {}
+	@Override public boolean documentChanged(DocumentEvent event) {return false;}
 }

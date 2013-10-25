@@ -15,7 +15,7 @@ Documentation:
 
 * [`README.md`](./README.md): this current file
 * [`roadmap.md`](./roadmap.md): a roadmap for the project
-* [`statics`](./statics)`: folder containing some tools for development
+* [`statics`](./statics): folder containing some tools for development
 
 Code:
 
