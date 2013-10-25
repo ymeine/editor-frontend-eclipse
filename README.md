@@ -1,8 +1,8 @@
-An Eclipse plugin client for [`editor-backend`](https://github.com/ariatemplates/editor-backend).
+An Eclipse plugin client for [`ariatemplates/editor-backend`](https://github.com/ariatemplates/editor-backend).
 
 # Current state
 
-You can launch an Eclipse application with a plugin using __an external__ backend (see [procedure below](#setup)) and use it to edit `.tpl` files: __despite the name of the extension only the HTML syntax will be supported inside!__ (this is due to old stories and limitations of the backend itself...)
+You can launch an Eclipse application with the plugin using __an external__ backend (see [procedure below](#setup)) and use it to edit files with `.tpl` extension: __despite the name of the extension only the HTML syntax will be supported inside!__ (this remains to be fixed...)
 
 # File system layout
 
@@ -37,7 +37,7 @@ To version: _everything else_.
 
 First of all: __READ CAREFULLY THE DOCS__.
 
-Please have a look at the [documentation of the documentation](https://github.com/ariatemplates/editor-backend/documentation.md) too (we follow the same rules as for the [backend project](https://github.com/ariatemplates/editor-backend)).
+Please have a look at the [documentation of the documentation](https://github.com/ariatemplates/editor-backend/blob/master/documentation.md) too (we follow the same rules as for the [backend project](https://github.com/ariatemplates/editor-backend)).
 
 ## Environment
 
@@ -52,19 +52,21 @@ Tested on Microsoft Windows 7 Enterprise 64-bit SP1.
 
 ## Setup
 
-After [cloning](http://git-scm.com/docs/git-clone) the [repository](https://github.com/ymeine/editors-frontend-eclipse.git)
+After [cloning](http://git-scm.com/docs/git-clone) the [repository](https://github.com/ariatemplates/editor-frontend-eclipse.git)
 
 ```bash
-git clone https://github.com/ymeine/editors-frontend-eclipse.git
+git clone https://github.com/ariatemplates/editor-frontend-eclipse.git
 ```
 
 you will have to do some setup.
 
-There are two items to setup: the [Eclipse project](#eclipse) and the [backend](#backend).
+There are two items to setup: the [backend](#backend) and the [Eclipse project](#eclipse).
 
 ### Backend
 
 Please see the [backend project](https://github.com/ariatemplates/editor-backend)'s documentation for [setup procedure](https://github.com/ariatemplates/editor-backend#setup).
+
+__DISCLAIMER: the following feature is broken: __
 
 You can theoretically put it anywhere, since it communicates through network, but if you install it in a `resources` folder inside the root of this project, the plugin should be able to launch the backend automatically if not running already.
 
@@ -79,8 +81,7 @@ Here is the __full detailed__ procedure to create the Eclipse project from the s
 	* Browse the file system to select this current folder
 	* Click on `Finish`
 * Add natures to the project:
-	* __Close the project__: this procedure manually modifies the project file
-	* open the generated `.project` file under the root folder of the project (i.e. this current folder): this file is in XML format
+	* __open externally__ the generated `.project` file under the root folder of the project (i.e. this current folder): this file is in XML format
 	* under the XML element `natures`, add natures by adding `nature` elements (example: `<natures><nature>org.eclipse.pde.PluginNature</nature></natures>`)
 	* add the following natures:
 		* `org.eclipse.pde.PluginNature`
@@ -101,7 +102,7 @@ Here is the __full detailed__ procedure to create the Eclipse project from the s
 			* Select `Plug-in Dependencies`
 			* Click `Next` then `Finish`
 	* Add builders
-		* open the `.project` file
+		* __open externally__ the `.project` file
 		* under the element `buildSpec`, add builders by adding `buildCommand` elements, each of them containing two elements: `name` and `arguments` (example: `<buildSpec><buildCommand><name>org.eclipse.jdt.core.javabuilder</name></buildCommand></buildSpec>`)
 		* add the following builders __in order__ (just put the following in `name` elements):
 			1. `org.eclipse.jdt.core.javabuilder`
@@ -113,15 +114,9 @@ For simplicity, here is for the `.project` file the XML snippet resulting from t
 
 ```xml
 <buildSpec>
-	<buildCommand>
-		<name>org.eclipse.jdt.core.javabuilder</name>
-	</buildCommand>
-	<buildCommand>
-		<name>org.eclipse.pde.ManifestBuilder</name>
-	</buildCommand>
-	<buildCommand>
-		<name>org.eclipse.pde.SchemaBuilder</name>
-	</buildCommand>
+	<buildCommand><name>org.eclipse.jdt.core.javabuilder</name></buildCommand>
+	<buildCommand><name>org.eclipse.pde.ManifestBuilder</name></buildCommand>
+	<buildCommand><name>org.eclipse.pde.SchemaBuilder</name></buildCommand>
 </buildSpec>
 <natures>
 	<nature>org.eclipse.pde.PluginNature</nature>
@@ -151,12 +146,12 @@ Please refer to the subfolders of the project for details about corresponding mo
 
 Sections below discuss about development at the whole project scale.
 
-__Please have a look at the [roadmap](./roadmap.md) too for a prioritization of what has to be done.__ It will link to specific documentations' sections (including some of below ones).
+__Please have a look at the [roadmap](./roadmap.md) too for a prioritization of what has to be done.__ It will link to specific documentations' sections.
 
 ### Plugin definition
 
 __Clean Eclipse extension points.__
 
-> Do we use the `org.eclipse.ui.editors.documentProviders` extension point or not?
+> Do we use the [`org.eclipse.ui.editors.documentProviders`](http://help.eclipse.org/kepler/index.jsp?topic=%2Forg.eclipse.platform.doc.isv%2Freference%2Fextension-points%2Forg_eclipse_ui_editors_documentProviders.html) extension point or not?
 
 We can manage without, as it is done for now, but maybe it's better for design purposes to use it.

@@ -53,7 +53,9 @@ However, this is not consistent since it tries to optimize it when consecutive t
 
 It will be easier to understand with an example. Imagine this source code:
 
-`a() ;`
+```javascript
+a() ;
+```
 
 and the correponding tokens:
 
@@ -90,20 +92,6 @@ To sum it up, folding requires both:
 In fact, folding handles for instance use a genric feature of the text editors: annotations.
 
 # Contribute
-
-## Alignment with the latest backend implementation
-
-__The backend changed a lot, and the plugin needs to use differently.__ See [this](/src/poc#alignment-with-the-latest-backend-implementation) for a recap.
-
-Occurences of RPC calls to be adapted:
-
-* [`POCEditor`](./POCEditor.java)`.outline`
-* [`POCEditor`](./POCEditor.java)`.fold`
-* [`POCSourceViewerConfiguration`](./POCSourceViewerConfiguration.java)`()`
-* [`POCTokenScanner`](./POCTokenScanner.java)`.setRange`
-* [`POCTokenScanner`](./POCTokenScanner.java)`.getStylesheet`
-
-An additional things is the change of the name of the method used to get tokens in `POCTokenScanner.setRange()`: from `tokenize` to `highlight` (change `POCTokenScanner.TOKENIZE_MEMBER_KEY`). Probably there are also other changes in the format of this method, please refer to the documentation of the backend concerning [highlighting](https://github.com/ariatemplates/editor-backend/app/node_modules/modes/node_modules#highlighting).
 
 ## Highlighting
 
@@ -196,6 +184,7 @@ Services to be set up:
 ### Highlighting
 
 1. Cache styles
+1. Cache stylesheet: for one given document or maybe for a given mode (and the mode should be retrieved from a document)
 1. Pre-process entirely the stylesheet: it changes rarely (if it's not never) so it won't have to be done too often
 
 ## Documentation
@@ -205,4 +194,4 @@ Services to be set up:
 __Complete the documentation the work that has been done for folding.__
 
 * review what has been written already
-* [ymeine](https://github.com/ymeine): put the references of the resources I used (I mainly copied and arranged code from a tutorial)
+* [ymeine](https://github.com/ymeine): put the references of the resources I used (I mainly copied and arranged code from [this tutorial](http://www.eclipse.org/articles/Article-Folding-in-Eclipse-Text-Editors/folding.html))
