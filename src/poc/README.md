@@ -114,12 +114,6 @@ Backend.execSvc(String service, Document document, Object arg) {
 }
 ```
 
-## Degraded mode
-
-__Editing a document should always be possible in reasonable time, with or without backend support.__
-
-Ensure it is always possible to fallback to a basic raw text editor when something fails with the backend, or fails in general.
-
 ## Communication
 
 __Handle every type of return values.__
@@ -127,29 +121,6 @@ __Handle every type of return values.__
 From JSON requests, we should be able to handle return values other than objects too (like strings for errors), or at least if we consider we should only receive objects in case of success, use the status to check if there is an error instead.
 
 However, the backend makes an effort to always return objects, even in case of errors (but for instance if you try a non-existing route, I guess the third-party server library used behind will not).
-
-## Data management
-
-__Externalize some data as user preferences.__
-
-You can easily find most of them (for what has already been implemented) by looking at all the `private final static` definitions in the source code.
-
-Backend:
-
-* External backend re-use
-	* port for external backend
-	* GUID identification pair
-	* enable external backend re-use or not
-* Backend program management
-	* use embedded backend or external installation
-	* path of the external installation
-	* use system Node.js installation or not (migth require a specific version)
-	* custom Node.js path
-	* port to use when launching a backend
-	* enable to find and use first available port (some additional data might be required for that, like a range, ...)
-	* launch timeout
-
-__Complete this list!__
 
 ## Performances
 
