@@ -6,6 +6,7 @@ import java.util.Map;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.ui.editors.text.FileDocumentProvider;
+import org.eclipse.ui.part.FileEditorInput;
 
 import poc.Backend;
 import poc.BackendException;
@@ -13,22 +14,25 @@ import poc.BackendException;
 public class POCDocumentProvider extends FileDocumentProvider {
 
 	// FIXME Should be inferred from extension or something like that
-	private static final String mode = "html";
+	private static final String mode = "athtml";
 
 	private static final String METHOD_INIT = "init";
 	private static final String ARGUMENT_MODE = "mode";
 	private static final String ARGUMENT_SOURCE = "source";
 
+
 	@Override
 	protected IDocument createDocument(Object element) throws CoreException {
 		// Document creation (client side) -------------------------------------
 
-		// In practice `element` is a FileDocumentInput
+		// In practice `element` is a FileEditorInput
 		POCDocument document = (POCDocument) super.createDocument(element);
 
 		if (document == null) {
 			return null;
 		}
+
+		document.setFile(((FileEditorInput) element).getFile());
 
 		// Document registration (backend side) --------------------------------
 

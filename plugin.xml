@@ -27,5 +27,9 @@
             name="Ultimate Editor">
       </page>
    </extension>
-
+   <extension id="com.ariatemplates.tools.ide.error" point="org.eclipse.core.resources.markers" name="AT validation marker">
+      <persistent value="true"/>
+      <super type="org.eclipse.core.resources.problemmarker"/>
+      <super type="org.eclipse.core.resources.textmarker"/>
+   </extension>
 </plugin>

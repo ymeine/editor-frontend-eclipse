@@ -31,16 +31,18 @@ public class POCDocumentListener implements IDocumentListener {
 			argument.put(POCDocumentListener.KEY_SOURCE, event.getText());
 
 			Backend.get().service(document, POCDocumentListener.METHOD_UPDATE, argument);
+
+			document.clearMarkerAnnotations();
 		} catch (BackendException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/***************************************************************************
 	 * Unused
 	 **************************************************************************/
-	
+
 	@Override public void documentAboutToBeChanged(DocumentEvent event) {}
 }

@@ -35,7 +35,7 @@ public class POCEditor extends TextEditor {
 
 	public POCEditor() {
 		super();
-		
+
 		setDocumentProvider(new POCDocumentProvider());
 	}
 
@@ -49,51 +49,50 @@ public class POCEditor extends TextEditor {
 	@Override
 	public void createPartControl(Composite parent) {
 		super.createPartControl(parent);
-		
+
 		// Folding -------------------------------------------------------------
 
-		ProjectionViewer viewer = (ProjectionViewer)this.getSourceViewer();
+		ProjectionViewer viewer = (ProjectionViewer) this.getSourceViewer();
 
-	    this.projectionSupport = new ProjectionSupport(viewer, this.getAnnotationAccess(), this.getSharedColors());
-	    this.projectionSupport.install();
-	    
-	    viewer.doOperation(ProjectionViewer.TOGGLE);
-	    this.annotationModel = viewer.getProjectionAnnotationModel();
+		this.projectionSupport = new ProjectionSupport(viewer, this.getAnnotationAccess(), this.getSharedColors());
+		this.projectionSupport.install();
+
+		viewer.doOperation(ProjectionViewer.TOGGLE);
+		this.annotationModel = viewer.getProjectionAnnotationModel();
 	}
 
 	@Override
 	protected void initializeEditor() {
 		super.initializeEditor();
-		
+
 		setSourceViewerConfiguration(new POCSourceViewerConfiguration());
 	}
 
 	@Override
 	public Object getAdapter(@SuppressWarnings("rawtypes") Class required) {
 		// Outline -------------------------------------------------------------
-		
+
 		if (required.equals(IContentOutlinePage.class)) {
 			if (contentOutlinePage == null) {
 				contentOutlinePage = new POCOutline();
 				contentOutlinePage.setInput(getEditorInput());
 			}
-			
+
 			return contentOutlinePage;
 		}
-		
+
 		// None ----------------------------------------------------------------
 
 		return super.getAdapter(required);
 	}
-
-
 
 	/***************************************************************************
 	 * Folding
 	 **************************************************************************/
 
 	private static final String METHOD_FOLD = "fold";
-	
+	private static final String METHOD_VALIDATE = "validate";
+
 	private static final String OPTION_ARG_0BASED = "0-based";
 	private static final String OPTION_ARG_TEXT = "text";
 	private static final String OPTION_ARG_LENGTH = "length";
@@ -101,7 +100,7 @@ public class POCEditor extends TextEditor {
 	private static final String KEY_RANGES = "ranges";
 	private static final String KEY_START = "start";
 	private static final String KEY_LENGTH = "length";
-	
+
 	private ProjectionAnnotationModel annotationModel;
 	private ProjectionSupport projectionSupport;
 
@@ -113,18 +112,18 @@ public class POCEditor extends TextEditor {
 			arguments.put(POCEditor.OPTION_ARG_0BASED, true);
 			arguments.put(POCEditor.OPTION_ARG_TEXT, true);
 			arguments.put(POCEditor.OPTION_ARG_LENGTH, true);
-			
+
 			Map<String, Object> result = Backend.get().service(document, POCEditor.METHOD_FOLD, arguments);
 			List<Map<String, Object>> folds = (List<Map<String, Object>>) result.get(POCEditor.KEY_RANGES);
-			
+
 			List<Position> positions = new ArrayList<Position>(folds.size());
-			for (Map<String, Object> range: folds) {
-				int start = ((Number)range.get(POCEditor.KEY_START)).intValue();
-				int length = ((Number)range.get(POCEditor.KEY_LENGTH)).intValue();
+			for (Map<String, Object> range : folds) {
+				int start = ((Number) range.get(POCEditor.KEY_START)).intValue();
+				int length = ((Number) range.get(POCEditor.KEY_LENGTH)).intValue();
 
 				positions.add(new Position(start, length));
 			}
-			
+
 			this.updateFoldingStructure(positions);
 		} catch (BackendException e) {
 			e.printStackTrace();
@@ -134,13 +133,13 @@ public class POCEditor extends TextEditor {
 
 	private List<Annotation> oldAnnotations = new ArrayList<Annotation>();
 
-	public void updateFoldingStructure(List<Position> positions)
-	{
-		// This will hold the new annotations along with their corresponding positions
+	public void updateFoldingStructure(List<Position> positions) {
+		// This will hold the new annotations along with their corresponding
+		// positions
 		HashMap<ProjectionAnnotation, Position> newAnnotations = new HashMap<ProjectionAnnotation, Position>();
 
 		List<Annotation> annotations = new ArrayList<Annotation>();
-		for (Position position: positions) {
+		for (Position position : positions) {
 			ProjectionAnnotation annotation = new ProjectionAnnotation();
 			newAnnotations.put(annotation, position);
 			annotations.add(annotation);
@@ -151,8 +150,6 @@ public class POCEditor extends TextEditor {
 		this.oldAnnotations = annotations;
 	}
 
-
-
 	/***************************************************************************
 	 * Events
 	 **************************************************************************/
@@ -162,45 +159,44 @@ public class POCEditor extends TextEditor {
 		super.editorSaved();
 		this.update();
 	}
-	
+
+
 	public void update() {
 		try {
-			//format();
-			this.fold();
-			//validate();
-			this.outline();
+			// format();
+			// this.fold();
+			// this.outline();
+			this.validate();
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-
-	
 	/***************************************************************************
 	 * Formatting
 	 **************************************************************************/
 
 	// TODO Process input on initialization
 
-	/*private void format() throws IOException {
-		POCDocument document = (POCDocument) this.getDocumentProvider().getDocument(this.getEditorInput());
-
-		Map<String, Object> argument = new HashMap<String, Object>();
-		argument.put("source", document.get());
-		Map<String, Object> formatted = Backend.get().rpc(document.getMode(), "format", argument);
-
-		document.set(formatted.get("source").toString());
-	}*/
-
-
+	/*
+	 * private void format() throws IOException { POCDocument document =
+	 * (POCDocument)
+	 * this.getDocumentProvider().getDocument(this.getEditorInput());
+	 *
+	 * Map<String, Object> argument = new HashMap<String, Object>();
+	 * argument.put("source", document.get()); Map<String, Object> formatted =
+	 * Backend.get().rpc(document.getMode(), "format", argument);
+	 *
+	 * document.set(formatted.get("source").toString()); }
+	 */
 
 	/***************************************************************************
 	 * Outline
 	 **************************************************************************/
-	
+
 	private static final String METHOD_OUTLINE = "outline";
-	
+
 	private POCOutline contentOutlinePage = null;
 
 	private void outline() throws JsonSyntaxException, ParseException, IOException {
@@ -213,20 +209,22 @@ public class POCEditor extends TextEditor {
 			e.printStackTrace();
 		}
 	}
-	
-	
-	
+
 	/***************************************************************************
 	 * Validation
 	 **************************************************************************/
 
-	/*private void validate() throws IOException {
+	private void validate() throws IOException {
 		POCDocument document = (POCDocument) this.getDocumentProvider().getDocument(this.getEditorInput());
+		document.clearMarkerAnnotations();
 
-		Map<String, Object> argument = new HashMap<String, Object>();
-		argument.put("source", document.get());
+		try {
+			Map<String, Object> messages = Backend.get().service(document, POCEditor.METHOD_VALIDATE);
+			document.addAllMarkerAnnotations(messages);
+		} catch (BackendException e) {
+			e.printStackTrace();
+		}
+	}
 
-		System.out.println(Backend.get().rpc(document.getMode(), "validate", argument));
-	}*/
 
 }
