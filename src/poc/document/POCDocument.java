@@ -10,11 +10,18 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
 
+
+import poc.Backend;
+
 public class POCDocument extends Document {
 
 	private Map<String, Object> GUID = null;
 
 	private IFile file = null;
+
+	private final static String METHOD_UPDATE = "update";
+
+	private List<Map<String, Object>> sourceChanges = new ArrayList<Map<String,Object>>();
 
 	public Map<String, Object> getGUID() {
 		return this.GUID;
@@ -31,6 +38,24 @@ public class POCDocument extends Document {
 	public void setFile(IFile file) {
 		this.file = file;
 	}
+
+	public void addSourceChange(Map<String, Object> entry) {
+		this.sourceChanges.add(entry);
+	}
+
+	public void resetSourceChanges() {
+		this.sourceChanges.clear();
+	}
+
+	public void updateSource() {
+		try {
+			Backend.get().service(this, POCDocument.METHOD_UPDATE, this.sourceChanges);
+			this.resetSourceChanges();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 
 	@SuppressWarnings("unchecked")
 	public void addMarkerAnnotation(Map<String, ?> config, int severity) {

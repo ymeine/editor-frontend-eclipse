@@ -86,6 +86,10 @@ public class POCEditor extends TextEditor {
 		return super.getAdapter(required);
 	}
 
+	public POCDocument getDocument() {
+		return (POCDocument) this.getDocumentProvider().getDocument(this.getEditorInput());
+	}
+
 	/***************************************************************************
 	 * Folding
 	 **************************************************************************/
@@ -107,7 +111,7 @@ public class POCEditor extends TextEditor {
 	@SuppressWarnings("unchecked")
 	private void fold() throws JsonSyntaxException, ParseException, IOException {
 		try {
-			POCDocument document = (POCDocument) this.getDocumentProvider().getDocument(this.getEditorInput());
+			POCDocument document = getDocument();
 			Map<String, Object> arguments = new HashMap<String, Object>();
 			arguments.put(POCEditor.OPTION_ARG_0BASED, true);
 			arguments.put(POCEditor.OPTION_ARG_TEXT, true);
@@ -157,6 +161,7 @@ public class POCEditor extends TextEditor {
 	@Override
 	protected void editorSaved() {
 		super.editorSaved();
+		this.getDocument().updateSource();
 		this.update();
 	}
 
@@ -200,7 +205,7 @@ public class POCEditor extends TextEditor {
 	private POCOutline contentOutlinePage = null;
 
 	private void outline() throws JsonSyntaxException, ParseException, IOException {
-		POCDocument document = (POCDocument) this.getDocumentProvider().getDocument(this.getEditorInput());
+		POCDocument document = getDocument();
 
 		try {
 			Map<String, Object> outline = Backend.get().service(document, POCEditor.METHOD_OUTLINE);
@@ -215,7 +220,7 @@ public class POCEditor extends TextEditor {
 	 **************************************************************************/
 
 	private void validate() throws IOException {
-		POCDocument document = (POCDocument) this.getDocumentProvider().getDocument(this.getEditorInput());
+		POCDocument document = getDocument();
 		document.clearMarkerAnnotations();
 
 		try {

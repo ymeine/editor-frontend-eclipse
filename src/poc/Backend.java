@@ -44,39 +44,39 @@ public class Backend {
 	/***************************************************************************
 	 * Initialization
 	 **************************************************************************/
-	
+
 	// -------------------------------------------------------------------- JSON
-	
+
 	private Gson gson = null;
-	
+
 	// -------------------------------------------------------------------- HTTP
-	
+
 	private DefaultHttpClient httpclient = null;
-	
+
 	// POST --------------------------------------------------------------------
-	
+
 	private HttpPost rpc = null;
 	private static final String URL_PATH_RPC = "rpc";
 	private static final String HEADER_CONTENT_TYPE = "Content-Type";
 	private static final String HEADER_VALUE_CONTENT_TYPE = "application/json";
-	
+
 	// GET ---------------------------------------------------------------------
-	
+
 	private HttpGet shutdown = null;
 	private static final String URL_PATH_SHUTDOWN = "shutdown";
-	
+
 	private HttpGet ping = null;
 	private static final String URL_PATH_PING = "ping";
-	
+
 	private HttpGet guid = null;
 	private static final String URL_PATH_GUID = "80d007698d534c3d9355667f462af2b0";
-	
+
 	// -------------------------------------------------------------------- URLs
-	
+
 	private static final String URL_BASE = "http://localhost:3000/";
 
-	
-	// 
+
+	//
 
 	/**
 	 * Builds a new backend instance.
@@ -99,7 +99,7 @@ public class Backend {
 	/***************************************************************************
 	 * Backend runtime management
 	 **************************************************************************/
-	
+
 	// FIXME Don't make it hard-coded and absolute!
 	// Use Eclipse preferences system
 	// Otherwise use PATH
@@ -114,13 +114,13 @@ public class Backend {
 
 	private static final int POLLING_SLEEP_TIME = 50; // ms
 	private static final int POLLING_TIME_OUT = 1000; // ms
-	
+
 	private Process process = null;
 	private Boolean isManagedExternally = null;
-	
+
 	/**
 	 * Tells whether the external backend server is running or not.
-	 * 
+	 *
 	 * It uses the safe identification method, to ensure that the server has not been unfortunately replaced. Otherwise, the ping method could have been used.
 	 */
 	private Boolean isExternalBackendRunning() {
@@ -129,7 +129,7 @@ public class Backend {
 			if (response.getStatusLine().getStatusCode() != 200) {
 				return false;
 			}
-			
+
 			return EntityUtils.toString(response.getEntity()).equals(Backend.OUTPUT_GUID);
 		} catch (IOException exception) {
 			return false;
@@ -145,7 +145,7 @@ public class Backend {
 	public Boolean isRunning() {
 		// We don't know if it is an external process or not yet ---------------
 		// (first check in the program or after a stop)
-		
+
 		if (this.isManagedExternally == null) {
 			if (this.isExternalBackendRunning()) {
 				this.isManagedExternally = true;
@@ -156,13 +156,13 @@ public class Backend {
 		}
 
 		// Externally managed --------------------------------------------------
-		
+
 		if (this.isManagedExternally) {
 			return this.isExternalBackendRunning();
 		}
 
 		// We manage the process ourself ---------------------------------------
-		
+
 		if (process == null) return false;
 		try {
 			process.exitValue();
@@ -174,21 +174,21 @@ public class Backend {
 
 	/**
 	 * If not running, starts the backend.
-	 * 
-	 * FIXME Broken, can't automatically find the process inside PATH 
+	 *
+	 * FIXME Broken, can't automatically find the process inside PATH
 	 *
 	 * @return the created Process instance behind
 	 */
 	public Process start() throws IOException, InterruptedException {
 		if (!isRunning()) {
 			// Launches the process --------------------------------------------
-			
+
 			ProcessBuilder processBuilder = new ProcessBuilder(command);
 			//processBuilder.directory(new File(programPath));
 			this.process = processBuilder.start();
 
 			// Polling to check the backend is fully set up --------------------
-			
+
 			boolean started = false;
 			int time = 0;
 			while (!started && (time < Backend.POLLING_TIME_OUT)) {
@@ -224,7 +224,7 @@ public class Backend {
 			} catch (IOException exception) {
 				this.process.destroy();
 			}
-			
+
 			this.process = null;
 			this.isManagedExternally = null;
 		}
@@ -237,62 +237,62 @@ public class Backend {
 	/***************************************************************************
 	 * Backend communication
 	 **************************************************************************/
-	
+
 	// Mode service ------------------------------------------------------------
 
 	private static final String METHOD_EDITOR_EXEC = "exec";
-	
+
 	private static final String ARGUMENT_GUID = "guid";
 	private static final String ARGUMENT_SERVICE = "svc";
 	private static final String ARGUMENT_SERVICE_ARGUMENT = "arg";
-	
+
 	public Map<String, Object> service(Map<String, Object> guid, String service) throws ParseException, IOException, JsonSyntaxException, BackendException {
 		return this.service(guid, service, null);
 	}
-	
-	public Map<String, Object> service(POCDocument document, String service, Map<String, Object> argument) throws ParseException, IOException, JsonSyntaxException, BackendException {
+
+	public Map<String, Object> service(POCDocument document, String service, Object argument) throws ParseException, IOException, JsonSyntaxException, BackendException {
 		return this.service(document.getGUID(), service, argument);
 	}
-	
+
 	public Map<String, Object> service(POCDocument document, String service) throws ParseException, IOException, JsonSyntaxException, BackendException {
 		return this.service(document, service, null);
 	}
 
 	/**
 	 * For every RPC related to an editor service.
-	 * 
+	 *
 	 * @throws BackendException
 	 */
-	public Map<String, Object> service(Map<String, Object> guid, String service, Map<String, Object> serviceArgument) throws ParseException, IOException, JsonSyntaxException, BackendException {
+	public Map<String, Object> service(Map<String, Object> guid, String service, Object serviceArgument) throws ParseException, IOException, JsonSyntaxException, BackendException {
 		Map<String, Object> argument = new HashMap<String, Object>();
-		
+
 		argument.put(Backend.ARGUMENT_GUID, guid);
 		argument.put(Backend.ARGUMENT_SERVICE, service);
 		if (serviceArgument != null) {
 			argument.put(Backend.ARGUMENT_SERVICE_ARGUMENT, serviceArgument);
 		}
-		
+
 		return this.editor(Backend.METHOD_EDITOR_EXEC, argument);
 	}
-	
+
 	// Editor module -----------------------------------------------------------
-	
+
 	private static final String MODULE_NAME_EDITOR = "editor";
 
 	public Map<String, Object> editor(String member) throws JsonSyntaxException, ParseException, IOException, BackendException {
 		return this.editor(member, null);
 	}
-	
-	public Map<String, Object> editor(String member, Map<String, Object> argument) throws JsonSyntaxException, ParseException, IOException, BackendException {
+
+	public Map<String, Object> editor(String member, Object argument) throws JsonSyntaxException, ParseException, IOException, BackendException {
 		return this.rpc(Backend.MODULE_NAME_EDITOR, member, argument);
 	}
 
 	// RPC ---------------------------------------------------------------------
-	
+
 	private static final String KEY_MODULE = "module";
 	private static final String KEY_MEMBER = "method";
 	private static final String KEY_ARGUMENT = "argument";
-	
+
 	public Map<String, Object> rpc(String module, String member) throws IOException, JsonSyntaxException, ParseException, BackendException {
 		return this.rpc(module, member, null);
 	}
@@ -312,7 +312,7 @@ public class Backend {
 	 * @see postJson
 	 *
 	 * @throws IOException
-	 * @throws BackendException 
+	 * @throws BackendException
 	 */
 	public Map<String, Object> rpc(String module, String member, Object argument) throws ParseException, IOException, JsonSyntaxException, BackendException {
 		Map<String, Object> object = new HashMap<String, Object>();
@@ -327,40 +327,40 @@ public class Backend {
 
 		return this.postJson(this.rpc);
 	}
-	
-	
-	
+
+
+
 	/***************************************************************************
 	 * Raw HTTP communication
 	 **************************************************************************/
-	
+
 	public static String getStringFromResponse(HttpResponse response) throws ParseException, IOException {
 		return EntityUtils.toString(response.getEntity());
 	}
-	
+
 	/**
 	 * Executes the given HTTP GET request with the internal HTTP client instance, and returns the response.
 	 *
 	 * @param request A HTTP GET request.
 	 *
 	 * @return the response
-	 * 
-	 * @throws ClientProtocolException 
+	 *
+	 * @throws ClientProtocolException
 	 * @throws ParseException
 	 * @throws IOException
 	 */
 	private HttpResponse get(HttpGet request) throws ClientProtocolException, IOException {
 		return this.httpclient.execute(request);
 	}
-	
+
 	/**
 	 * Executes the given HTTP POST request with the internal HTTP client instance, and returns the response.
 	 *
 	 * @param request A HTTP POST request.
 	 *
 	 * @return the response
-	 * 
-	 * @throws ClientProtocolException 
+	 *
+	 * @throws ClientProtocolException
 	 * @throws ParseException
 	 * @throws IOException
 	 */
@@ -379,19 +379,19 @@ public class Backend {
 	 * @throws ParseException
 	 * @throws IOException
 	 * @throws JsonSyntaxException
-	 * @throws BackendException 
+	 * @throws BackendException
 	 */
 	@SuppressWarnings("unchecked")
 	private Map<String, Object> postJson(HttpPost request) throws ParseException, IOException, JsonSyntaxException, BackendException {
 		HttpResponse response = this.post(request);
-		
+
 		Map<String, Object> result = new HashMap<String, Object>();
 		result = gson.fromJson(Backend.getStringFromResponse(response), Map.class);
-		
+
 		switch (response.getStatusLine().getStatusCode()) {
-			case 200: 
+			case 200:
 				return result;
-			default: 
+			default:
 				throw new BackendException(result);
 		}
 	}
