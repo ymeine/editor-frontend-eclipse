@@ -8,12 +8,18 @@ import org.eclipse.jface.text.TypedRegion;
 
 public class POCDocumentPartitioner implements IDocumentPartitioner {
 
-	public static final String PARTITION_NAME = "MAIN" ;
+	public static final String PARTITION_NAME = "MAIN";
 
-	private static final String[] types = {POCDocumentPartitioner.PARTITION_NAME};
+	private static final String[] types = { POCDocumentPartitioner.PARTITION_NAME };
+
+	private POCDocument document = null;
 
 	private ITypedRegion region = null;
-	
+
+	public POCDocumentPartitioner(POCDocument document) {
+		this.document = document;
+	}
+
 	/***************************************************************************
 	 * Partitioning
 	 **************************************************************************/
@@ -30,8 +36,8 @@ public class POCDocumentPartitioner implements IDocumentPartitioner {
 
 	@Override
 	public ITypedRegion[] computePartitioning(int offset, int length) {
-		this.region = new TypedRegion(offset, length, POCDocumentPartitioner.PARTITION_NAME);
-		ITypedRegion[] regions = {this.region};
+		this.region = new TypedRegion(0, this.document.getLength(), POCDocumentPartitioner.PARTITION_NAME);
+		ITypedRegion[] regions = { this.region };
 		return regions;
 	}
 
@@ -39,13 +45,20 @@ public class POCDocumentPartitioner implements IDocumentPartitioner {
 	public ITypedRegion getPartition(int offset) {
 		return this.region;
 	}
-	
+
 	/***************************************************************************
 	 * Unused
 	 **************************************************************************/
 
 	@Override public void connect(IDocument document) {}
 	@Override public void disconnect() {}
-	@Override public void documentAboutToBeChanged(DocumentEvent event) {}
-	@Override public boolean documentChanged(DocumentEvent event) {return false;}
+
+	@Override
+	public void documentAboutToBeChanged(DocumentEvent event) {
+	}
+
+	@Override
+	public boolean documentChanged(DocumentEvent event) {
+		return false;
+	}
 }

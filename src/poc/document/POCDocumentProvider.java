@@ -53,7 +53,7 @@ public class POCDocumentProvider extends FileDocumentProvider {
 
 		// Document configuration ----------------------------------------------
 
-		document.setDocumentPartitioner(new POCDocumentPartitioner());
+		document.setDocumentPartitioner(new POCDocumentPartitioner(document));
 		document.addDocumentListener(new POCDocumentListener(document));
 
 		// Return --------------------------------------------------------------
