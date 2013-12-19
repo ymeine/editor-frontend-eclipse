@@ -19,6 +19,7 @@ public class POCDocumentProvider extends FileDocumentProvider {
 	private static final String METHOD_INIT = "init";
 	private static final String ARGUMENT_MODE = "mode";
 	private static final String ARGUMENT_SOURCE = "source";
+	private static final String ARGUMENT_EXTENSION = "extension";
 
 
 	@Override
@@ -40,6 +41,7 @@ public class POCDocumentProvider extends FileDocumentProvider {
 			Map<String, Object> argument = new HashMap<String, Object>();
 			argument.put(POCDocumentProvider.ARGUMENT_MODE, mode);
 			argument.put(POCDocumentProvider.ARGUMENT_SOURCE, document.get());
+			argument.put(POCDocumentProvider.ARGUMENT_EXTENSION, document.getFile().getFileExtension());
 
 			Map<String, Object> result = Backend.get().editor(POCDocumentProvider.METHOD_INIT, argument);
 
