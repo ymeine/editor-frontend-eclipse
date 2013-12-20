@@ -18,6 +18,7 @@ public class POCDocumentPartitioner implements IDocumentPartitioner {
 
 	public POCDocumentPartitioner(POCDocument document) {
 		this.document = document;
+		this.region = new TypedRegion(0, this.document.getLength(), POCDocumentPartitioner.PARTITION_NAME);
 	}
 
 	/***************************************************************************
@@ -55,6 +56,7 @@ public class POCDocumentPartitioner implements IDocumentPartitioner {
 
 	@Override
 	public void documentAboutToBeChanged(DocumentEvent event) {
+		this.region = new TypedRegion(0, this.document.getLength(), POCDocumentPartitioner.PARTITION_NAME);
 	}
 
 	@Override
