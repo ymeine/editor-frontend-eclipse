@@ -1,0 +1,50 @@
+{
+	"name": "editor-frontend-eclipse",
+	"version": "0.1.0",
+	"description": "A frontend for the ariatemplates/editor-backend backend, as an Eclipse plugin.",
+	"keywords": [
+		"editor",
+		"ide",
+		"frontend",
+		"eclipse"
+	],
+
+	"bugs": "https://github.com/ariatemplates/editor-frontend-eclipse/issues",
+
+	"license": "Apache-2.0",
+
+	"author": {
+		"name": "Yannick Meine",
+		"email": "yannick.meine@gmail.com",
+		"url": "http://ymeine.github.io"
+	},
+
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/ariatemplates/editor-frontend-eclipse"
+	},
+
+
+
+	"directories": {
+		"lib": "./src"
+	},
+
+
+
+
+	"preferGlobal": false,
+	"private": true,
+
+	"devDependencies": {
+		"grunt": "0.4.x",
+
+		"grunt-contrib-clean":"0.5.x",
+		"grunt-execute": "0.2.x",
+		"grunt-curl": "1.5.x",
+		"grunt-contrib-compress": "0.8.x"
+	},
+	"dependencies": {
+		"editor-backend": "git+https://github.com/ariatemplates/editor-backend#version/0.1.x"
+	}
+}

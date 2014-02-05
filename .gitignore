@@ -1,5 +1,4 @@
-/.classpath
-/.project
-/.settings/
-/bin/
-/export/
+node_modules
+bin
+runtime
+editor-plugin.zip

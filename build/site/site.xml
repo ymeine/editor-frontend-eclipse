@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <description name="Aria Templates Tools">
+      Packages for the Aria Templates Tools.
+   </description>
+   <feature url="features/com.ariatemplates.tools.ide.feature_0.1.0.201409031829.jar" id="com.ariatemplates.tools.ide.feature" version="0.1.0.201409031829">
+      <category name="editor"/>
+   </feature>
+   <category-def name="editor" label="Editor">
+      <description>
+         Editor packages
+      </description>
+   </category-def>
+</site>
