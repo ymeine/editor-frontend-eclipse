@@ -17,11 +17,8 @@ Bundle-ManifestVersion: 2
 Bundle-SymbolicName: com.ariatemplates.tools.ide;singleton:=true
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: Amadeus SAS
-Export-Package: poc;
-  uses:="poc.document,
-   org.eclipse.ui.plugin,
-   org.osgi.framework,
-   org.apache.http",
+Export-Package: poc;uses:="poc.document,org.eclipse.ui.plugin,org.osgi.framework",
+ poc.backend;uses:="org.apache.http.client.methods,org.apache.http",
  poc.data;
   uses:="org.eclipse.jface.preference,
    org.eclipse.jface.resource,
