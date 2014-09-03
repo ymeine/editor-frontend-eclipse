@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="com.ariatemplates.tools.ide.feature"
+      label="Aria Templates Editor"
+      version="0.1.0.qualifier"
+      provider-name="Amadeus SAS"
+      plugin="com.ariatemplates.tools.ide">
+
+   <description>
+      Aria Templates Editor packages.
+   </description>
+
+   <requires>
+      <import plugin="org.apache.httpcomponents.httpcore" version="4.1.4" match="greaterOrEqual"/>
+      <import plugin="org.apache.httpcomponents.httpclient" version="4.1.2" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.eclipse.ui.editors" version="3.6.1" match="greaterOrEqual"/>
+      <import plugin="com.google.gson" version="2.1.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.jface.text" version="3.6.1" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.views" version="3.5.1" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="org.eclipse.ui.ide" version="3.6.2" match="greaterOrEqual"/>
+   </requires>
+
+   <plugin
+         id="com.ariatemplates.tools.ide"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+</feature>

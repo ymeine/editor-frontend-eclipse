@@ -11,14 +11,6 @@
             name="Template Editor">
       </editor>
    </extension>
-   <!--extension
-         point="org.eclipse.ui.editors.documentProviders">
-      <provider
-            class="poc.document.DocumentProvider"
-            extensions="tpl"
-            id="poc.document.DocumentProvider">
-      </provider>
-   </extension-->
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
