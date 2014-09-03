@@ -2,7 +2,7 @@ Eclipse frontend plugin code, making use of the backend to provide source code e
 
 # File system layout
 
-* [`README.md`](./README.md): this current file
+- [`readme.md`](./readme.md): the main documentation file
 * [`poc`](./poc): the root package of the Eclipse plugin code
 
 # Versioning

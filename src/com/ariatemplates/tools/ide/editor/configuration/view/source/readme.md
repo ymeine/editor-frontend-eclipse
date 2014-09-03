@@ -1,0 +1,1 @@
+The local mode implementation used for the document is implicitly hard-coded inside this document, by importing the highlighter for a specific one.

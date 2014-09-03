@@ -4,7 +4,7 @@
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            class="poc.editors.POCEditor"
+            class="com.ariatemplates.tools.ide.editor.editor.Editor"
             default="true"
             extensions="tpl, tml"
             id="POC.template"
@@ -14,7 +14,7 @@
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
-            class="poc.data.POCWorkbenchPreferencePage"
+            class="com.ariatemplates.tools.ide.data.preferences.workbench.page.Page"
             id="POC.page1"
             name="Ultimate Editor">
       </page>
