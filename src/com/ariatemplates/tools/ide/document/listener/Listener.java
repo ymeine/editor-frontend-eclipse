@@ -1,5 +1,7 @@
 package com.ariatemplates.tools.ide.document.listener;
 
+
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,9 +12,12 @@ import com.ariatemplates.tools.ide.document.document.Document;
 import com.ariatemplates.tools.ide.document.listener.Listener;
 
 
+
 public class Listener implements IDocumentListener {
 
 	private Document document = null;
+
+
 
 	public Listener(Document document) {
 		this.document = document;

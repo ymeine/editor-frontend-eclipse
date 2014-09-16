@@ -1,6 +1,7 @@
 package com.ariatemplates.tools.ide.outline.content.provider;
 
 
+
 import java.util.List;
 import java.util.Map;
 
@@ -8,6 +9,8 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
 import com.ariatemplates.tools.ide.outline.content.provider.Provider;
+
+
 
 public class Provider implements ITreeContentProvider {
 
@@ -19,8 +22,8 @@ public class Provider implements ITreeContentProvider {
 	 **************************************************************************/
 
 	/**
-	 * This method handles all possible input errors: 
-	 * 
+	 * This method handles all possible input errors:
+	 *
 	 * - input is null
 	 * - input is not a Map
 	 * - input is a Map but doesn't contain the root key
@@ -54,19 +57,19 @@ public class Provider implements ITreeContentProvider {
 	public boolean hasChildren(Object element) {
 		return this.getChildren(element).length > 0;
 	}
-	
+
 	/***************************************************************************
 	 * Helpers
 	 **************************************************************************/
 
 	/**
 	 * Returns an array of Objects from a List contained in the given Map under the given key.
-	 * 
+	 *
 	 * What this method essentially does is taking care of type conversions for you.
-	 * 
+	 *
 	 * @param[in] element A map: must be not bull!
-	 * @param[in] key The key of the value in the given map: must be not null!  
-	 * 
+	 * @param[in] key The key of the value in the given map: must be not null!
+	 *
 	 * @returns The list of elements if found and defined, <code>null</code> otherwise.
 	 * @throws ClassCastException In case the given element is not a map
 	 */
@@ -82,5 +85,5 @@ public class Provider implements ITreeContentProvider {
 	@Override public void dispose() {}
 	@Override public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {}
 	@Override public Object getParent(Object element) {return null;}
-	
+
 }

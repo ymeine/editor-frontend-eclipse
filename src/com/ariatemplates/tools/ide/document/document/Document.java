@@ -1,5 +1,7 @@
 package com.ariatemplates.tools.ide.document.document;
 
+
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -9,23 +11,19 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.BadLocationException;
 
-
-
-
-
-
 import com.ariatemplates.tools.ide.backend.backend.Backend;
 import com.ariatemplates.tools.ide.document.document.Document;
+
+
 
 public class Document extends org.eclipse.jface.text.Document {
 
 	private Map<String, Object> GUID = null;
-
 	private IFile file = null;
-
 	private final static String METHOD_UPDATE = "update";
-
 	private List<Map<String, Object>> sourceChanges = new ArrayList<Map<String,Object>>();
+
+
 
 	public Map<String, Object> getGUID() {
 		return this.GUID;
@@ -42,6 +40,8 @@ public class Document extends org.eclipse.jface.text.Document {
 	public void setFile(IFile file) {
 		this.file = file;
 	}
+
+
 
 	public void addSourceChange(Map<String, Object> entry) {
 		this.sourceChanges.add(entry);
@@ -95,11 +95,11 @@ public class Document extends org.eclipse.jface.text.Document {
 		Object[] messagesArray = (Object[]) messages.toArray();
 		StringBuilder out = new StringBuilder();
 
-		for (int k = 0; k < messagesArray.length; k++) {
-			if (k > 0) {
+		for (int index = 0; index < messagesArray.length; index++) {
+			if (index > 0) {
 				out.append("\n");
 			}
-			out.append("- ").append(messagesArray[k]);
+			out.append("- ").append(messagesArray[index]);
 		}
 		return out.toString();
 	}

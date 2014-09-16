@@ -1,5 +1,7 @@
 package com.ariatemplates.tools.ide.backend.http;
 
+
+
 import java.io.IOException;
 
 import org.apache.http.HttpResponse;
@@ -13,24 +15,25 @@ import org.apache.http.util.EntityUtils;
 
 
 public class HTTP {
+
 	private final DefaultHttpClient httpclient = new DefaultHttpClient();
-	
-	
-	
+
+
+
 	static public String getString(HttpResponse response) throws ParseException, IOException {
 		return EntityUtils.toString(response.getEntity());
 	}
-	
+
 	static public int getCode(HttpResponse response) {
 		return response.getStatusLine().getStatusCode();
 	}
-	
+
 	static public void release(HttpResponse response) throws IllegalStateException, IOException {
 		response.getEntity().getContent().close();
 	}
 
-	
-	
+
+
 	/**
 	 * Executes the given HTTP GET request with the internal HTTP client instance, and returns the response.
 	 *
@@ -52,4 +55,5 @@ public class HTTP {
 	public HttpResponse post(HttpPost request) throws ClientProtocolException, IOException {
 		return this.httpclient.execute(request);
 	}
+
 }

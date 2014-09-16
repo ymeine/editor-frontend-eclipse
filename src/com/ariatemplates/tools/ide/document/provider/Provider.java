@@ -1,5 +1,7 @@
 package com.ariatemplates.tools.ide.document.provider;
 
+
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,6 +16,8 @@ import com.ariatemplates.tools.ide.document.document.Document;
 import com.ariatemplates.tools.ide.document.listener.Listener;
 import com.ariatemplates.tools.ide.document.partitioner.Partitioner;
 import com.ariatemplates.tools.ide.document.provider.Provider;
+
+
 
 public class Provider extends FileDocumentProvider {
 
@@ -43,7 +47,7 @@ public class Provider extends FileDocumentProvider {
 
 		try {
 			Map<String, Object> argument = new HashMap<String, Object>();
-			argument.put(Provider.ARGUMENT_MODE, mode);
+			argument.put(Provider.ARGUMENT_MODE, Provider.mode);
 			argument.put(Provider.ARGUMENT_SOURCE, document.get());
 			argument.put(Provider.ARGUMENT_EXTENSION, document.getFile().getFileExtension());
 

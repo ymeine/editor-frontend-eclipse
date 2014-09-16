@@ -1,13 +1,17 @@
 package com.ariatemplates.tools.ide.outline.outline;
 
+
+
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
 
+
+
 public class Outline extends ContentOutlinePage {
 
 	private Object input = null;
-	
+
 	/***************************************************************************
 	 * Init
 	 **************************************************************************/
@@ -27,7 +31,7 @@ public class Outline extends ContentOutlinePage {
 
 	public void setInput(Object input) {
 		this.input = input;
-		update();
+		this.update();
 	}
 
 	public void update() {

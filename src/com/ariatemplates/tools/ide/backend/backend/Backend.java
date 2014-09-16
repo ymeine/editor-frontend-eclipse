@@ -1,5 +1,7 @@
 package com.ariatemplates.tools.ide.backend.backend;
 
+
+
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -46,11 +48,11 @@ public class Backend {
 		return Backend.singleton;
 	}
 
-	
-	
+
+
 	/***************************************************************************
 	 * Initialization
-	 * 
+	 *
 	 * Prepares HTTP requests, JSON tools, and process management.
 	 **************************************************************************/
 
@@ -76,7 +78,7 @@ public class Backend {
 
 	private static final int URL_PORT = 50000;
 	private static final String URL_BASE = "http://localhost:" + Backend.URL_PORT + "/";
-	
+
 	private static final String URL_PATH_RPC = "rpc";
 	private static final String URL_PATH_SHUTDOWN = "shutdown";
 	private static final String URL_PATH_PING = "ping";
@@ -88,14 +90,14 @@ public class Backend {
 	/**
 	 * Builds a new backend instance.
 	 */
-	public Backend() {		
+	public Backend() {
 		this.rpc = new HttpPost(Backend.URL_BASE + Backend.URL_PATH_RPC);
 		this.rpc.setHeader(Backend.HEADER_CONTENT_TYPE, Backend.HEADER_VALUE_CONTENT_TYPE);
-		
+
 		this.shutdown = new HttpGet(Backend.URL_BASE + Backend.URL_PATH_SHUTDOWN);
 		this.ping = new HttpGet(Backend.URL_BASE + Backend.URL_PATH_PING);
 		this.guid = new HttpGet(Backend.URL_BASE + Backend.URL_PATH_GUID);
-		
+
 		File basePath = new File("");
 		try {
 			basePath = new File(FileLocator.toFileURL(Activator.getDefault().getBundle().getEntry("/")).toURI());
@@ -103,7 +105,7 @@ public class Backend {
 			System.err.println("Could not resolve bundle absolute path.");
 			System.err.print(e);
 		}
-		
+
 		this.processRunner.setProcessPath(new File(basePath, Backend.NODE_PATH).getAbsolutePath());
 		this.processRunner.setArguments(
 			new File(basePath, Backend.APPLICATION_ENTRY_PATH).getAbsolutePath(),
@@ -115,7 +117,7 @@ public class Backend {
 
 	/***************************************************************************
 	 * Backend runtime management
-	 *  
+	 *
 	 * The thing is to be able to manage either an externally running backend,
 	 * or one launched by ourself.
 	 **************************************************************************/
@@ -126,38 +128,38 @@ public class Backend {
 	// Otherwise use packaged node version, with a relative path
 
 	private Boolean isManagedExternally = null;
-	
+
 	private final ProcessRunner processRunner = new ProcessRunner();
 	private static final String NODE_PATH = "runtime\\node";
 	private static final String APPLICATION_ENTRY_PATH =  "node_modules/editor-backend/app/index";
 	private static final String APPLICATION_OPTIONS = "--slave"; // tells the node application it has been created by us and that we want to use its stdout for communication
-	
+
 
 	private static final String OUTPUT_GUID = "e531ebf04fad4e17b890c0ac72789956";
 	private static final int POLLING_SLEEP_TIME = 50; // ms
 	private static final int POLLING_TIME_OUT = 1000; // ms
 
-	
-	
+
+
 	// Start/Stop --------------------------------------------------------------
-	
+
 	/**
 	 * If not already running, starts the backend.
 	 *
-	 * @return the created Process instance behind if so, or <code>null</code> if the backend is not managed by us 
+	 * @return the created Process instance behind if so, or <code>null</code> if the backend is not managed by us
 	 */
 	public Process start() throws IOException, InterruptedException {
-		
+
 		boolean isRunning = this.isRunning();
-		
+
 		// Early termination ---------------------------------------------------
-		
+
 		if (isRunning && this.isManagedExternally) {
 			return null;
 		}
-		
+
 		// Actually starts it --------------------------------------------------
-		
+
 		if (!isRunning) {
 			// Launches the process --------------------------------------------
 
@@ -176,10 +178,10 @@ public class Backend {
 					time += Backend.POLLING_SLEEP_TIME;
 				}
 			}
-			
-			
+
+
 		}
-		
+
 		// Return ----------------------------------------------------------
 
 		return this.processRunner.getProcess();
@@ -187,7 +189,7 @@ public class Backend {
 
 	/**
 	 * If we manage the backend process ourself and it is running, stops it by sending a specific request.
-	 * 
+	 *
 	 * If the shutdown request fails, the process is aborted with lower level utilities.
 	 *
 	 * @see isRunning
@@ -203,9 +205,9 @@ public class Backend {
 			this.isManagedExternally = null;
 		}
 	}
-	
-	
-	
+
+
+
 	// Check -------------------------------------------------------------------
 
 	/**
@@ -236,7 +238,7 @@ public class Backend {
 
 		return this.processRunner.isRunning();
 	}
-	
+
 	/**
 	 * Tells whether the external backend server is running or not.
 	 *
@@ -255,19 +257,19 @@ public class Backend {
 			return false;
 		}
 	}
-	
 
-	
-	
-	
+
+
+
+
 	/***************************************************************************
 	 * Backend communication
-	 * 
+	 *
 	 * This is the High-level protocol implementation (RPC essentially).
 	 **************************************************************************/
 
-	
-	
+
+
 	// Mode service ------------------------------------------------------------
 
 	private static final String METHOD_EDITOR_EXEC = "exec";
@@ -305,8 +307,8 @@ public class Backend {
 		return this.editor(Backend.METHOD_EDITOR_EXEC, argument);
 	}
 
-	
-	
+
+
 	// Editor module -----------------------------------------------------------
 
 	private static final String MODULE_NAME_EDITOR = "editor";
@@ -319,8 +321,8 @@ public class Backend {
 		return this.rpc(Backend.MODULE_NAME_EDITOR, member, argument);
 	}
 
-	
-	
+
+
 	// RPC ---------------------------------------------------------------------
 
 	private static final String KEY_MODULE = "module";
@@ -362,4 +364,5 @@ public class Backend {
 				throw new BackendException(result);
 		}
 	}
+
 }

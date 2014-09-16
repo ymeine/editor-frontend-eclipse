@@ -1,5 +1,7 @@
 package com.ariatemplates.tools.ide.document.partitioner;
 
+
+
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentPartitioner;
@@ -9,14 +11,14 @@ import org.eclipse.jface.text.TypedRegion;
 import com.ariatemplates.tools.ide.document.document.Document;
 import com.ariatemplates.tools.ide.document.partitioner.Partitioner;
 
+
+
 public class Partitioner implements IDocumentPartitioner {
 
 	public static final String PARTITION_NAME = "MAIN";
-
 	private static final String[] types = { Partitioner.PARTITION_NAME };
 
 	private Document document = null;
-
 	private ITypedRegion region = null;
 
 	public Partitioner(Document document) {
