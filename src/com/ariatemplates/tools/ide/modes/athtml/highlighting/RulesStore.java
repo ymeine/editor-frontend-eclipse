@@ -1,23 +1,22 @@
-package com.ariatemplates.tools.ide.modes.athtml.highlighting;
+package com.ariatemplates.tools.ide.modes.athtml.highlighting
 
-import java.util.ArrayList;
-import java.util.List;
 
-import org.eclipse.jface.text.rules.EndOfLineRule;
-import org.eclipse.jface.text.rules.IRule;
-import org.eclipse.jface.text.rules.MultiLineRule;
-import org.eclipse.jface.text.rules.NumberRule;
-import org.eclipse.jface.text.rules.PatternRule;
 
-import com.ariatemplates.tools.ide.modes.athtml.highlighting.rules.Array;
-import com.ariatemplates.tools.ide.modes.athtml.highlighting.rules.Attribute;
-import com.ariatemplates.tools.ide.modes.athtml.highlighting.rules.Expression;
-import com.ariatemplates.tools.ide.modes.athtml.highlighting.rules.Function;
-import com.ariatemplates.tools.ide.modes.athtml.highlighting.rules.Key;
-import com.ariatemplates.tools.ide.modes.athtml.highlighting.rules.Object;
-import com.ariatemplates.tools.ide.modes.athtml.highlighting.rules.Statement;
-import com.ariatemplates.tools.ide.modes.athtml.highlighting.rules.Tag;
-import com.ariatemplates.tools.ide.modes.athtml.highlighting.rules.Word;
+import org.eclipse.jface.text.rules.EndOfLineRule
+import org.eclipse.jface.text.rules.IRule
+import org.eclipse.jface.text.rules.MultiLineRule
+import org.eclipse.jface.text.rules.NumberRule
+import org.eclipse.jface.text.rules.PatternRule
+
+import com.ariatemplates.tools.ide.modes.athtml.highlighting.rules.Array
+import com.ariatemplates.tools.ide.modes.athtml.highlighting.rules.Attribute
+import com.ariatemplates.tools.ide.modes.athtml.highlighting.rules.Expression
+import com.ariatemplates.tools.ide.modes.athtml.highlighting.rules.Function
+import com.ariatemplates.tools.ide.modes.athtml.highlighting.rules.Key
+import com.ariatemplates.tools.ide.modes.athtml.highlighting.rules.Object
+import com.ariatemplates.tools.ide.modes.athtml.highlighting.rules.Statement
+import com.ariatemplates.tools.ide.modes.athtml.highlighting.rules.Tag
+import com.ariatemplates.tools.ide.modes.athtml.highlighting.rules.Word
 
 
 
@@ -27,43 +26,48 @@ import com.ariatemplates.tools.ide.modes.athtml.highlighting.rules.Word;
  * @author flongo
  *
  */
-public class RulesStore {
+class RulesStore {
 
-	public static int MULTILINE_COMMENT = 1;
-	public static int SINGLELINE_COMMENT = 2;
-	public static int STATEMENT = 3;
-	public static int EXPRESSION = 4;
-	public static int STRING_DOUBLE = 5;
-	public static int STRING_SINGLE = 6;
-	public static int STRING_COMPLEX = 7;
-	public static int TAG = 8;
-	public static int TAG_ATTRIBUTE = 9;
-	public static int NUMBER = 10;
-	public static int BOOLEAN = 11;
-	public static int OPERATOR = 12;
-	public static int FUNCTION = 13;
-	public static int KEY = 14;
-	public static int OBJECT = 15;
-	public static int ARRAY = 16;
-
-	private static RulesStore singleton = null;
-
-	private TokensStore tokenStore = TokensStore.get();
-
-	public static RulesStore get() {
-		if (singleton == null) {
-			RulesStore.singleton = new RulesStore();
-		}
-		return RulesStore.singleton;
+	private static singleton
+	static get() {
+		this.class.singleton = this.class.singleton ?: new RulesStore()
 	}
+
+	static MULTILINE_COMMENT = 1
+	static SINGLELINE_COMMENT = 2
+	static STATEMENT = 3
+	static EXPRESSION = 4
+	static STRING_DOUBLE = 5
+	static STRING_SINGLE = 6
+	static STRING_COMPLEX = 7
+	static TAG = 8
+	static TAG_ATTRIBUTE = 9
+	static NUMBER = 10
+	static BOOLEAN = 11
+	static OPERATOR = 12
+	static FUNCTION = 13
+	static KEY = 14
+	static OBJECT = 15
+	static ARRAY = 16
+
+	private tokenStore = TokensStore.get()
 
 	/**
 	 * @return the default rules
 	 */
-	public List<IRule> getRules() {
-		int[] defaultRules = { RulesStore.MULTILINE_COMMENT, RulesStore.SINGLELINE_COMMENT, RulesStore.STATEMENT, RulesStore.EXPRESSION,
-				RulesStore.STRING_COMPLEX, RulesStore.TAG };
-		return this.getRules(defaultRules);
+	def getRules() {
+		def cl = this.class
+
+		def defaultRules = [
+			cl.MULTILINE_COMMENT,
+			cl.SINGLELINE_COMMENT,
+			cl.STATEMENT,
+			cl.EXPRESSION,
+			cl.STRING_COMPLEX,
+			cl.TAG
+		]
+
+		this.getRules defaultRules
 	}
 
 	/**
@@ -72,12 +76,8 @@ public class RulesStore {
 	 *            rules types from the static class properties
 	 * @return the rules corresponding to the specified types
 	 */
-	public List<IRule> getRules(int[] types) {
-		List<IRule> rules = new ArrayList<IRule>();
-		for (int i = 0; i < types.length; i++) {
-			rules.add(this.getRule(types[i]));
-		}
-		return rules;
+	def getRules(types) {
+		types.collect { type -> this.getRule type }
 	}
 
 	/**
@@ -86,58 +86,52 @@ public class RulesStore {
 	 *            rule type from the static class properties
 	 * @return the rule corresponding to the specified type
 	 */
-	public IRule getRule(int type) {
-		if (type == RulesStore.MULTILINE_COMMENT) {
-			return new MultiLineRule("/*", "*/", this.tokenStore.getToken(TokensStore.COMMENT), (char) 0, false);
-		}
-		if (type == RulesStore.SINGLELINE_COMMENT) {
-			return new EndOfLineRule("//", this.tokenStore.getToken(TokensStore.COMMENT));
-		}
-		if (type == RulesStore.STATEMENT) {
-			return new Statement();
-		}
-		if (type == RulesStore.EXPRESSION) {
-			return new Expression();
-		}
-		if (type == RulesStore.STRING_DOUBLE) {
-			return new PatternRule("\"", "\"", this.tokenStore.getToken(TokensStore.STRING), '\\', false);
-		}
-		if (type == RulesStore.STRING_SINGLE) {
-			return new PatternRule("'", "'", this.tokenStore.getToken(TokensStore.STRING), '\\', false);
-		}
-		if (type == RulesStore.STRING_COMPLEX) {
-			return new com.ariatemplates.tools.ide.modes.athtml.highlighting.rules.StringRule();
-		}
-		if (type == RulesStore.TAG) {
-			return new Tag();
-		}
-		if (type == RulesStore.TAG_ATTRIBUTE) {
-			return new Attribute();
-		}
-		if (type == RulesStore.NUMBER) {
-			return new NumberRule(this.tokenStore.getToken(TokensStore.NUMBER));
-		}
-		if (type == RulesStore.BOOLEAN) {
-			String[] words = { "true", "false" };
-			return new Word(words, this.tokenStore.getToken(TokensStore.BOOLEAN));
-		}
-		if (type == RulesStore.OPERATOR) {
-			String[] words = { "+", "-", "%", "*", "|", "&", "=", "<", ">", "!=" };
-			return new Word(words, this.tokenStore.getToken(TokensStore.OPERATOR));
-		}
-		if (type == RulesStore.FUNCTION) {
-			return new Function();
-		}
-		if (type == RulesStore.KEY) {
-			return new Key();
-		}
-		if (type == RulesStore.OBJECT) {
-			return new Object();
-		}
-		if (type == RulesStore.ARRAY) {
-			return new Array();
-		}
-		return null;
+	def getRule(type) {
+		def cl = this.class
+
+		def builders = [
+			cl.MULTILINE_COMMENT: {
+				new MultiLineRule("/*", "*/", this.tokenStore.getToken(TokensStore.COMMENT), (0 as char), false)
+			}
+			cl.SINGLELINE_COMMENT: {
+				new EndOfLineRule("//", this.tokenStore.getToken(TokensStore.COMMENT))
+			}
+
+			cl.STATEMENT: {new Statement()}
+			cl.EXPRESSION: {new Expression()}
+
+			cl.STRING_DOUBLE: {
+				new PatternRule("\"", "\"", this.tokenStore.getToken(TokensStore.STRING), '\\', false)
+			}
+			cl.STRING_SINGLE: {
+				new PatternRule("'", "'", this.tokenStore.getToken(TokensStore.STRING), '\\', false)
+			}
+			cl.STRING_COMPLEX: {
+				new com.ariatemplates.tools.ide.modes.athtml.highlighting.rules.StringRule()
+			}
+
+			cl.TAG: {new Tag()}
+			cl.TAG_ATTRIBUTE: {new Attribute()}
+
+			cl.NUMBER: {
+				new NumberRule(this.tokenStore.getToken(TokensStore.NUMBER))
+			}
+			cl.BOOLEAN: {
+				def words = ["true", "false"]
+				new Word(words, this.tokenStore.getToken(TokensStore.BOOLEAN))
+			}
+			cl.OPERATOR: {
+				def words = ["+", "-", "%", "*", "|", "&", "=", "<", ">", "!="]
+				new Word(words, this.tokenStore.getToken(TokensStore.OPERATOR))
+			}
+
+			cl.FUNCTION: {new Function()}
+			cl.KEY: {new Key()}
+			cl.OBJECT: {new Object()}
+			cl.ARRAY: {new Array()}
+		]
+
+		(builders[type] ?: {null})()
 	}
 
 	/**
@@ -145,9 +139,21 @@ public class RulesStore {
 	 *         arrays, objects, numbers and booleans
 	 */
 	public List<IRule> getPrimitiveRules() {
-		int[] primitiveTypes = { RulesStore.MULTILINE_COMMENT, RulesStore.SINGLELINE_COMMENT, RulesStore.STRING_DOUBLE, RulesStore.STRING_SINGLE,
-				RulesStore.NUMBER, RulesStore.BOOLEAN, RulesStore.OPERATOR, RulesStore.FUNCTION, RulesStore.OBJECT, RulesStore.ARRAY };
-		return this.getRules(primitiveTypes);
-	}
+		def cl = this.class
 
+		def primitiveTypes = [
+			cl.MULTILINE_COMMENT,
+			cl.SINGLELINE_COMMENT,
+			cl.STRING_DOUBLE,
+			cl.STRING_SINGLE,
+			cl.NUMBER,
+			cl.BOOLEAN,
+			cl.OPERATOR,
+			cl.FUNCTION,
+			cl.OBJECT,
+			cl.ARRAY
+		]
+
+		this.getRules primitiveTypes
+	}
 }
