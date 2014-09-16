@@ -1,5 +1,7 @@
 package com.ariatemplates.tools.ide.editor.highlighting.tokens.scanner;
 
+
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -15,6 +17,8 @@ import org.eclipse.swt.widgets.Display;
 
 import com.ariatemplates.tools.ide.backend.backend.Backend;
 import com.ariatemplates.tools.ide.document.document.Document;
+
+
 
 public class Scanner implements ITokenScanner {
 
@@ -52,19 +56,19 @@ public class Scanner implements ITokenScanner {
 
 			// Styles ----------------------------------------------------------
 			//this.getStylesheet(mode);
-			Map<String, Object> stylesheet = (Map<String, Object>) Backend.get().service(doc, METHOD_STYLESHEET);
-			this.defaultStyle = (Map<String, Object>) stylesheet.get(KEY_DEFAULT_STYLE);
-			this.styles = (Map<String, Object>) stylesheet.get(KEY_STYLES);
+			Map<String, Object> stylesheet = (Map<String, Object>) Backend.get().service(doc, Scanner.METHOD_STYLESHEET);
+			this.defaultStyle = (Map<String, Object>) stylesheet.get(Scanner.KEY_DEFAULT_STYLE);
+			this.styles = (Map<String, Object>) stylesheet.get(Scanner.KEY_STYLES);
 
 			// Tokens ----------------------------------------------------------
 			Map<String, Object> argument = new HashMap<String, Object>();
 			argument.put("wholeSource", true);
-			argument.put(ARGUMENT_OFFSET, offset);
+			argument.put(Scanner.ARGUMENT_OFFSET, offset);
 			argument.put("end", offset + length);
 
-			Map<String, Object> result = Backend.get().service(doc, METHOD_HIGHLIGHT, argument);
-			
-			List<Map<String, Object>> tokens = (List<Map<String, Object>>) result.get(KEY_TOKENS);
+			Map<String, Object> result = Backend.get().service(doc, Scanner.METHOD_HIGHLIGHT, argument);
+
+			List<Map<String, Object>> tokens = (List<Map<String, Object>>) result.get(Scanner.KEY_TOKENS);
 
 			this.tokensIterator = tokens.iterator();
 		} catch (Exception e) {
@@ -86,52 +90,51 @@ public class Scanner implements ITokenScanner {
 
 	// Cache -------------------------------------------------------------------
 
-//	private static boolean safeCache = true;
-//	private Map<String, Object> stylesheets = new HashMap<String, Object>();
-//
-//	// TODO Create or find a generic cache utility. Integrate this cache utility in the Backend class? It would make sense!! This is not optmize communication with the backend, which should implement a generic cache system
-//	@SuppressWarnings("unchecked")
-//	private void getStylesheet(Document document) throws IOException {
-//		Map<String, Object> stylesheet = null;
-//
-//		// Cache ---------------------------------------------------------------
-//		if (stylesheets.containsKey(mode)) {
-//			if (safeCache) {
-//				Map<String, Object> options = new HashMap<String, Object>();
-//				options.put("checkCache", true);
-//				options.put("sendIfObsolete", true);
-//
-//				Map<String, Object> response;
-//				try {
-//					response = Backend.get().editor("mode", METHOD_STYLESHEET, options);
-//					if ((Boolean)response.get("obsolete")) {
-//						stylesheet = (Map<String, Object>) response.get(KEY_STYLESHEET);
-//						stylesheets.put(mode, stylesheet);
-//					} else {
-//						stylesheet = (Map<String, Object>) stylesheets.get(mode);
-//					}
-//				} catch (JsonSyntaxException | ParseException
-//						| BackendException e) {
-//					e.printStackTrace();
-//				}
-//
-//			} else {
-//				stylesheet = (Map<String, Object>) stylesheets.get(mode);
-//			}
-//		} else {
-//			try {
-//				stylesheet = (Map<String, Object>) Backend.get().service(document, METHOD_STYLESHEET).get(KEY_STYLESHEET);
-//				stylesheets.put(mode, stylesheet);
-//			} catch (JsonSyntaxException | ParseException | BackendException e) {
-//				e.printStackTrace();
-//			}
-//		}
-//
-//
-//		// Stylesheet extractions ----------------------------------------------
-//		defaultStyle = (Map<String, Object>) stylesheet.get(KEY_DEFAULT_STYLE);
-//		styles = (Map<String, Object>) stylesheet.get(KEY_STYLES);
-//	}
+	// private static boolean safeCache = true;
+	// private Map<String, Object> stylesheets = new HashMap<String, Object>();
+
+	// // TODO Create or find a generic cache utility. Integrate this cache utility in the Backend class? It would make sense!! This is not optimize communication with the backend, which should implement a generic cache system
+	// @SuppressWarnings("unchecked")
+	// private void getStylesheet(Document document) throws IOException {
+	// 	Map<String, Object> stylesheet = null;
+
+	// 	// Cache ---------------------------------------------------------------
+
+	// 	if (this.stylesheets.containsKey(Scanner.mode)) {
+	// 		if (this.safeCache) {
+	// 			Map<String, Object> options = new HashMap<String, Object>();
+	// 			options.put("checkCache", true);
+	// 			options.put("sendIfObsolete", true);
+
+	// 			try {
+	// 				Map<String, Object> response = Backend.get().editor("mode", Scanner.METHOD_STYLESHEET, options);
+	// 				if ((Boolean) response.get("obsolete")) {
+	// 					stylesheet = (Map<String, Object>) response.get(Scanner.KEY_STYLESHEET);
+	// 					stylesheets.put(Scanner.mode, stylesheet);
+	// 				} else {
+	// 					stylesheet = (Map<String, Object>) stylesheets.get(Scanner.mode);
+	// 				}
+	// 			} catch (JsonSyntaxException | ParseException | BackendException e) {
+	// 				e.printStackTrace();
+	// 			}
+
+	// 		} else {
+	// 			stylesheet = (Map<String, Object>) stylesheets.get(Scanner.mode);
+	// 		}
+	// 	} else {
+	// 		try {
+	// 			stylesheet = (Map<String, Object>) Backend.get().service(document, Scanner.METHOD_STYLESHEET).get(Scanner.KEY_STYLESHEET);
+	// 			this.stylesheets.put(Scanner.mode, stylesheet);
+	// 		} catch (JsonSyntaxException | ParseException | BackendException e) {
+	// 			e.printStackTrace();
+	// 		}
+	// 	}
+
+	// 	// Stylesheet extractions ----------------------------------------------
+
+	// 	this.defaultStyle = (Map<String, Object>) stylesheet.get(Scanner.KEY_DEFAULT_STYLE);
+	// 	this.styles = (Map<String, Object>) stylesheet.get(Scanner.KEY_STYLES);
+	// }
 
 
 
@@ -150,7 +153,7 @@ public class Scanner implements ITokenScanner {
 		}
 
 		this.currentToken = this.tokensIterator.next();
-		String type = (String) this.currentToken.get(KEY_STYLE);
+		String type = (String) this.currentToken.get(Scanner.KEY_STYLE);
 
 		if (type.equals(STYLE_WS)) {
 			return Token.WHITESPACE;
@@ -172,15 +175,15 @@ public class Scanner implements ITokenScanner {
 			style = this.defaultStyle;
 		}
 
-		Map<String, Object> rgb = (Map<String, Object>) style.get(KEY_COLOR);
+		Map<String, Object> rgb = (Map<String, Object>) style.get(Scanner.KEY_COLOR);
 		if (rgb == null) {
-			rgb = (Map<String, Object>) defaultStyle.get(KEY_COLOR);
+			rgb = (Map<String, Object>) this.defaultStyle.get(Scanner.KEY_COLOR);
 		}
 		return new TextAttribute(new Color(
 			Display.getCurrent(),
-			((Number)rgb.get(KEY_RED)).intValue(),
-			((Number)rgb.get(KEY_GREEN)).intValue(),
-			((Number)rgb.get(KEY_BLUE)).intValue()
+			((Number)rgb.get(Scanner.KEY_RED)).intValue(),
+			((Number)rgb.get(Scanner.KEY_GREEN)).intValue(),
+			((Number)rgb.get(Scanner.KEY_BLUE)).intValue()
 		));
 	}
 
@@ -191,12 +194,12 @@ public class Scanner implements ITokenScanner {
 
 	@Override
 	public int getTokenOffset() {
-		return ((Number) currentToken.get(KEY_START)).intValue();
+		return ((Number) currentToken.get(Scanner.KEY_START)).intValue();
 	}
 
 	@Override
 	public int getTokenLength() {
-		return (((Number)currentToken.get(KEY_END)).intValue()) - this.getTokenOffset();
+		return (((Number)currentToken.get(Scanner.KEY_END)).intValue()) - this.getTokenOffset();
 	}
 
 }

@@ -1,5 +1,7 @@
 package com.ariatemplates.tools.ide.modes.athtml.highlighting;
 
+
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,6 +23,15 @@ import com.ariatemplates.tools.ide.modes.athtml.highlighting.tokens.Rich;
 public class TokensStore {
 
 	private static TokensStore singleton = null;
+
+	public static TokensStore get() {
+		if (singleton == null) {
+			TokensStore.singleton = new TokensStore();
+		}
+		return TokensStore.singleton;
+	}
+
+
 
 	public static String DEFAULT = "default";
 	public static int[] DEFAULT_COLOR = { 0, 0, 0 };
@@ -99,29 +110,36 @@ public class TokensStore {
 		this.colorMap.put(TokensStore.ARRAY, TokensStore.ARRAY_COLOR);
 	}
 
-	public static TokensStore get() {
-		if (singleton == null) {
-			TokensStore.singleton = new TokensStore();
-		}
-		return TokensStore.singleton;
-	}
+
 
 	public Rich getToken(String type, int offset, int length) {
 		Rich returnToken = this.getToken(type);
+
 		returnToken.setOffset(offset);
 		returnToken.setLength(length);
+
 		return returnToken;
 	}
 
 	public Rich getToken(String type) {
 		int[] rgb = this.colorMap.get(type);
+
 		Rich returnToken;
 		if (rgb != null) {
-			returnToken = new Rich(new TextAttribute(new Color(Display.getCurrent(), rgb[0], rgb[1], rgb[2])));
+			returnToken = new Rich(
+				new TextAttribute(
+					new Color(
+						Display.getCurrent(),
+						rgb[0], rgb[1], rgb[2]
+					)
+				)
+			);
 		} else {
 			returnToken = new Rich();
 		}
+
 		returnToken.setType(type);
+
 		return returnToken;
 	}
 

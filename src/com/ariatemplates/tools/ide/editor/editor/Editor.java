@@ -1,5 +1,6 @@
 package com.ariatemplates.tools.ide.editor.editor;
 
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,6 +29,8 @@ import com.google.gson.JsonSyntaxException;
 import com.ariatemplates.tools.ide.editor.configuration.view.source.Source;
 import com.ariatemplates.tools.ide.editor.editor.Editor;
 
+
+
 public class Editor extends TextEditor {
 
 	/***************************************************************************
@@ -37,7 +40,7 @@ public class Editor extends TextEditor {
 	public Editor() {
 		super();
 
-		setDocumentProvider(new Provider());
+		this.setDocumentProvider(new Provider());
 	}
 
 	@Override
@@ -66,7 +69,7 @@ public class Editor extends TextEditor {
 	protected void initializeEditor() {
 		super.initializeEditor();
 
-		setSourceViewerConfiguration(new Source());
+		this.setSourceViewerConfiguration(new Source());
 	}
 
 	@Override
@@ -74,12 +77,12 @@ public class Editor extends TextEditor {
 		// Outline -------------------------------------------------------------
 
 		if (required.equals(IContentOutlinePage.class)) {
-			if (contentOutlinePage == null) {
-				contentOutlinePage = new Outline();
-				contentOutlinePage.setInput(getEditorInput());
+			if (this.contentOutlinePage == null) {
+				this.contentOutlinePage = new Outline();
+				this.contentOutlinePage.setInput(this.getEditorInput());
 			}
 
-			return contentOutlinePage;
+			return this.contentOutlinePage;
 		}
 
 		// None ----------------------------------------------------------------
@@ -169,7 +172,7 @@ public class Editor extends TextEditor {
 
 	public void update() {
 		try {
-			// format();
+			// this.format();
 			// this.fold();
 			// this.outline();
 			this.validate();
@@ -185,17 +188,16 @@ public class Editor extends TextEditor {
 
 	// TODO Process input on initialization
 
-	/*
-	 * private void format() throws IOException { Document document =
-	 * (Document)
-	 * this.getDocumentProvider().getDocument(this.getEditorInput());
-	 *
-	 * Map<String, Object> argument = new HashMap<String, Object>();
-	 * argument.put("source", document.get()); Map<String, Object> formatted =
-	 * Backend.get().rpc(document.getMode(), "format", argument);
-	 *
-	 * document.set(formatted.get("source").toString()); }
-	 */
+
+	// private void format() throws IOException {
+	// 	Document document = (Document) this.getDocument(this.getEditorInput());
+
+	// 	Map<String, Object> argument = new HashMap<String, Object>();
+	// 	argument.put("source", document.get());
+	// 	Map<String, Object> formatted = Backend.get().rpc(document.getMode(), "format", argument);
+
+	// 	document.set(formatted.get("source").toString());
+	// }
 
 	/***************************************************************************
 	 * Outline
@@ -206,7 +208,7 @@ public class Editor extends TextEditor {
 	private Outline contentOutlinePage = null;
 
 	private void outline() throws JsonSyntaxException, ParseException, IOException {
-		Document document = getDocument();
+		Document document = this.getDocument();
 
 		try {
 			Map<String, Object> outline = Backend.get().service(document, Editor.METHOD_OUTLINE);

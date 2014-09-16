@@ -1,5 +1,7 @@
 package com.ariatemplates.tools.ide.modes.athtml.highlighting.tokens;
 
+
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,16 +22,17 @@ import org.eclipse.jface.text.rules.Token;
  */
 public class Rich extends Token {
 
+	public static int UNDEFINED_INT = -1;
+	public static Rich UNDEFINED = new Rich(false);
+
 	private List<IToken> children = new ArrayList<IToken>();
 	private int offset = -1;
 	private int length = -1;
 
-	public static int UNDEFINED_INT = -1;
-
-	public static Rich UNDEFINED = new Rich(false);
-
 	private boolean defined = true;
 	private String type;
+
+
 
 	public Rich(Object data, int offset, int length) {
 		super(data);
@@ -46,6 +49,12 @@ public class Rich extends Token {
 		this.setDefined(defined);
 	}
 
+	public Rich(Object data) {
+		super(data);
+	}
+
+
+
 	private void setDefined(boolean defined) {
 		this.defined = defined;
 	}
@@ -55,9 +64,7 @@ public class Rich extends Token {
 		return !this.defined;
 	}
 
-	public Rich(Object data) {
-		super(data);
-	}
+
 
 	public void addChild(IToken child) {
 		this.children.add(child);
@@ -75,6 +82,12 @@ public class Rich extends Token {
 		this.children = children;
 	}
 
+	public void popChild() {
+		this.children.remove(this.children.size() - 1);
+	}
+
+
+
 	public void setOffset(int offset) {
 		this.offset = offset;
 	}
@@ -91,16 +104,6 @@ public class Rich extends Token {
 		return length;
 	}
 
-	public Rich clone() {
-		Rich newToken = new Rich();
-		newToken.setData(this.getData());
-		newToken.setLength(this.length);
-		newToken.setOffset(this.offset);
-		newToken.setDefined(this.defined);
-		newToken.setChildren(this.children);
-		newToken.setType(this.type);
-		return newToken;
-	}
 
 	public void setType(String type) {
 		this.type = type;
@@ -110,7 +113,19 @@ public class Rich extends Token {
 		return this.type;
 	}
 
-	public void popChild() {
-		this.children.remove(this.children.size() - 1);
+
+
+	public Rich clone() {
+		Rich newToken = new Rich();
+
+		newToken.setData(this.getData());
+
+		newToken.setLength(this.length);
+		newToken.setOffset(this.offset);
+		newToken.setDefined(this.defined);
+		newToken.setChildren(this.children);
+		newToken.setType(this.type);
+
+		return newToken;
 	}
 }

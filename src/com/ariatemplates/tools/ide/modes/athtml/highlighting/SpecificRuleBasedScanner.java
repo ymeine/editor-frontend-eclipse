@@ -1,5 +1,7 @@
 package com.ariatemplates.tools.ide.modes.athtml.highlighting;
 
+
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;

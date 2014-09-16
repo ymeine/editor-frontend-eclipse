@@ -1,5 +1,7 @@
 package com.ariatemplates.tools.ide.editor.annotations.markers.hover;
 
+
+
 import java.util.Iterator;
 
 import org.eclipse.core.resources.IMarker;
@@ -7,6 +9,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.source.IAnnotationHover;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.ui.texteditor.MarkerAnnotation;
+
 
 
 public class Hover implements IAnnotationHover {

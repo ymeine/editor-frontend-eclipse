@@ -1,5 +1,7 @@
 package com.ariatemplates.tools.ide.editor.configuration.view.source;
 
+
+
 import org.eclipse.jface.text.contentassist.IContentAssistant;
 import org.eclipse.jface.text.formatter.IContentFormatter;
 import org.eclipse.jface.text.presentation.IPresentationReconciler;
@@ -12,6 +14,8 @@ import com.ariatemplates.tools.ide.document.partitioner.Partitioner;
 import com.ariatemplates.tools.ide.modes.athtml.highlighting.SpecificRuleBasedScanner;
 import com.ariatemplates.tools.ide.editor.annotations.markers.hover.Hover;
 
+
+
 public class Source extends org.eclipse.jface.text.source.SourceViewerConfiguration {
 
 	// FIXME Should be taken from somewhere. But I don't see, as a mode is
@@ -23,19 +27,18 @@ public class Source extends org.eclipse.jface.text.source.SourceViewerConfigurat
 	// private static final String mode = "html";
 	//
 	// private Map<String, Object> configuration = null;
-	//
+
 	// private static final String KEY_CONFIGURATION_WIDTH = "configuration";
 
 	// public Source() {
-	// super();
-	// try {
-	// configuration = Backend.get().rpc(mode,
-	// Source.KEY_CONFIGURATION_WIDTH);
-	// } catch (BackendException e) {
-	// e.printStackTrace();
-	// } catch (Exception e) {
-	// e.printStackTrace();
-	// }
+	// 	super();
+	// 	try {
+	// 		this.configuration = Backend.get().rpc(mode, Source.KEY_CONFIGURATION_WIDTH);
+	// 	} catch (BackendException e) {
+	// 		e.printStackTrace();
+	// 	} catch (Exception e) {
+	// 		e.printStackTrace();
+	// 	}
 	// }
 
 	/***************************************************************************
@@ -43,14 +46,13 @@ public class Source extends org.eclipse.jface.text.source.SourceViewerConfigurat
 	 **************************************************************************/
 
 	// private static final String KEY_TAB_WIDTH = "tabWidth";
-	//
+
 	// @Override
 	// public int getTabWidth(ISourceViewer sourceViewer) {
-	// if (configuration != null) {
-	// return
-	// ((Number)configuration.get(Source.KEY_TAB_WIDTH)).intValue();
-	// }
-	// return super.getTabWidth(sourceViewer);
+	// 	if (this.configuration != null) {
+	// 		return ((Number) this.configuration.get(Source.KEY_TAB_WIDTH)).intValue();
+	// 	}
+	// 	return super.getTabWidth(sourceViewer);
 	// }
 
 	/***************************************************************************

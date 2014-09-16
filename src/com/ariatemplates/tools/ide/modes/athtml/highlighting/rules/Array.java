@@ -1,5 +1,7 @@
 package com.ariatemplates.tools.ide.modes.athtml.highlighting.rules;
 
+
+
 import java.util.List;
 
 import org.eclipse.jface.text.rules.ICharacterScanner;
@@ -10,6 +12,8 @@ import com.ariatemplates.tools.ide.modes.athtml.highlighting.RulesStore;
 import com.ariatemplates.tools.ide.modes.athtml.highlighting.SpecificRuleBasedScanner;
 import com.ariatemplates.tools.ide.modes.athtml.highlighting.TokensStore;
 import com.ariatemplates.tools.ide.modes.athtml.highlighting.tokens.Rich;
+
+
 
 public class Array extends Container {
 
