@@ -20,14 +20,13 @@ import com.google.gson.JsonSyntaxException
 
 
 
-public class Backend {
+class Backend {
 
 	/***************************************************************************
 	 * Singleton
 	 **************************************************************************/
 
-	static singleton = null
-
+	static singleton
 	/**
 	 * Returns a singleton object, for convenience.
 	 *
@@ -35,14 +34,9 @@ public class Backend {
 	 *
 	 * @return A singleton.
 	 */
-	static getSingleton() {
-		if (this.class.singleton == null) {
-			this.class.singleton = new Backend()
-		}
-
-		this.class.singleton
+	static get() {
+		this.class.singleton = this.class.singleton ?: new Backend()
 	}
-	def get = getSingleton
 
 
 

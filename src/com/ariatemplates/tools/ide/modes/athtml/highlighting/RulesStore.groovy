@@ -33,22 +33,22 @@ class RulesStore {
 		this.class.singleton = this.class.singleton ?: new RulesStore()
 	}
 
-	static MULTILINE_COMMENT = 1
-	static SINGLELINE_COMMENT = 2
-	static STATEMENT = 3
-	static EXPRESSION = 4
-	static STRING_DOUBLE = 5
-	static STRING_SINGLE = 6
-	static STRING_COMPLEX = 7
-	static TAG = 8
-	static TAG_ATTRIBUTE = 9
-	static NUMBER = 10
-	static BOOLEAN = 11
-	static OPERATOR = 12
-	static FUNCTION = 13
-	static KEY = 14
-	static OBJECT = 15
-	static ARRAY = 16
+	static final MULTILINE_COMMENT = 1
+	static final SINGLELINE_COMMENT = 2
+	static final STATEMENT = 3
+	static final EXPRESSION = 4
+	static final STRING_DOUBLE = 5
+	static final STRING_SINGLE = 6
+	static final STRING_COMPLEX = 7
+	static final TAG = 8
+	static final TAG_ATTRIBUTE = 9
+	static final NUMBER = 10
+	static final BOOLEAN = 11
+	static final OPERATOR = 12
+	static final FUNCTION = 13
+	static final KEY = 14
+	static final OBJECT = 15
+	static final ARRAY = 16
 
 	private tokenStore = TokensStore.get()
 

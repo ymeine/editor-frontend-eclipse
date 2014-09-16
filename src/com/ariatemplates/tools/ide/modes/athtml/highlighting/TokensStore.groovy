@@ -72,27 +72,22 @@ class TokensStore {
 		]
 	}
 
-	def getToken(type, offset, length) {
-		def returnToken = this.getToken type
-
-		returnToken.setOffset offset
-		returnToken.setLength length
-
-		returnToken
-	}
-
-	def getToken(type) {
+	def getToken(type, offset=null, length=null) {
 		def rgb = this.colorMap[type]
 
-		def returnToken
+		def token
 		if (rgb != null) {
 			def color = new Color(Display.getCurrent(), *rgb)
-			returnToken = new Rich(new TextAttribute(color))
+			token = new Rich(new TextAttribute(color))
 		} else {
-			returnToken = new Rich()
+			token = new Rich()
 		}
 
-		returnToken.setType type
+		token.setType type
 
-		returnToken
+		if (offset != null) token.setOffset offset
+		if (length != null) token.setLength length
+
+		token
 	}
+}
