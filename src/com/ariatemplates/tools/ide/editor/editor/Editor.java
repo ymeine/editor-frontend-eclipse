@@ -38,8 +38,6 @@ public class Editor extends TextEditor {
 	 **************************************************************************/
 
 	public Editor() {
-		super();
-
 		this.setDocumentProvider(new Provider());
 	}
 
@@ -115,7 +113,7 @@ public class Editor extends TextEditor {
 	@SuppressWarnings("unchecked")
 	private void fold() throws JsonSyntaxException, ParseException, IOException {
 		try {
-			Document document = getDocument();
+			Document document = this.getDocument();
 			Map<String, Object> arguments = new HashMap<String, Object>();
 			arguments.put(Editor.OPTION_ARG_0BASED, true);
 			arguments.put(Editor.OPTION_ARG_TEXT, true);
@@ -223,7 +221,7 @@ public class Editor extends TextEditor {
 	 **************************************************************************/
 
 	private void validate() throws IOException {
-		Document document = getDocument();
+		Document document = this.getDocument();
 		document.clearMarkerAnnotations();
 
 		try {

@@ -21,7 +21,6 @@ import com.ariatemplates.tools.ide.modes.athtml.highlighting.tokens.Rich;
  * fragment of the document
  *
  * @author flongo
- *
  */
 public class SpecificRuleBasedScanner extends RuleBasedScanner {
 

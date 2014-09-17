@@ -1,15 +1,10 @@
 Label provider
 
-----
 
-[TOC]
-
-----
 
 
 
 # File system layout
 
-- [`Provider.java`](./Provider.java): 
-- [`readme.md`](./readme.md): 
-
+- [`Provider.java`](./Provider.java): the main implementation file
+- [`readme.md`](./readme.md): the main documentation file

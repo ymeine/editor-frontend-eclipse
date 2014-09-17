@@ -1,12 +1,30 @@
-Highlighting
-
-
-
-This package handles everything related to syntax highlighting of source code.
+Syntax highlighting
 
 
 
 
+
+# File system layout
+
+- [`readme.md`](./readme.md): the main documentation file
+
+Modules: 
+
+- [`rules/`](./rules/): parsing rules that produce specific tokens
+- [`tokens/`](./tokens/): specific tokens
+
+Classes: 
+
+- [`SpecificRuleBasedScanner.java`](./SpecificRuleBasedScanner.java): the entry point for highlighting, the actual code doing the work and used by Eclipse
+- [`RulesStore.java`](./RulesStore.java): manages the set of rules
+- [`TokensStore.java`](./TokensStore.java): manages the set of tokens
+
+
+----
+
+The section below is a WIP, and should be moved somewhere else probably.
+
+----
 
 # Introduction
 
@@ -76,7 +94,11 @@ Highlighting adds colors to each node of our graph representing source code.
 In order not to pollute visual space, overlapping is avoided, so naturally only leaves have highlighting information.
 
 
+----
 
+The section below is old and needs review.
+
+----
 
 
 # Documentation

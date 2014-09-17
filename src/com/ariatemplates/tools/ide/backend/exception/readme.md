@@ -1,15 +1,10 @@
 Backend exception
 
-----
 
-[TOC]
-
-----
 
 
 
 # File system layout
 
-- [`Exception.java`](./Exception.java): 
-- [`readme.md`](./readme.md): 
-
+- [`Exception.java`](./Exception.java): the main implementation file
+- [`readme.md`](./readme.md): the main documentation file

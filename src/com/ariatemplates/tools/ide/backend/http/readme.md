@@ -1,15 +1,10 @@
-HTTP
+HTTP communication
 
-----
 
-[TOC]
-
-----
 
 
 
 # File system layout
 
-- [`HTTP.java`](./HTTP.java): 
-- [`readme.md`](./readme.md): 
-
+- [`HTTP.java`](./HTTP.java): the main implementation file
+- [`readme.md`](./readme.md): the main documentation file
