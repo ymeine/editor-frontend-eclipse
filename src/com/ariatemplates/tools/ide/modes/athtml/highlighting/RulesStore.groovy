@@ -24,7 +24,6 @@ import com.ariatemplates.tools.ide.modes.athtml.highlighting.rules.Word
  * This class allows to retrieve rules of all the supported types
  *
  * @author flongo
- *
  */
 class RulesStore {
 
@@ -53,6 +52,7 @@ class RulesStore {
 	private tokenStore = TokensStore.get()
 
 
+	private builders
 
 	def RulesStore() {
 		super()
@@ -70,10 +70,10 @@ class RulesStore {
 			(cl.EXPRESSION): {new Expression()},
 
 			(cl.STRING_DOUBLE): {
-				new PatternRule("\"", "\"", this.tokenStore.getToken(TokensStore.STRING), '\\', false)
+				new PatternRule("\"", "\"", this.tokenStore.getToken(TokensStore.STRING), '\\' as char, false)
 			},
 			(cl.STRING_SINGLE): {
-				new PatternRule("'", "'", this.tokenStore.getToken(TokensStore.STRING), '\\', false)
+				new PatternRule("'", "'", this.tokenStore.getToken(TokensStore.STRING), '\\' as char, false)
 			},
 			(cl.STRING_COMPLEX): {
 				new com.ariatemplates.tools.ide.modes.athtml.highlighting.rules.StringRule()
@@ -102,30 +102,25 @@ class RulesStore {
 	}
 
 	/**
-	 * @return the default rules
-	 */
-	def getRules() {
-		def cl = this.class
-
-		def defaultRules = [
-			cl.MULTILINE_COMMENT,
-			cl.SINGLELINE_COMMENT,
-			cl.STATEMENT,
-			cl.EXPRESSION,
-			cl.STRING_COMPLEX,
-			cl.TAG
-		]
-
-		this.getRules defaultRules
-	}
-
-	/**
 	 *
 	 * @param types
 	 *            rules types from the static class properties
-	 * @return the rules corresponding to the specified types
+	 * @return the rules corresponding to the specified types (the default rules if not specified)
 	 */
-	def getRules(types) {
+	def getRules(types=null) {
+		if (types == null) {
+			def cl = this.class
+
+			types = [
+				cl.MULTILINE_COMMENT,
+				cl.SINGLELINE_COMMENT,
+				cl.STATEMENT,
+				cl.EXPRESSION,
+				cl.STRING_COMPLEX,
+				cl.TAG
+			]
+		}
+
 		types.collect { type -> this.getRule type }
 	}
 

@@ -16,7 +16,7 @@ import com.ariatemplates.tools.ide.modes.athtml.highlighting.tokens.Rich
 class Function extends Container {
 
 	static final KEYWORD = "function"
-	static final KEYWORD_LENGTH = this.KEYWORD.length
+	static final KEYWORD_LENGTH = this.KEYWORD.size()
 
 	IToken evaluate(ICharacterScanner initialScanner) {
 		super.evaluate initialScanner

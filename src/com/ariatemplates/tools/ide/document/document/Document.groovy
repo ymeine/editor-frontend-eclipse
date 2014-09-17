@@ -12,7 +12,7 @@ import com.ariatemplates.tools.ide.backend.backend.Backend
 
 
 class Document extends org.eclipse.jface.text.Document {
-	Map<String, Object> GUID
+	def guid
 	IFile file
 
 	private sourceChanges = []
@@ -93,7 +93,5 @@ class Document extends org.eclipse.jface.text.Document {
 			def severity = config["severity"]
 			messages[config["key"]].each {message -> this.addMarkerAnnotation message, severity}
 		}
-		// messages["errors"].each {error -> this.addMarkerAnnotation error, IMarker.SEVERITY_ERROR}
-		// messages["warnings"].each {warning -> this.addMarkerAnnotation warning, IMarker.SEVERITY_WARNING}
 	}
 }

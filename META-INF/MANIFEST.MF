@@ -10,7 +10,8 @@ Require-Bundle: org.apache.httpcomponents.httpcore;bundle-version="4.1.4",
  org.eclipse.core.resources,
  org.eclipse.ui.ide;bundle-version="3.6.2",
  org.eclipse.core.filesystem;bundle-version="1.4.100",
- org.codehaus.groovy;bundle-version="2.3.3"
+ org.codehaus.groovy;bundle-version="2.3.3",
+ org.eclipse.ui.workbench.texteditor;bundle-version="3.9.0"
 Bundle-ActivationPolicy: lazy
 Bundle-Version: 0.1.0.qualifier
 Bundle-Name: Aria Templates Editor

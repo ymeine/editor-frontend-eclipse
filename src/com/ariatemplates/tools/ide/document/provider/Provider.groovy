@@ -25,7 +25,6 @@ class Provider extends FileDocumentProvider {
 	protected IDocument createDocument(element) {
 		// Document creation (client side) -------------------------------------
 
-		// In practice `element` is a FileEditorInput
 		def document = super.createDocument element
 
 		if (document == null) {
@@ -40,14 +39,12 @@ class Provider extends FileDocumentProvider {
 			def result = Backend.get().editor("init", [
 				"mode": mode,
 				"source": document.get(),
-				"extension": document.getFile().getFileExtension()
+				"extension": document.file.getFileExtension()
 			])
 
 			document.guid = result
-		} catch (BackendException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (e) {
+			e.printStackTrace()
 		}
 
 		// Document configuration ----------------------------------------------

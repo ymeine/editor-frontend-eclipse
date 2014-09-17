@@ -8,12 +8,16 @@ class BackendException extends Exception {
 
 
 	static buildMessage(content) {
-		def msg = content["msg"]
-		content.remove "msg"
-		"$msg: $content"
+		if (content instanceof Map) {
+			def msg = content["msg"]
+			content.remove "msg"
+			"$msg: $content"
+		} else {
+			"$content"
+		}
 	}
 
-	BackendException(Map<String, Object> content) {
+	BackendException(content) {
 		super(this.class.buildMessage(content))
 	}
 }

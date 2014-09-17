@@ -140,6 +140,7 @@ class Backend {
 	 * @return the created Process instance behind if so, or <code>null</code> if the backend is not managed by us
 	 */
 	def start() {
+		def cl = this.class
 		def isRunning = this.isRunning()
 
 		// Early termination ---------------------------------------------------
@@ -159,13 +160,13 @@ class Backend {
 
 			def started = false
 			def time = 0
-			while (!started && (time < this.class.POLLING_TIME_OUT)) {
+			while (!started && (time < cl.POLLING_TIME_OUT)) {
 				try {
 					HTTP.release this.http.get(this.ping)
 					started = true
 				} catch (IOException ex) {
-					Thread.sleep this.class.POLLING_SLEEP_TIME
-					time += this.class.POLLING_SLEEP_TIME
+					Thread.sleep cl.POLLING_SLEEP_TIME
+					time += cl.POLLING_SLEEP_TIME
 				}
 			}
 
@@ -262,12 +263,6 @@ class Backend {
 
 	// Mode service ------------------------------------------------------------
 
-	private static final METHOD_EDITOR_EXEC = "exec"
-
-	private static final ARGUMENT_GUID = "guid"
-	private static final ARGUMENT_SERVICE = "svc"
-	private static final ARGUMENT_SERVICE_ARGUMENT = "arg"
-
 	/**
 	 * For every RPC related to an editor service.
 	 *
@@ -275,29 +270,27 @@ class Backend {
 	 */
 	def service(guid, service, serviceArgument=null) {
 		if (guid instanceof Document) {
-			guid = guid.getGUID()
+			guid = guid.guid
 		}
 
-		def argument = new HashMap<String, Object>()
-
-		argument[this.class.ARGUMENT_GUID] = guid
-		argument[this.class.ARGUMENT_SERVICE] = service
+		def argument = [
+			"guid": guid,
+			"svc": service
+		]
 
 		if (serviceArgument != null) {
-			argument[this.class.ARGUMENT_SERVICE_ARGUMENT] = serviceArgument
+			argument["arg"] = serviceArgument
 		}
 
-		this.editor this.class.METHOD_EDITOR_EXEC, argument
+		this.editor("exec", argument)
 	}
 
 
 
 	// Editor module -----------------------------------------------------------
 
-	private static final MODULE_NAME_EDITOR = "editor"
-
 	def editor(member, argument=null) {
-		this.rpc this.class.MODULE_NAME_EDITOR, member, argument
+		this.rpc "editor", member, argument
 	}
 
 
@@ -316,7 +309,7 @@ class Backend {
 	 * @return The JSON result of the RPC.
 	 */
 	def rpc(module, member, argument=null) {
-		HashMap<String, Object> object = [
+		def object = [
 			"module": module,
 			"method": member,
 			"argument": argument
@@ -325,12 +318,12 @@ class Backend {
 		this.rpc.setEntity(new StringEntity(gson.toJson(object)))
 		def response = this.http.post this.rpc
 
-		def result = new HashMap<String, Object>()
+		def result = [:]
 		result = gson.fromJson(HTTP.getString(response), Map.class)
 
 		switch (HTTP.getCode(response)) {
 			case 200:
-				result
+				return result
 			default:
 				throw new BackendException(result)
 		}

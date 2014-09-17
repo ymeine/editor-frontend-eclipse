@@ -23,9 +23,9 @@ class Rich extends Token {
 	static UNDEFINED = new Rich(false)
 
 	def offset = -1
-	public children = []
-	public length = -1
-	public type
+	def children = []
+	def length = -1
+	def type
 
 	private defined = true
 

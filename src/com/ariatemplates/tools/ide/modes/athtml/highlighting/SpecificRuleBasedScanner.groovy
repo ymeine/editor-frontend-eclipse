@@ -18,43 +18,45 @@ import com.ariatemplates.tools.ide.modes.athtml.highlighting.RulesStore
  * fragment of the document
  *
  * @author flongo
- *
  */
 class SpecificRuleBasedScanner extends RuleBasedScanner {
 
 	private tokenStore = TokensStore.get()
 	private rulesStore = RulesStore.get()
-	private iteratorsStack = new ArrayList<Iterator<IToken>>()
+
 	private currentToken
-	private int initialOffset = 0
 	private defaultTokenType
 
+	private initialOffset = 0
+
+	private iteratorsStack = []
 
 
-	def SpecificRuleBasedScanner() {
-		this.setDefaultReturnToken this.tokenStore.getToken(TokensStore.DEFAULT)
-		this.setRules(this.rulesStore.getRules())
-	}
 
-	def SpecificRuleBasedScanner(String defaultToken, int[] rulesTypes, IDocument document, int offset, int length) {
-		this(defaultToken, RulesStore.get().getRules(rulesTypes), document, offset, length)
-	}
+	def SpecificRuleBasedScanner(defaultTokenType=null, rules=null, document=null, offset=null, length=null) {
+		if (defaultTokenType == null) {
+			defaultTokenType = TokensStore.DEFAULT
+		} else {
+			this.defaultTokenType = defaultTokenType
+		}
 
-	def SpecificRuleBasedScanner(String defaultToken, List<IRule> rules, IDocument document, int offset, int length) {
-		this.initialOffset = offset
-		this.defaultTokenType = defaultToken
-		this.setDefaultReturnToken(this.tokenStore.getToken(defaultToken))
-		IRule[] typeArray = new IRule[rules.size()]
-		this.setRules(rules.toArray(typeArray))
-		this.setRange(document, offset, length)
-	}
+		if (rules == null || rules instanceof int[]) {
+			rules = this.rulesStore.getRules(rules)
+		}
 
-	public SpecificRuleBasedScanner(String defaultToken, int[] rulesTypes, IDocument document, int offset) {
-		this(defaultToken, rulesTypes, document, offset, document.getLength() - offset)
-	}
+		// ---------------------------------------------------------------------
 
-	public SpecificRuleBasedScanner(String defaultToken, List<IRule> rules, IDocument document, int offset) {
-		this(defaultToken, rules, document, offset, document.getLength() - offset)
+		if (offset != null) {
+			this.initialOffset = offset
+		}
+
+		this.setDefaultReturnToken(this.tokenStore.getToken(defaultTokenType))
+		this.setRules(rules as IRule[])
+
+		if (document != null && offset != null) {
+			length = length ?: document.getLength() - offset
+			this.setRange(document, offset, length)
+		}
 	}
 
 
@@ -66,50 +68,47 @@ class SpecificRuleBasedScanner extends RuleBasedScanner {
 	 * @return the next token
 	 */
 	IToken nextToken() {
-		def temporaryToken
+		def next
+		def iteratorsStack = this.iteratorsStack
 
-		if (this.iteratorsStack.isEmpty()) {
-			temporaryToken = super.nextToken()
+		if (iteratorsStack.isEmpty()) {
+			next = super.nextToken()
 		} else {
-			def lastIndex = this.iteratorsStack.size() - 1
-			def lastIterator = this.iteratorsStack.get(lastIndex)
+			def lastIndex = iteratorsStack.size() - 1
+			def lastIterator = iteratorsStack[lastIndex]
+
 			if (lastIterator.hasNext()) {
-				temporaryToken = lastIterator++
+				next = lastIterator++
 			} else {
-				this.iteratorsStack.remove(lastIndex)
-				temporaryToken = this.nextToken()
+				iteratorsStack.remove(lastIndex)
+				next = this.nextToken()
 			}
 		}
 
-		def enhancedToken = (temporaryToken instanceof Rich) ? temporaryToken : null
+		def enhancedToken = next instanceof Rich ? next : null
 
 		if (enhancedToken != null && enhancedToken.hasChildren()) {
-			this.iteratorsStack += enhancedToken.getChildren().iterator()
-			temporaryToken = this.nextToken()
+			iteratorsStack += enhancedToken.getChildren().iterator()
+			next = this.nextToken()
 		}
 
-		if (temporaryToken.isUndefined()) {
+		if (next.isUndefined()) {
 			return this.nextToken()
 		}
-		this.currentToken = temporaryToken
+		this.currentToken = next
 
-		temporaryToken
+		next
 	}
 
 	/**
 	 * It returns the next token independently of its children. It does not
 	 * flatten the hierarchy
-	 *
-	 * @return
 	 */
 	IToken nextFlatToken() {
-		def temporaryToken
-
-		temporaryToken = super.nextToken()
-		this.currentToken = temporaryToken
-
-		temporaryToken
+		this.currentToken = super.nextToken()
 	}
+
+
 
 	int getTokenOffset() {
 		if (this.currentToken == null) {
@@ -117,12 +116,13 @@ class SpecificRuleBasedScanner extends RuleBasedScanner {
 		}
 
 		def offset = -1
+
 		if (this.currentToken instanceof Rich) {
-			def enhancedToken = this.currentToken
-			offset = enhancedToken.getOffset()
+			offset = this.currentToken.offset
 		}
+
 		if (offset == -1) {
-			return super.getTokenOffset()
+			offset = super.getTokenOffset()
 		}
 
 		offset
@@ -133,13 +133,14 @@ class SpecificRuleBasedScanner extends RuleBasedScanner {
 			return 0
 		}
 
-		int length = -1
+		def length = -1
+
 		if (this.currentToken instanceof Rich) {
-			def enhancedToken = this.currentToken
-			length = enhancedToken.getLength()
+			length = this.currentToken.length
 		}
+
 		if (length == -1) {
-			return super.getTokenLength()
+			length = super.getTokenLength()
 		}
 
 		length
@@ -158,24 +159,22 @@ class SpecificRuleBasedScanner extends RuleBasedScanner {
 	 * @return
 	 */
 	def getToken(stopAtDefault=false) {
-		containerToken = this.tokenStore.getToken(TokensStore.CONTAINER)
+		def containerToken = this.tokenStore.getToken(TokensStore.CONTAINER)
 
 		while (this.fOffset < this.fRangeEnd) {
-			int initialOffset = this.fOffset
-			def next = this.nextFlatToken()
-			int finalOffset = this.fOffset
-			def pocNext = next
-			def pocNextClone = pocNext.clone()
+			def initialOffset = this.fOffset
+			def finalOffset = this.fOffset
+			def next = this.nextFlatToken().clone()
 
-			if (pocNextClone.getLength() == Rich.UNDEFINED_INT && pocNextClone.getOffset() == Rich.UNDEFINED_INT) {
-				pocNextClone.setOffset initialOffset
-				pocNextClone.setLength(finalOffset - initialOffset)
+			if (next.length == Rich.UNDEFINED_INT && next.offset == Rich.UNDEFINED_INT) {
+				next.offset = initialOffset
+				next.length = finalOffset - initialOffset
 			}
-			if (stopAtDefault && pocNextClone.getType() == this.defaultTokenType) {
+			if (stopAtDefault && next.type == this.defaultTokenType) {
 				return containerToken
 			}
 
-			this.currentToken = pocNextClone
+			this.currentToken = next
 			containerToken.addChild this.currentToken
 		}
 
@@ -188,5 +187,4 @@ class SpecificRuleBasedScanner extends RuleBasedScanner {
 	 *         getToken method is called with a true argument
 	 */
 	def getTokenizedLength() {this.getCurrentOffset() - this.initialOffset}
-
 }

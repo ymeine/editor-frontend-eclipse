@@ -23,7 +23,7 @@ class Key extends Container {
 
 		final forbiddenChars = " :,\r\t\n{}"
 
-		if (next == ICharacterScanner.EOF || forbiddenChars.indexOf(nextChar) != -1) {
+		if (next == ICharacterScanner.EOF || nextChar in forbiddenChars) {
 			this.rewind()
 			return Rich.UNDEFINED
 		}
@@ -55,7 +55,7 @@ class Key extends Container {
 			return this.containerToken
 		}
 
-		while (next == ICharacterScanner.EOF || forbiddenChars.indexOf(nextChar) == -1) {
+		while (next == ICharacterScanner.EOF || nextChar in forbiddenChars) {
 			this.__addToken()
 
 			next = this.read()
