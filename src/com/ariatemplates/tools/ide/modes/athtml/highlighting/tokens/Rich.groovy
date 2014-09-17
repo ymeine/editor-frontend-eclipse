@@ -20,7 +20,7 @@ import org.eclipse.jface.text.rules.Token
 class Rich extends Token {
 
 	static UNDEFINED_INT = -1
-	static UNDEFINED = new Rich false
+	static UNDEFINED = new Rich(false)
 
 	def offset = -1
 	public children = []
@@ -31,18 +31,27 @@ class Rich extends Token {
 
 
 
-	Rich(data=null, offset=null, length=null) {
-		if (data instanceof Boolean) {
-			super()
-			this.defined = data
-		} else {
-			super data
-		}
-
-		if (offset != null) {this.offset = offset}
-		if (length!= null) {this.length = length}
+	public Rich(Object data, offset, length) {
+		super(data)
+		this.offset = offset
+		this.length = length
+	}
+	
+	public Rich() {
+		super(null)
+	}
+	
+	public Rich(Boolean defined) {
+		super(null)
+		this.defined = defined
+	}
+	
+	public Rich(Object data) {
+		super(data)
 	}
 
+	
+	
 	boolean isUndefined() {!this.defined}
 	def addChild(child) {this.children += child}
 	def hasChildren() {!this.children.isEmpty()}

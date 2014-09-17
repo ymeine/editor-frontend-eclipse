@@ -1,4 +1,4 @@
-import ProcessRunner
+/*import ProcessRunner
 
 
 runner = new ProcessRunner()
@@ -25,3 +25,4 @@ Thread.sleep(1000)
 runner.stop()
 println runner.process
 println runner.exit_value
+*/

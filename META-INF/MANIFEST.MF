@@ -8,7 +8,9 @@ Require-Bundle: org.apache.httpcomponents.httpcore;bundle-version="4.1.4",
  org.eclipse.jface.text;bundle-version="3.6.1",
  org.eclipse.ui.views;bundle-version="3.5.1",
  org.eclipse.core.resources,
- org.eclipse.ui.ide;bundle-version="3.6.2"
+ org.eclipse.ui.ide;bundle-version="3.6.2",
+ org.eclipse.core.filesystem;bundle-version="1.4.100",
+ org.codehaus.groovy;bundle-version="2.3.3"
 Bundle-ActivationPolicy: lazy
 Bundle-Version: 0.1.0.qualifier
 Bundle-Name: Aria Templates Editor
@@ -38,7 +40,6 @@ Export-Package: com.ariatemplates.tools.ide;
    org.eclipse.jface.text.contentassist,
    org.eclipse.swt.widgets,
    org.eclipse.ui.editors.text",
- com.ariatemplates.tools.ide.highlight;uses:="org.eclipse.jface.text,org.eclipse.jface.text.rules",
  com.ariatemplates.tools.ide.outline;uses:="org.eclipse.ui.views.contentoutline,org.eclipse.jface.viewers,org.eclipse.swt.widgets"
 Bundle-ClassPath: bin/,
  .

@@ -7,7 +7,7 @@ import org.eclipse.core.resources.IMarker
 import org.eclipse.core.runtime.CoreException
 import org.eclipse.jface.text.BadLocationException
 
-import com.ariatemplates.tools.ide.backend.backend.Backend;
+import com.ariatemplates.tools.ide.backend.backend.Backend
 
 
 
@@ -71,14 +71,29 @@ class Document extends org.eclipse.jface.text.Document {
 			if (index > 0) {
 				out.append "\n"
 			}
-			out.append("- ").append message
+			out.append("- ").append(message)
 		}
 
 		"$out"
 	}
 
 	def addAllMarkerAnnotations(messages) {
-		messages["errors"].each {error -> this.addMarkerAnnotation error, IMarker.SEVERITY_ERROR}
-		messages["warnings"].each {warning -> this.addMarkerAnnotation warning, IMarker.SEVERITY_WARNING}
+		def sets = [
+			[
+				"key": "errors",
+				"severity": IMarker.SEVERITY_ERROR
+			],
+			[
+				"key": "warnings",
+				"severity": IMarker.SEVERITY_WARNING
+			]
+		]
+
+		sets.each { config ->
+			def severity = config["severity"]
+			messages[config["key"]].each {message -> this.addMarkerAnnotation message, severity}
+		}
+		// messages["errors"].each {error -> this.addMarkerAnnotation error, IMarker.SEVERITY_ERROR}
+		// messages["warnings"].each {warning -> this.addMarkerAnnotation warning, IMarker.SEVERITY_WARNING}
 	}
 }

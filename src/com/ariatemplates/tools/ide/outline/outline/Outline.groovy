@@ -18,7 +18,7 @@ class Outline extends ContentOutlinePage {
 	void createControl(Composite parent) {
 		super.createControl parent
 
-		viewer = this.getTreeViewer()
+		def viewer = this.getTreeViewer()
 		viewer.setContentProvider new com.ariatemplates.tools.ide.outline.content.provider.Provider()
 		viewer.setLabelProvider new com.ariatemplates.tools.ide.outline.label.provider.Provider()
 	}
@@ -33,7 +33,7 @@ class Outline extends ContentOutlinePage {
 	}
 
 	def update() {
-		viewer = this.getTreeViewer()
+		def viewer = this.getTreeViewer()
 		if (viewer != null) {
 			viewer.setInput this.input
 		}

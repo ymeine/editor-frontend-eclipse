@@ -158,7 +158,7 @@ class Function extends Container {
 					this.addToken this.tokenStore.getToken(
 						TokensStore.DEFAULT,
 						this.start + this.offset,
-						1)
+						1
 					)
 				}
 			}

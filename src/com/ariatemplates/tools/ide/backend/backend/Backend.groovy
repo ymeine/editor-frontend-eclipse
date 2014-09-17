@@ -35,7 +35,7 @@ class Backend {
 	 * @return A singleton.
 	 */
 	static get() {
-		this.class.singleton = this.class.singleton ?: new Backend()
+		this.singleton = this.singleton ?: new Backend()
 	}
 
 
@@ -80,12 +80,14 @@ class Backend {
 	 * Builds a new backend instance.
 	 */
 	def Backend() {
-		this.@rpc = new HttpPost("${this.class.URL_BASE}${this.class.URL_PATH_RPC}")
-		this.rpc.setHeader "${this.class.HEADER_CONTENT_TYPE}${this.class.HEADER_VALUE_CONTENT_TYPE}"
+		def cl = this.class
 
-		this.shutdown = new HttpGet("${this.class.URL_BASE}${this.class.URL_PATH_SHUTDOWN}")
-		this.ping = new HttpGet("${this.class.URL_BASE}${this.class.URL_PATH_PING}")
-		this.guid = new HttpGet("${this.class.URL_BASE}${this.class.URL_PATH_GUID}")
+		this.rpc = new HttpPost("${cl.URL_BASE}${cl.URL_PATH_RPC}")
+		this.rpc.setHeader cl.HEADER_CONTENT_TYPE, cl.HEADER_VALUE_CONTENT_TYPE
+
+		this.shutdown = new HttpGet("${cl.URL_BASE}${cl.URL_PATH_SHUTDOWN}")
+		this.ping = new HttpGet("${cl.URL_BASE}${cl.URL_PATH_PING}")
+		this.guid = new HttpGet("${cl.URL_BASE}${cl.URL_PATH_GUID}")
 
 		def basePath = new File("")
 		try {
@@ -95,10 +97,10 @@ class Backend {
 			print e
 		}
 
-		this.processRunner.process_path = new File(basePath, this.class.NODE_PATH).getAbsolutePath()
+		this.processRunner.process_path = new File(basePath, cl.NODE_PATH).getAbsolutePath()
 		this.processRunner.arguments = [
-			new File(basePath, this.class.APPLICATION_ENTRY_PATH).getAbsolutePath(),
-			this.class.APPLICATION_OPTIONS
+			new File(basePath, cl.APPLICATION_ENTRY_PATH).getAbsolutePath(),
+			cl.APPLICATION_OPTIONS
 		]
 	}
 
@@ -159,7 +161,7 @@ class Backend {
 			def time = 0
 			while (!started && (time < this.class.POLLING_TIME_OUT)) {
 				try {
-					HTTP.release this.http.get this.ping
+					HTTP.release this.http.get(this.ping)
 					started = true
 				} catch (IOException ex) {
 					Thread.sleep this.class.POLLING_SLEEP_TIME

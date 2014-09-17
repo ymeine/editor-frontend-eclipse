@@ -53,16 +53,16 @@ class Scanner implements ITokenScanner {
 
 			// Tokens ----------------------------------------------------------
 
-			def result = Backend.get().service document, this.class.METHOD_HIGHLIGHT, [
+			def result = Backend.get().service(document, this.class.METHOD_HIGHLIGHT, [
 				"wholeSource": true,
-				this.class.ARGUMENT_OFFSET: offset,
+				(this.class.ARGUMENT_OFFSET): offset,
 				"end": offset + length
-			]
+			])
 
 			tokens = result[this.class.KEY_TOKENS]
 
 			this.tokensIterator = tokens.iterator()
-		} catch (Exception e) {
+		} catch (e) {
 			e.printStackTrace()
 		}
 	}
@@ -148,7 +148,7 @@ class Scanner implements ITokenScanner {
 			return Token.WHITESPACE
 		}
 
-		new Token(this.getAttribute type)
+		new Token(this.getAttribute(type))
 	}
 
 	// TODO Caching?
@@ -158,10 +158,10 @@ class Scanner implements ITokenScanner {
 
 		new TextAttribute(new Color(
 			Display.getCurrent(),
-			rgb["r"],
-			rgb["g"],
-			rgb["b"]
-		));
+			*('rgb'.collect {k->rgb[k]})
+		))
+
+
 	}
 
 	// Locations ---------------------------------------------------------------

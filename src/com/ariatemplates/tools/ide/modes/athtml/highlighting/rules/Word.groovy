@@ -20,7 +20,7 @@ class Word extends Container {
 
 	def Word(words, tokens) {
 		this.words = words
-		this.maxLength = Math.max words.*length()
+		this.maxLength = Math.max(words*.length())
 
 		if (tokens instanceof Rich) {
 			this.defaultToken = tokens

@@ -7,7 +7,5 @@ import org.eclipse.jface.viewers.LabelProvider
 
 
 class Provider extends LabelProvider {
-	String getText(element) {
-		(element as Map)["label"]
-	}
+	String getText(element) {element["label"]}
 }

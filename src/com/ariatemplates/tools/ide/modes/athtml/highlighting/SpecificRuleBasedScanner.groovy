@@ -8,6 +8,7 @@ import org.eclipse.jface.text.rules.IToken
 import org.eclipse.jface.text.rules.RuleBasedScanner
 
 import com.ariatemplates.tools.ide.modes.athtml.highlighting.tokens.Rich
+import com.ariatemplates.tools.ide.modes.athtml.highlighting.RulesStore
 
 
 
@@ -32,28 +33,28 @@ class SpecificRuleBasedScanner extends RuleBasedScanner {
 
 	def SpecificRuleBasedScanner() {
 		this.setDefaultReturnToken this.tokenStore.getToken(TokensStore.DEFAULT)
-		this.setRules(rulesStore.getRules())
+		this.setRules(this.rulesStore.getRules())
 	}
 
 	def SpecificRuleBasedScanner(String defaultToken, int[] rulesTypes, IDocument document, int offset, int length) {
-		this(defaultToken, RulesStore.get().getRules(rulesTypes), document, offset, length);
+		this(defaultToken, RulesStore.get().getRules(rulesTypes), document, offset, length)
 	}
 
 	def SpecificRuleBasedScanner(String defaultToken, List<IRule> rules, IDocument document, int offset, int length) {
-		this.initialOffset = offset;
-		this.defaultTokenType = defaultToken;
-		this.setDefaultReturnToken(this.tokenStore.getToken(defaultToken));
-		IRule[] typeArray = new IRule[rules.size()];
-		this.setRules(rules.toArray(typeArray));
-		this.setRange(document, offset, length);
+		this.initialOffset = offset
+		this.defaultTokenType = defaultToken
+		this.setDefaultReturnToken(this.tokenStore.getToken(defaultToken))
+		IRule[] typeArray = new IRule[rules.size()]
+		this.setRules(rules.toArray(typeArray))
+		this.setRange(document, offset, length)
 	}
 
 	public SpecificRuleBasedScanner(String defaultToken, int[] rulesTypes, IDocument document, int offset) {
-		this(defaultToken, rulesTypes, document, offset, document.getLength() - offset);
+		this(defaultToken, rulesTypes, document, offset, document.getLength() - offset)
 	}
 
 	public SpecificRuleBasedScanner(String defaultToken, List<IRule> rules, IDocument document, int offset) {
-		this(defaultToken, rules, document, offset, document.getLength() - offset);
+		this(defaultToken, rules, document, offset, document.getLength() - offset)
 	}
 
 

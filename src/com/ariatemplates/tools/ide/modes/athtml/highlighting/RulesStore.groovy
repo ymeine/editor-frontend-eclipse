@@ -30,7 +30,7 @@ class RulesStore {
 
 	private static singleton
 	static get() {
-		this.class.singleton = this.class.singleton ?: new RulesStore()
+		this.singleton = this.singleton ?: new RulesStore()
 	}
 
 	static final MULTILINE_COMMENT = 1
@@ -51,6 +51,55 @@ class RulesStore {
 	static final ARRAY = 16
 
 	private tokenStore = TokensStore.get()
+
+
+
+	def RulesStore() {
+		super()
+		def cl = this.class
+
+		this.builders = [
+			(cl.MULTILINE_COMMENT): {
+				new MultiLineRule("/*", "*/", this.tokenStore.getToken(TokensStore.COMMENT), (0 as char), false)
+			},
+			(cl.SINGLELINE_COMMENT): {
+				new EndOfLineRule("//", this.tokenStore.getToken(TokensStore.COMMENT))
+			},
+
+			(cl.STATEMENT): {new Statement()},
+			(cl.EXPRESSION): {new Expression()},
+
+			(cl.STRING_DOUBLE): {
+				new PatternRule("\"", "\"", this.tokenStore.getToken(TokensStore.STRING), '\\', false)
+			},
+			(cl.STRING_SINGLE): {
+				new PatternRule("'", "'", this.tokenStore.getToken(TokensStore.STRING), '\\', false)
+			},
+			(cl.STRING_COMPLEX): {
+				new com.ariatemplates.tools.ide.modes.athtml.highlighting.rules.StringRule()
+			},
+
+			(cl.TAG): {new Tag()},
+			(cl.TAG_ATTRIBUTE): {new Attribute()},
+
+			(cl.NUMBER): {
+				new NumberRule(this.tokenStore.getToken(TokensStore.NUMBER))
+			},
+			(cl.BOOLEAN): {
+				def words = ["true", "false"]
+				new Word(words, this.tokenStore.getToken(TokensStore.BOOLEAN))
+			},
+			(cl.OPERATOR): {
+				def words = ["+", "-", "%", "*", "|", "&", "=", "<", ">", "!="]
+				new Word(words, this.tokenStore.getToken(TokensStore.OPERATOR))
+			},
+
+			(cl.FUNCTION): {new Function()},
+			(cl.KEY): {new Key()},
+			(cl.OBJECT): {new Object()},
+			(cl.ARRAY): {new Array()}
+		]
+	}
 
 	/**
 	 * @return the default rules
@@ -86,53 +135,7 @@ class RulesStore {
 	 *            rule type from the static class properties
 	 * @return the rule corresponding to the specified type
 	 */
-	def getRule(type) {
-		def cl = this.class
-
-		def builders = [
-			cl.MULTILINE_COMMENT: {
-				new MultiLineRule("/*", "*/", this.tokenStore.getToken(TokensStore.COMMENT), (0 as char), false)
-			}
-			cl.SINGLELINE_COMMENT: {
-				new EndOfLineRule("//", this.tokenStore.getToken(TokensStore.COMMENT))
-			}
-
-			cl.STATEMENT: {new Statement()}
-			cl.EXPRESSION: {new Expression()}
-
-			cl.STRING_DOUBLE: {
-				new PatternRule("\"", "\"", this.tokenStore.getToken(TokensStore.STRING), '\\', false)
-			}
-			cl.STRING_SINGLE: {
-				new PatternRule("'", "'", this.tokenStore.getToken(TokensStore.STRING), '\\', false)
-			}
-			cl.STRING_COMPLEX: {
-				new com.ariatemplates.tools.ide.modes.athtml.highlighting.rules.StringRule()
-			}
-
-			cl.TAG: {new Tag()}
-			cl.TAG_ATTRIBUTE: {new Attribute()}
-
-			cl.NUMBER: {
-				new NumberRule(this.tokenStore.getToken(TokensStore.NUMBER))
-			}
-			cl.BOOLEAN: {
-				def words = ["true", "false"]
-				new Word(words, this.tokenStore.getToken(TokensStore.BOOLEAN))
-			}
-			cl.OPERATOR: {
-				def words = ["+", "-", "%", "*", "|", "&", "=", "<", ">", "!="]
-				new Word(words, this.tokenStore.getToken(TokensStore.OPERATOR))
-			}
-
-			cl.FUNCTION: {new Function()}
-			cl.KEY: {new Key()}
-			cl.OBJECT: {new Object()}
-			cl.ARRAY: {new Array()}
-		]
-
-		(builders[type] ?: {null})()
-	}
+	def getRule(type) {(this.builders[type] ?: {null})()}
 
 	/**
 	 * @return the rules corresponding to the primitive types like strings,

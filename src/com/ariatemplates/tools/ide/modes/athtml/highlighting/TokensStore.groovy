@@ -21,7 +21,7 @@ class TokensStore {
 	private static singleton
 
 	static get() {
-		this.class.singleton = this.class.singleton ?: new TokensStore()
+		this.singleton = this.singleton ?: new TokensStore()
 	}
 
 
@@ -51,24 +51,24 @@ class TokensStore {
 	def TokensStore() {
 		def cl = this.class
 		this.colorMap = [
-			cl.DEFAULT: cl.DEFAULT_COLOR,
-			cl.CONTAINER: cl.CONTAINER_COLOR,
-			cl.STATEMENT: cl.STATEMENT_COLOR,
-			cl.STATEMENT_ARGS: cl.STATEMENT_ARGS_COLOR,
-			cl.COMMENT: cl.COMMENT_COLOR,
-			cl.EXPRESSION: cl.EXPRESSION_COLOR,
-			cl.EXPRESSION_ARGS: cl.EXPRESSION_ARGS_COLOR,
-			cl.STRING: cl.STRING_COLOR,
-			cl.TAG: cl.TAG_COLOR,
-			cl.TAG_ATTRIBUTE: cl.TAG_ATTRIBUTE_COLOR,
-			cl.TAG_ATTRIBUTE_EQUAL: cl.TAG_ATTRIBUTE_EQUAL_COLOR,
-			cl.NUMBER: cl.NUMBER_COLOR,
-			cl.BOOLEAN: cl.BOOLEAN_COLOR,
-			cl.OPERATOR: cl.OPERATOR_COLOR,
-			cl.FUNCTION: cl.FUNCTION_COLOR,
-			cl.KEY: cl.KEY_COLOR,
-			cl.OBJECT: cl.OBJECT_COLOR,
-			cl.ARRAY: cl.ARRAY_COLOR
+			(cl.DEFAULT): cl.DEFAULT_COLOR,
+			(cl.CONTAINER): cl.CONTAINER_COLOR,
+			(cl.STATEMENT): cl.STATEMENT_COLOR,
+			(cl.STATEMENT_ARGS): cl.STATEMENT_ARGS_COLOR,
+			(cl.COMMENT): cl.COMMENT_COLOR,
+			(cl.EXPRESSION): cl.EXPRESSION_COLOR,
+			(cl.EXPRESSION_ARGS): cl.EXPRESSION_ARGS_COLOR,
+			(cl.STRING): cl.STRING_COLOR,
+			(cl.TAG): cl.TAG_COLOR,
+			(cl.TAG_ATTRIBUTE): cl.TAG_ATTRIBUTE_COLOR,
+			(cl.TAG_ATTRIBUTE_EQUAL): cl.TAG_ATTRIBUTE_EQUAL_COLOR,
+			(cl.NUMBER): cl.NUMBER_COLOR,
+			(cl.BOOLEAN): cl.BOOLEAN_COLOR,
+			(cl.OPERATOR): cl.OPERATOR_COLOR,
+			(cl.FUNCTION): cl.FUNCTION_COLOR,
+			(cl.KEY): cl.KEY_COLOR,
+			(cl.OBJECT): cl.OBJECT_COLOR,
+			(cl.ARRAY): cl.ARRAY_COLOR
 		]
 	}
 
@@ -77,16 +77,15 @@ class TokensStore {
 
 		def token
 		if (rgb != null) {
-			def color = new Color(Display.getCurrent(), *rgb)
-			token = new Rich(new TextAttribute(color))
+			token = new Rich(new TextAttribute(new Color(Display.getCurrent(), *rgb)))
 		} else {
 			token = new Rich()
 		}
 
-		token.setType type
+		token.type = type
 
-		if (offset != null) token.setOffset offset
-		if (length != null) token.setLength length
+		if (offset != null) token.offset = offset
+		if (length != null) token.length = length
 
 		token
 	}

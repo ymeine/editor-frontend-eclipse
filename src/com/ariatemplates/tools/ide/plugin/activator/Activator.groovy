@@ -15,12 +15,10 @@ class Activator extends AbstractUIPlugin {
 	private static Activator plugin
 
 	static Activator getDefault() {
-		this.class.plugin
+		this.plugin
 	}
 
-
-
-	def Activator() {}
+	
 
 	void start(BundleContext context) {
 		super.start context
@@ -31,8 +29,7 @@ class Activator extends AbstractUIPlugin {
 			Backend.get().start()
 		} catch (exception) {
 			System.err.println "No external server running, and could not start the backend server internally."
-			System.err.println "Exception: "
-			System.err.println exception
+			exception.printStackTrace()
 		}
 	}
 

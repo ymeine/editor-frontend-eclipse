@@ -23,7 +23,7 @@ class Provider implements ITreeContentProvider {
 	Object[] getElements(inputElement) {
 		if (inputElement != null) {
 			try {
-				elements = this.getList inputElement, "tree"
+				def elements = inputElement["tree"]
 				if (elements != null) {
 					return elements
 				}
@@ -39,33 +39,12 @@ class Provider implements ITreeContentProvider {
 	 */
 	@Override
 	Object[] getChildren(parentElement) {
-		children = this.getList parentElement, "children"
-		children ?: []
+		parentElement["children"] ?: []
 	}
 
 	@Override
 	boolean hasChildren(element) {
 		this.getChildren(element).length > 0
-	}
-
-	/***************************************************************************
-	 * Helpers
-	 **************************************************************************/
-
-	/**
-	 * Returns an array of Objects from a List contained in the given Map under the given key.
-	 *
-	 * What this method essentially does is taking care of type conversions for you.
-	 *
-	 * @param[in] element A map: must be not bull!
-	 * @param[in] key The key of the value in the given map: must be not null!
-	 *
-	 * @returns The list of elements if found and defined, <code>null</code> otherwise.
-	 * @throws ClassCastException In case the given element is not a map
-	 */
-	private getList(element, key) {
-		list = (element as Map)[key] as List
-		list?.toArray()
 	}
 
 	/***************************************************************************

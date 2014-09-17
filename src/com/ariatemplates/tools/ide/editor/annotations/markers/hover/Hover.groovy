@@ -22,9 +22,9 @@ class Hover implements IAnnotationHover {
 		while (iterator.hasNext()) {
 			def annotation = iterator.next()
 			if (annotation instanceof MarkerAnnotation) {
-				def marker = annotation as MarkerAnnotation;
+				def marker = annotation
 				try {
-					int markerLine = marker.getMarker().getAttribute IMarker.LINE_NUMBER
+					def markerLine = marker.getMarker().getAttribute IMarker.LINE_NUMBER
 
 					if (markerLine == line) {
 						def markerMessage = marker.getMarker().getAttribute IMarker.MESSAGE

@@ -17,11 +17,11 @@ class Listener implements IDocumentListener {
 	}
 
 	void documentChanged(DocumentEvent event) {
-		document.addSourceChange [
+		document.addSourceChange([
 			"start": event.getOffset(),
 			"end": event.getOffset() + event.getLength(),
 			"source": event.getText()
-		]
+		])
 
 		document.clearMarkerAnnotations()
 	}

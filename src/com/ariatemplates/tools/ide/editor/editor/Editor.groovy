@@ -84,7 +84,7 @@ class Editor extends TextEditor {
 	}
 
 	def getDocument() {
-		this.getDocumentProvider().getDocument(this.getEditorInput())
+		this.getDocumentProvider().getDocument this.getEditorInput()
 	}
 
 	/***************************************************************************
@@ -98,20 +98,14 @@ class Editor extends TextEditor {
 		try {
 			def document = this.getDocument()
 
-			def result = Backend.get().service document, "fold", [
+			def result = Backend.get().service(document, "fold", [
 				"0-based": true,
 				"text": true,
 				"length": true
-			]
+			])
 
-			def folds = result["ranges"]
-
-			def positions = []
-			folds.each { range ->
-				int start = range["start"]
-				int length = range["length"]
-
-				positions += new Position(start, length)
+			def positions = result["ranges"].collect { range ->
+				new Position(range["start"], range["length"])
 			}
 
 			this.updateFoldingStructure positions

@@ -22,26 +22,26 @@ class Provider extends FileDocumentProvider {
 
 
 
-	protected IDocument createDocument(Object element) {
+	protected IDocument createDocument(element) {
 		// Document creation (client side) -------------------------------------
 
 		// In practice `element` is a FileEditorInput
-		Document document = super.createDocument element
+		def document = super.createDocument element
 
 		if (document == null) {
 			return null
 		}
 
-		document.setFile (element as FileEditorInput).getFile()
+		document.file = element.getFile() // element as FileEditorInput
 
 		// Document registration (backend side) --------------------------------
 
 		try {
-			def result = Backend.get().editor "init", [
+			def result = Backend.get().editor("init", [
 				"mode": mode,
 				"source": document.get(),
 				"extension": document.getFile().getFileExtension()
-			]
+			])
 
 			document.guid = result
 		} catch (BackendException e) {
