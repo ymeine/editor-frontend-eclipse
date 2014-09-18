@@ -1,14 +1,19 @@
 Here are tools to build, export and package the plugin in different formats.
 
+
+
+
+
 # File system layout
 
-* [`README.md`](./README.md): this current file
-* [`feature`](./feature): an Eclipse project for an Eclipse Feature
-* [`site`](./site): an Eclipse project for an Eclipse Update Site
+- [`readme.md`](./readme.md): the main documentation file
 
-# Versioning
+Packages: 
 
-To version: _everything_.
+- [`feature/`](./feature/): an Eclipse project for an Eclipse Feature
+- [`site/`](./site/): an Eclipse project for an Eclipse Update Site
+
+
 
 
 
@@ -26,8 +31,8 @@ As long as we have only one plugin developed, the feature might seem superfluous
 
 An Eclipse Update Site is composed of two things:
 
-* a set of components that can be served
-* metadata about those components, in order to serve them _better_
+- a set of components that can be served
+- metadata about those components, in order to serve them _better_
 
 More precisely, an Update Site is made to provide resources to extend the Eclipse Platform, and this is done with Eclipse plugins, which in this particular case need to be packaged into features.
 
@@ -39,9 +44,9 @@ More precisely, an Update Site is made to provide resources to extend the Eclips
 
 There are three kind of things you can build:
 
-* the plugin only
-* the feature wrapping this plugin
-* the update site that will serve this feature
+- the plugin only
+- the feature wrapping this plugin
+- the update site that will serve this feature
 
 (as you see there is a progression.)
 
@@ -54,5 +59,3 @@ Otherwise, read the following subsection to build the plugin.
 ## Build the plugin
 
 For now nothing is automated, you will have to use the _manual_ procedure, using the Eclipse IDE.
-
-

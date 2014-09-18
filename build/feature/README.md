@@ -1,15 +1,24 @@
 The Eclipse Feature project to package our plugin.
 
+
+
+
+
 # File system layout
 
-* [`README.md`](./README.md): this current file
-* [`.project`](./.project): the Eclipse project configuration
-* [`build.properties`](./build.properties): the configuration of the build
-* [`feature.xml`](./feature.xml): the feature definition
+Documentation: 
 
-# Versioning
+- [`readme.md`](./readme.md): the main documentation file
+- [`__doc__/`](./__doc__/): documentation resources
 
-To version: _everything_.
+Sources: 
+
+- [`feature.xml`](./feature.xml): the feature definition
+
+Eclipse project: 
+
+- [`.project`](./.project): the Eclipse project configuration
+- [`build.properties`](./build.properties): the configuration of the build
 
 
 
@@ -21,11 +30,11 @@ To version: _everything_.
 
 In Eclipse IDE, import an existing project using this [`.project`](./.project) file.
 
-![](./__doc/import-step1.png)
+![](./__doc__/import-step1.png)
 
-![](./__doc/import-step2.png)
+![](./__doc__/import-step2.png)
 
-![](./__doc/import-step3.png)
+![](./__doc__/import-step3.png)
 
 ## Build
 

@@ -28,12 +28,10 @@ There is nothing particular in this folder, as the Java conventions require a so
 - [Building an Eclipse Text Editor with JFace Text](http://www.realsolve.co.uk/site/tech/jface-text.php)
 - [Create commercial-quality eclipse ide](http://www.ibm.com/developerworks/views/opensource/libraryview.jsp?search_by=Create+commercial-quality+eclipse+ide) on _IBM developerWorks : Open source :  Technical library_
 	- [Create a commercial-quality Eclipse IDE, Part 2: The user interface](http://www.ibm.com/developerworks/opensource/tutorials/os-ecl-commplgin2/index.html)
-		- [Section 2](http://www.ibm.com/developerworks/opensource/tutorials/os-ecl-commplgin2/section2.html)
-	- ...
 
 ## Eclipse documentation
 
-[Juno documentation](http://help.eclipse.org/juno/index.jsp)
+[Home](http://help.eclipse.org/)
 
 - `org.eclipse.ui.texteditor.AbstractTextEditor`, `createPartControl`, `getAdapter`
 - `org.eclipse.ui.editors.text.FileDocumentProvider`

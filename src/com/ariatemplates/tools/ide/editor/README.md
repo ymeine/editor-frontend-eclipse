@@ -40,7 +40,7 @@ In fact, folding handles for instance use a generic feature of the text editors:
 
 
 
-# Contribute
+# Backlog
 
 ## Editor, Source viewer configuration or document module?
 
