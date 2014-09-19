@@ -44,22 +44,23 @@ class Scanner implements ITokenScanner {
 
 	void setRange(IDocument document, int offset, int length) {
 		try {
+			def cl = this.class
 			// Styles ----------------------------------------------------------
 
 			//this.getStylesheet mode
-			def stylesheet = Backend.get().service document, this.class.METHOD_STYLESHEET
-			this.defaultStyle = stylesheet[this.class.KEY_DEFAULT_STYLE]
-			this.styles = stylesheet[this.class.KEY_STYLES]
+			def stylesheet = Backend.get().service document, cl.METHOD_STYLESHEET
+			this.defaultStyle = stylesheet[cl.KEY_DEFAULT_STYLE]
+			this.styles = stylesheet[cl.KEY_STYLES]
 
 			// Tokens ----------------------------------------------------------
 
-			def result = Backend.get().service(document, this.class.METHOD_HIGHLIGHT, [
+			def result = Backend.get().service(document, cl.METHOD_HIGHLIGHT, [
 				"wholeSource": true,
-				(this.class.ARGUMENT_OFFSET): offset,
+				(cl.ARGUMENT_OFFSET): offset,
 				"end": offset + length
 			])
 
-			tokens = result[this.class.KEY_TOKENS]
+			tokens = result[cl.KEY_TOKENS]
 
 			this.tokensIterator = tokens.iterator()
 		} catch (e) {
@@ -141,7 +142,7 @@ class Scanner implements ITokenScanner {
 			return Token.EOF
 		}
 
-		this.currentToken = this.tokensIterator.next()
+		this.currentToken = ++this.tokensIterator
 		def type = this.currentToken[this.class.KEY_STYLE]
 
 		if (type == "ws") {
@@ -157,7 +158,7 @@ class Scanner implements ITokenScanner {
 		def rgb = style["color"] ?: this.defaultStyle["color"]
 
 		new TextAttribute(new Color(
-			Display.getCurrent(),
+			Display.current,
 			*('rgb'.collect {k->rgb[k]})
 		))
 
@@ -171,7 +172,7 @@ class Scanner implements ITokenScanner {
 	}
 
 	int getTokenLength() {
-		this.currentToken["end"] - this.getTokenOffset()
+		this.currentToken["end"] - this.tokenOffset
 	}
 
 }

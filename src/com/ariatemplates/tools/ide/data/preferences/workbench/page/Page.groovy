@@ -12,10 +12,10 @@ import org.eclipse.ui.IWorkbenchPreferencePage
 
 
 class Page extends PreferencePage implements IWorkbenchPreferencePage {
-	def Page(title=null, image=null) {
-		super(title, image)
-	}
+	Page() {}
+	Page(title) {super(title)}
+	Page(title, image) {super(title, image)}
 
-	def void init(IWorkbench workbench) {}
+	void init(IWorkbench workbench) {}
 	protected Control createContents(Composite parent) {null}
 }

@@ -12,21 +12,21 @@ import org.apache.http.util.EntityUtils
 
 
 
-public class HTTP {
+class HTTP {
 	private final httpclient = new DefaultHttpClient()
 
 
 
-	static public getString(response) {
-		EntityUtils.toString response.getEntity()
+	static getString(response) {
+		EntityUtils.toString response.entity
 	}
 
-	static public getCode(response) {
-		response.getStatusLine().getStatusCode()
+	static getCode(response) {
+		response.statusLine.statusCode
 	}
 
-	static public release(response) {
-		response.getEntity().getContent().close()
+	static release(response) {
+		response.entity.content.close()
 	}
 
 

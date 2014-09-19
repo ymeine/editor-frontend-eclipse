@@ -9,6 +9,7 @@ import org.eclipse.jface.text.rules.RuleBasedScanner
 
 import com.ariatemplates.tools.ide.modes.athtml.highlighting.tokens.Rich
 import com.ariatemplates.tools.ide.modes.athtml.highlighting.RulesStore
+import com.ariatemplates.tools.ide.modes.athtml.highlighting.TokensStore
 
 
 
@@ -33,7 +34,7 @@ class SpecificRuleBasedScanner extends RuleBasedScanner {
 
 
 
-	def SpecificRuleBasedScanner(defaultTokenType=null, rules=null, document=null, offset=null, length=null) {
+	SpecificRuleBasedScanner(defaultTokenType=null, rules=null, document=null, offset=null, length=null) {
 		if (defaultTokenType == null) {
 			defaultTokenType = TokensStore.DEFAULT
 		} else {
@@ -50,11 +51,11 @@ class SpecificRuleBasedScanner extends RuleBasedScanner {
 			this.initialOffset = offset
 		}
 
-		this.setDefaultReturnToken(this.tokenStore.getToken(defaultTokenType))
-		this.setRules(rules as IRule[])
+		this.defaultReturnToken = this.tokenStore.getToken defaultTokenType
+		this.rules = rules as IRule[]
 
 		if (document != null && offset != null) {
-			length = length ?: document.getLength() - offset
+			length = length ?: document.length - offset
 			this.setRange(document, offset, length)
 		}
 	}
@@ -88,13 +89,14 @@ class SpecificRuleBasedScanner extends RuleBasedScanner {
 		def enhancedToken = next instanceof Rich ? next : null
 
 		if (enhancedToken != null && enhancedToken.hasChildren()) {
-			iteratorsStack += enhancedToken.getChildren().iterator()
+			iteratorsStack.add enhancedToken.children.iterator()
 			next = this.nextToken()
 		}
 
 		if (next.isUndefined()) {
 			return this.nextToken()
 		}
+
 		this.currentToken = next
 
 		next
@@ -122,7 +124,7 @@ class SpecificRuleBasedScanner extends RuleBasedScanner {
 		}
 
 		if (offset == -1) {
-			offset = super.getTokenOffset()
+			offset = super.tokenOffset
 		}
 
 		offset
@@ -140,7 +142,7 @@ class SpecificRuleBasedScanner extends RuleBasedScanner {
 		}
 
 		if (length == -1) {
-			length = super.getTokenLength()
+			length = super.tokenLength
 		}
 
 		length
@@ -186,5 +188,5 @@ class SpecificRuleBasedScanner extends RuleBasedScanner {
 	 *         one that has been associated to the default token, in case the
 	 *         getToken method is called with a true argument
 	 */
-	def getTokenizedLength() {this.getCurrentOffset() - this.initialOffset}
+	def getTokenizedLength() {this.currentOffset - this.initialOffset}
 }

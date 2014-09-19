@@ -2,8 +2,6 @@ package com.ariatemplates.tools.ide.editor.annotations.markers.hover
 
 
 
-import java.util.Iterator
-
 import org.eclipse.core.resources.IMarker
 import org.eclipse.core.runtime.CoreException
 import org.eclipse.jface.text.source.IAnnotationHover
@@ -15,23 +13,20 @@ import org.eclipse.ui.texteditor.MarkerAnnotation
 class Hover implements IAnnotationHover {
 
 	String getHoverInfo(ISourceViewer sourceViewer, int line) {
-		def hoverInfo = new StringBuilder()
+		def hoverInfo = []
 
-		def iterator = sourceViewer.getAnnotationModel().getAnnotationIterator()
+		def iterator = sourceViewer.annotationModel.annotationIterator
 
 		while (iterator.hasNext()) {
-			def annotation = iterator.next()
+			def annotation = ++iterator
 			if (annotation instanceof MarkerAnnotation) {
 				def marker = annotation
 				try {
-					def markerLine = marker.getMarker().getAttribute IMarker.LINE_NUMBER
+					def markerLine = marker.marker.getAttribute IMarker.LINE_NUMBER
 
 					if (markerLine == line) {
-						def markerMessage = marker.getMarker().getAttribute IMarker.MESSAGE
-						if (hoverInfo.length() != 0) {
-							hoverInfo.append "\n"
-						}
-						hoverInfo.append markerMessage
+						def markerMessage = marker.marker.getAttribute IMarker.MESSAGE
+						hoverInfo += markerMessage
 					}
 				} catch (CoreException e) {
 					e.printStackTrace()
@@ -39,7 +34,7 @@ class Hover implements IAnnotationHover {
 			}
 		}
 
-		"$hoverInfo"
+		hoverInfo.join("\n")
 	}
 
 }

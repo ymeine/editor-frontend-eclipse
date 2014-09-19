@@ -17,6 +17,8 @@ class Document extends org.eclipse.jface.text.Document {
 
 	private sourceChanges = []
 
+
+
 	def addSourceChange(entry) {
 		this.sourceChanges += entry
 	}
@@ -40,18 +42,16 @@ class Document extends org.eclipse.jface.text.Document {
 			marker.setAttribute IMarker.SEVERITY, severity
 
 			def location = config["location"]
+			def charStart = location["start"]["index"]
+			def charEnd = location["end"]["index"]
 
-			int charStart = location["start"]["index"]
-			int charEnd = location["end"]["index"]
 			marker.setAttribute IMarker.CHAR_START, charStart
 			marker.setAttribute IMarker.CHAR_END, charEnd
 			marker.setAttribute IMarker.LINE_NUMBER, this.getLineOfOffset(charStart)
 
-			String message = this.formatMessages config["messages"]
+			def message = config["messages"].collect({message -> "- $message"}).join('\n')
 			marker.setAttribute IMarker.MESSAGE, message
-		} catch (CoreException e) {
-			e.printStackTrace()
-		} catch (BadLocationException e) {
+		} catch (CoreException | BadLocationException e) {
 			e.printStackTrace()
 		}
 	}
@@ -62,19 +62,6 @@ class Document extends org.eclipse.jface.text.Document {
 		} catch (CoreException e) {
 			e.printStackTrace()
 		}
-	}
-
-	String formatMessages(messages) {
-		def out = new StringBuilder()
-
-		messages.eachWithIndex { message, index ->
-			if (index > 0) {
-				out.append "\n"
-			}
-			out.append("- ").append(message)
-		}
-
-		"$out"
 	}
 
 	def addAllMarkerAnnotations(messages) {

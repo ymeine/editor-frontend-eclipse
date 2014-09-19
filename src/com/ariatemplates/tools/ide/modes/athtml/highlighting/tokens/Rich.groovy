@@ -31,43 +31,34 @@ class Rich extends Token {
 
 
 
-	public Rich(Object data, offset, length) {
+	Rich(data, offset, length) {
 		super(data)
 		this.offset = offset
 		this.length = length
 	}
-	
-	public Rich() {
-		super(null)
-	}
-	
-	public Rich(Boolean defined) {
-		super(null)
-		this.defined = defined
-	}
-	
-	public Rich(Object data) {
+
+	Rich(data=null, defined=null) {
 		super(data)
+		if (defined != null) this.defined = defined
 	}
 
-	
-	
-	boolean isUndefined() {!this.defined}
-	def addChild(child) {this.children += child}
+
+
+	def isUndefined() {!this.defined}
+	def addChild(child) {this.children.add child}
 	def hasChildren() {!this.children.isEmpty()}
 
 	def clone() {
-		def newToken = new Rich()
+		def token = new Rich()
 
-		newToken.setData this.getData()
+		token.data = this.data
+		token.length = this.length
+		token.offset = this.offset
+		token.defined = this.defined
+		token.children = this.children
+		token.type = this.type
 
-		newToken.length = this.length
-		newToken.offset = this.offset
-		newToken.defined = this.defined
-		newToken.children = this.children
-		newToken.type = this.type
-
-		newToken
+		token
 	}
 
 	def popChild() {

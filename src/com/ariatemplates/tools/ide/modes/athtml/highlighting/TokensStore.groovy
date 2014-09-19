@@ -48,7 +48,7 @@ class TokensStore {
 
 	private colorMap
 
-	def TokensStore() {
+	TokensStore() {
 		def cl = this.class
 		this.colorMap = [
 			(cl.DEFAULT): cl.DEFAULT_COLOR,
@@ -77,7 +77,7 @@ class TokensStore {
 
 		def token
 		if (rgb != null) {
-			token = new Rich(new TextAttribute(new Color(Display.getCurrent(), *rgb)))
+			token = new Rich(new TextAttribute(new Color(Display.current, *rgb)))
 		} else {
 			token = new Rich()
 		}

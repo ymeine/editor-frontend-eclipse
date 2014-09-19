@@ -17,6 +17,7 @@ class Statement extends Container {
 
 	IToken evaluate(ICharacterScanner initialScanner) {
 		super.evaluate initialScanner
+		def tokenStore = this.tokenStore
 
 		def bracketsCount = 0
 
@@ -32,7 +33,8 @@ class Statement extends Container {
 
 		next = 0
 		def isStatementnameOver = false
-		def rules = RulesStore.get().getPrimitiveRules()
+		def rules = RulesStore.get().primitiveRules
+		def document = this.scanner.document
 
 		while (next != ICharacterScanner.EOF && bracketsCount > 0) {
 			next = this.read()
@@ -40,12 +42,12 @@ class Statement extends Container {
 			def subscanner = new SpecificRuleBasedScanner(
 				TokensStore.DEFAULT,
 				rules,
-				this.scanner.getDocument(),
+				document,
 				this.start + this.offset
 			);
 
 			def nextToken = subscanner.getToken true
-			def tokenizedLentgh = subscanner.getTokenizedLength() - 1
+			def tokenizedLentgh = subscanner.tokenizedLength - 1
 
 			if (tokenizedLentgh > 0) {
 				isStatementnameOver = true
@@ -70,7 +72,7 @@ class Statement extends Container {
 					if (this.buffer.charAt(this.offset - 1) == '/') {
 						this.removeLastToken()
 
-						this.addToken this.tokenStore.getToken(
+						this.addToken tokenStore.getToken(
 							TokensStore.STATEMENT,
 							this.start + this.offset - 1,
 							2
@@ -82,7 +84,7 @@ class Statement extends Container {
 					if (!isStatementnameOver) {
 						this.__addToken()
 					} else {
-						this.addToken this.tokenStore.getToken(
+						this.addToken tokenStore.getToken(
 							TokensStore.STATEMENT_ARGS,
 							this.start + this.offset,
 							1
@@ -99,7 +101,7 @@ class Statement extends Container {
 	}
 
 	private __addToken() {
-		this.addToken this.tokenStore.getToken(
+		this.addToken this.@tokenStore.getToken(
 			TokensStore.STATEMENT,
 			this.start + this.offset,
 			1

@@ -14,9 +14,9 @@ import com.ariatemplates.tools.ide.modes.athtml.highlighting.tokens.Rich
 
 
 class Expression extends Container {
-
 	IToken evaluate(ICharacterScanner initialScanner) {
 		super.evaluate initialScanner
+		def tokenStore = this.tokenStore
 
 		def bracketsCount = 0
 		def next
@@ -34,25 +34,27 @@ class Expression extends Container {
 		}
 
 		bracketsCount++
-		this.addToken this.tokenStore.getToken(
+		this.addToken tokenStore.getToken(
 			TokensStore.EXPRESSION,
 			this.start,
 			2
 		)
 
 		next = 0
-		def rules = RulesStore.get().getPrimitiveRules()
+		def rules = RulesStore.get().primitiveRules
+		def document = this.scanner.document
+
 		while (next != ICharacterScanner.EOF && bracketsCount > 0) {
 			next = this.read()
 
 			def subscanner = new SpecificRuleBasedScanner(
 				TokensStore.DEFAULT,
 				rules,
-				this.scanner.getDocument(),
+				document,
 				this.start + this.offset
 			)
 			def nextToken = subscanner.getToken true
-			def tokenizedLentgh = subscanner.getTokenizedLength() - 1
+			def tokenizedLentgh = subscanner.tokenizedLength - 1
 
 			if (tokenizedLentgh > 0) {
 				this.addToken nextToken
@@ -65,13 +67,13 @@ class Expression extends Container {
 				}
 
 				if (bracketsCount == 0) {
-					this.addToken this.tokenStore.getToken(
+					this.addToken tokenStore.getToken(
 						TokensStore.EXPRESSION,
 						this.start + this.offset,
 						1
 					)
 				} else if (next != ICharacterScanner.EOF) {
-					this.addToken this.tokenStore.getToken(
+					this.addToken tokenStore.getToken(
 						TokensStore.EXPRESSION_ARGS,
 						this.start + this.offset,
 						1

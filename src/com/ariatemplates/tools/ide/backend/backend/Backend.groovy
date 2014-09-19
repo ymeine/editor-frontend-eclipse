@@ -55,8 +55,6 @@ class Backend {
 	// POST --------------------------------------------------------------------
 
 	private HttpPost rpc
-	private static final HEADER_CONTENT_TYPE = "Content-Type"
-	private static final HEADER_VALUE_CONTENT_TYPE = "application/json"
 
 	// GET ---------------------------------------------------------------------
 
@@ -69,37 +67,32 @@ class Backend {
 	private static final URL_PORT = 50000
 	private static final URL_BASE = "http://localhost:${this.URL_PORT}/"
 
-	private static final URL_PATH_RPC = "rpc"
-	private static final URL_PATH_SHUTDOWN = "shutdown"
-	private static final URL_PATH_PING = "ping"
-	private static final URL_PATH_GUID = "80d007698d534c3d9355667f462af2b0"
-
 
 
 	/**
 	 * Builds a new backend instance.
 	 */
-	def Backend() {
+	Backend() {
 		def cl = this.class
 
-		this.rpc = new HttpPost("${cl.URL_BASE}${cl.URL_PATH_RPC}")
-		this.rpc.setHeader cl.HEADER_CONTENT_TYPE, cl.HEADER_VALUE_CONTENT_TYPE
+		this.rpc = new HttpPost("${cl.URL_BASE}rpc")
+		this.rpc.setHeader "Content-Type", "application/json"
 
-		this.shutdown = new HttpGet("${cl.URL_BASE}${cl.URL_PATH_SHUTDOWN}")
-		this.ping = new HttpGet("${cl.URL_BASE}${cl.URL_PATH_PING}")
-		this.guid = new HttpGet("${cl.URL_BASE}${cl.URL_PATH_GUID}")
+		this.shutdown = new HttpGet("${cl.URL_BASE}shutdown")
+		this.ping = new HttpGet("${cl.URL_BASE}ping")
+		this.guid = new HttpGet("${cl.URL_BASE}80d007698d534c3d9355667f462af2b0")
 
 		def basePath = new File("")
 		try {
-			basePath = new File(FileLocator.toFileURL(Activator.getDefault().getBundle().getEntry("/")).toURI())
-		} catch (Exception e) {
-			println "Could not resolve bundle absolute path."
-			print e
+			basePath = new File(FileLocator.toFileURL(Activator.default.bundle.getEntry "/").toURI())
+		} catch (e) {
+			System.err.println "Could not resolve bundle absolute path."
+			System.err.print e
 		}
 
-		this.processRunner.process_path = new File(basePath, cl.NODE_PATH).getAbsolutePath()
+		this.processRunner.processPath = new File(basePath, cl.NODE_PATH).absolutePath
 		this.processRunner.arguments = [
-			new File(basePath, cl.APPLICATION_ENTRY_PATH).getAbsolutePath(),
+			new File(basePath, cl.APPLICATION_ENTRY_PATH).absolutePath,
 			cl.APPLICATION_OPTIONS
 		]
 	}
@@ -175,7 +168,7 @@ class Backend {
 
 		// Return ----------------------------------------------------------
 
-		this.processRunner.getProcess()
+		this.processRunner.process
 	}
 
 	/**
@@ -188,7 +181,7 @@ class Backend {
 	def stop() {
 		if (this.isRunning() && !this.isManagedExternally) {
 			try {
-				HTTP.release(this.http.get(this.shutdown))
+				HTTP.release this.http.get(this.shutdown)
 			} catch (IOException exception) {
 				this.processRunner.abort()
 			}
@@ -227,7 +220,7 @@ class Backend {
 
 		// We manage the process ourself ---------------------------------------
 
-		this.processRunner.is_running()
+		this.processRunner.isRunning()
 	}
 
 	/**
@@ -282,7 +275,7 @@ class Backend {
 			argument["arg"] = serviceArgument
 		}
 
-		this.editor("exec", argument)
+		this.editor "exec", argument
 	}
 
 
@@ -315,13 +308,13 @@ class Backend {
 			"argument": argument
 		]
 
-		this.rpc.setEntity(new StringEntity(gson.toJson(object)))
+		this.rpc.entity = new StringEntity(gson.toJson object)
 		def response = this.http.post this.rpc
 
 		def result = [:]
-		result = gson.fromJson(HTTP.getString(response), Map.class)
+		result = gson.fromJson HTTP.getString(response), Map.class
 
-		switch (HTTP.getCode(response)) {
+		switch (HTTP.getCode response) {
 			case 200:
 				return result
 			default:

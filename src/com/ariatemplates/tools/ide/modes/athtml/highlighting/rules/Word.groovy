@@ -18,7 +18,7 @@ class Word extends Container {
 
 
 
-	def Word(words, tokens) {
+	Word(words, tokens) {
 		this.words = words
 		this.maxLength = Collections.max(words*.length())
 
@@ -34,20 +34,18 @@ class Word extends Container {
 	IToken evaluate(ICharacterScanner initialScanner) {
 		super.evaluate initialScanner
 
-		int next = this.read()
-		char nextChar = next
-		int counter = 1
-		int index = this.words.indexOf this.buffer
+		def next = this.read()
+		def counter = 1
+		def index = this.words.indexOf this.buffer
 
 		while (
 			next != ICharacterScanner.EOF
-			&& nextChar != '\r'
-			&& nextChar != '\n'
+			&& next != '\r'
+			&& next != '\n'
 			&& counter < this.maxLength
 			&& index == -1
 		) {
 			next = this.read()
-			nextChar = next
 			counter++
 			index = this.words.indexOf this.buffer
 		}
@@ -56,12 +54,13 @@ class Word extends Container {
 			this.rewind()
 			return Rich.UNDEFINED
 		}
+
 		if (index != -1) {
 			// def returnToken = this.tokens == null ? this.defaultToken.clone() : this.tokens.get(index).clone()
 			def returnToken = this.tokens?.get(index).clone() ?: this.defaultToken.clone()
 
-			returnToken.setOffset this.start
-			returnToken.setLength this.buffer.length()
+			returnToken.offset = this.start
+			returnToken.length = this.buffer.length()
 
 			return returnToken
 		}

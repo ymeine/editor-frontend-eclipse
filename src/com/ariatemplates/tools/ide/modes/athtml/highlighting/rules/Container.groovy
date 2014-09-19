@@ -21,15 +21,14 @@ import com.ariatemplates.tools.ide.modes.athtml.highlighting.tokens.Rich
  *
  */
 class Container implements IRule {
-
 	protected tokenStore = TokensStore.get()
 
 	protected start = 0
-	protected SpecificRuleBasedScanner scanner
+	protected scanner
 	protected buffer = ""
 	protected intBuffer = []
 	protected offset = -1
-	protected Rich containerToken
+	protected containerToken
 
 	/**
 	 * Sets some properties that are useful when reading a scanner
@@ -38,22 +37,22 @@ class Container implements IRule {
 	 */
 	IToken evaluate(ICharacterScanner initialScanner) {
 		this.scanner = initialScanner
-		this.start = scanner.getCurrentOffset()
+		this.start = scanner.currentOffset
 		this.buffer = ""
 		this.intBuffer.clear()
 		this.offset = -1
-		this.containerToken = this.tokenStore.getToken TokensStore.CONTAINER
+		this.containerToken = this.@tokenStore.getToken TokensStore.CONTAINER
 
 		null
 	}
 
-	protected int read(count=1) {
-		int next
+	protected read(count=1) {
+		def next
 		count.times {
 			next = this.scanner.read()
 			this.offset++
-			this.buffer += next
-			this.intBuffer += next
+			this.buffer.add next
+			this.intBuffer.add next
 		}
 
 		next

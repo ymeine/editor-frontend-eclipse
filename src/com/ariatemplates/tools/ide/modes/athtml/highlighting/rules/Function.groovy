@@ -21,6 +21,7 @@ class Function extends Container {
 	IToken evaluate(ICharacterScanner initialScanner) {
 		super.evaluate initialScanner
 		def cl = this.class
+		def tokenStore = this.tokenStore
 
 		this.read cl.KEYWORD_LENGTH
 
@@ -29,13 +30,13 @@ class Function extends Container {
 			return Rich.UNDEFINED
 		}
 
-		this.addToken this.tokenStore.getToken(
+		this.addToken tokenStore.getToken(
 			TokensStore.FUNCTION,
 			this.start,
 			cl.KEYWORD_LENGTH
 		)
 
-		boolean toContinue = this.parseFunctionArguments()
+		def toContinue = this.parseFunctionArguments()
 		if (!toContinue) {
 			return this.containerToken
 		}
@@ -45,16 +46,16 @@ class Function extends Container {
 		this.containerToken
 	}
 
-	def parseFunctionArguments() {
+	private parseFunctionArguments() {
 		def KEYWORD_LENGTH = this.class.KEYWORD_LENGTH
-		int argsOffset = KEYWORD_LENGTH
-		int next = 0
+		def argsOffset = KEYWORD_LENGTH
+		def next = 0
 
 		while (next != ICharacterScanner.EOF && next != ')') {
 			next = this.read()
 
 			if (next == '(') {
-				this.addToken this.tokenStore.getToken(
+				this.addToken tokenStore.getToken(
 					TokensStore.FUNCTION,
 					this.start + KEYWORD_LENGTH,
 					this.offset - 7
@@ -68,7 +69,7 @@ class Function extends Container {
 			this.unread()
 
 			if (argsOffset < this.offset) {
-				this.addToken this.tokenStore.getToken(
+				this.addToken tokenStore.getToken(
 					TokensStore.DEFAULT,
 					this.start + argsOffset,
 					this.offset - argsOffset
@@ -78,13 +79,13 @@ class Function extends Container {
 			return false
 		} else {
 			if (argsOffset < this.offset) {
-				this.addToken this.tokenStore.getToken(
+				this.addToken tokenStore.getToken(
 					TokensStore.DEFAULT,
 					this.start + argsOffset,
 					this.offset - argsOffset
 				)
 			}
-			this.addToken this.tokenStore.getToken(
+			this.addToken tokenStore.getToken(
 				TokensStore.FUNCTION,
 				this.start + this.offset,
 				1
@@ -95,17 +96,18 @@ class Function extends Container {
 	}
 
 	private void parseFunctionBody() {
-		int initialOffset = this.offset
-		int bracketsCount = 0
-		int next = 0
+		def initialOffset = this.offset
+		def bracketsCount = 0
+		def next = 0
 
 		while (next != ICharacterScanner.EOF && next != '{') {
 			next = this.read()
 		}
+
 		if (next == ICharacterScanner.EOF) {
 			this.unread()
 
-			this.addToken this.tokenStore.getToken(
+			this.addToken tokenStore.getToken(
 				TokensStore.FUNCTION,
 				initialOffset,
 				this.offset - initialOffset
@@ -113,7 +115,7 @@ class Function extends Container {
 
 			return
 		} else {
-			this.addToken this.tokenStore.getToken(
+			this.addToken tokenStore.getToken(
 				TokensStore.FUNCTION,
 				initialOffset,
 				this.offset - initialOffset
@@ -122,19 +124,20 @@ class Function extends Container {
 			bracketsCount++
 		}
 
-		def rules = RulesStore.get().getPrimitiveRules()
+		def rules = RulesStore.get().primitiveRules
+		def document = this.scanner.getDocument()
 		while (next != ICharacterScanner.EOF && bracketsCount > 0) {
 			next = this.read()
 
 			def subscanner = new SpecificRuleBasedScanner(
 				TokensStore.DEFAULT,
 				rules,
-				this.scanner.getDocument(),
+				document,
 				this.start + this.offset
 			)
 
 			def nextToken = subscanner.getToken true
-			int tokenizedLentgh = subscanner.getTokenizedLength() - 1
+			def tokenizedLentgh = subscanner.tokenizedLength - 1
 
 			if (tokenizedLentgh > 0) {
 				this.addToken nextToken
@@ -142,20 +145,18 @@ class Function extends Container {
 			} else {
 				if (next == '{') {
 					bracketsCount++;
-				}
-
-				if (next == '}') {
+				} else (next == '}') {
 					bracketsCount--;
 				}
 
 				if (bracketsCount == 0) {
-					this.addToken this.tokenStore.getToken(
+					this.addToken tokenStore.getToken(
 						TokensStore.FUNCTION,
 						this.start + this.offset,
 						1
 					)
 				} else {
-					this.addToken this.tokenStore.getToken(
+					this.addToken tokenStore.getToken(
 						TokensStore.DEFAULT,
 						this.start + this.offset,
 						1

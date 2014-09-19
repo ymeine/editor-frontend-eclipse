@@ -49,31 +49,34 @@ class RulesStore {
 	static final OBJECT = 15
 	static final ARRAY = 16
 
+
+
 	private tokenStore = TokensStore.get()
 
+	private rulesBuilders
+	private defaultRulesTypes
+	private primitiveRulesTypes
 
-	private builders
-
-	def RulesStore() {
-		super()
+	RulesStore() {
 		def cl = this.class
+		def tokenStore = this.tokenStore
 
-		this.builders = [
+		this.rulesBuilders = [
 			(cl.MULTILINE_COMMENT): {
-				new MultiLineRule("/*", "*/", this.tokenStore.getToken(TokensStore.COMMENT), (0 as char), false)
+				new MultiLineRule("/*", "*/", tokenStore.getToken(TokensStore.COMMENT), (0 as char), false)
 			},
 			(cl.SINGLELINE_COMMENT): {
-				new EndOfLineRule("//", this.tokenStore.getToken(TokensStore.COMMENT))
+				new EndOfLineRule("//", tokenStore.getToken(TokensStore.COMMENT))
 			},
 
 			(cl.STATEMENT): {new Statement()},
 			(cl.EXPRESSION): {new Expression()},
 
 			(cl.STRING_DOUBLE): {
-				new PatternRule("\"", "\"", this.tokenStore.getToken(TokensStore.STRING), '\\' as char, false)
+				new PatternRule("\"", "\"", tokenStore.getToken(TokensStore.STRING), '\\' as char, false)
 			},
 			(cl.STRING_SINGLE): {
-				new PatternRule("'", "'", this.tokenStore.getToken(TokensStore.STRING), '\\' as char, false)
+				new PatternRule("'", "'", tokenStore.getToken(TokensStore.STRING), '\\' as char, false)
 			},
 			(cl.STRING_COMPLEX): {
 				new com.ariatemplates.tools.ide.modes.athtml.highlighting.rules.StringRule()
@@ -83,15 +86,15 @@ class RulesStore {
 			(cl.TAG_ATTRIBUTE): {new Attribute()},
 
 			(cl.NUMBER): {
-				new NumberRule(this.tokenStore.getToken(TokensStore.NUMBER))
+				new NumberRule(tokenStore.getToken(TokensStore.NUMBER))
 			},
 			(cl.BOOLEAN): {
 				def words = ["true", "false"]
-				new Word(words, this.tokenStore.getToken(TokensStore.BOOLEAN))
+				new Word(words, tokenStore.getToken(TokensStore.BOOLEAN))
 			},
 			(cl.OPERATOR): {
 				def words = ["+", "-", "%", "*", "|", "&", "=", "<", ">", "!="]
-				new Word(words, this.tokenStore.getToken(TokensStore.OPERATOR))
+				new Word(words, tokenStore.getToken(TokensStore.OPERATOR))
 			},
 
 			(cl.FUNCTION): {new Function()},
@@ -99,47 +102,17 @@ class RulesStore {
 			(cl.OBJECT): {new Object()},
 			(cl.ARRAY): {new Array()}
 		]
-	}
 
-	/**
-	 *
-	 * @param types
-	 *            rules types from the static class properties
-	 * @return the rules corresponding to the specified types (the default rules if not specified)
-	 */
-	def getRules(types=null) {
-		if (types == null) {
-			def cl = this.class
+		this.defaultRulesTypes = [
+			cl.MULTILINE_COMMENT,
+			cl.SINGLELINE_COMMENT,
+			cl.STATEMENT,
+			cl.EXPRESSION,
+			cl.STRING_COMPLEX,
+			cl.TAG
+		]
 
-			types = [
-				cl.MULTILINE_COMMENT,
-				cl.SINGLELINE_COMMENT,
-				cl.STATEMENT,
-				cl.EXPRESSION,
-				cl.STRING_COMPLEX,
-				cl.TAG
-			]
-		}
-
-		types.collect { type -> this.getRule type }
-	}
-
-	/**
-	 *
-	 * @param type
-	 *            rule type from the static class properties
-	 * @return the rule corresponding to the specified type
-	 */
-	def getRule(type) {(this.builders[type] ?: {null})()}
-
-	/**
-	 * @return the rules corresponding to the primitive types like strings,
-	 *         arrays, objects, numbers and booleans
-	 */
-	public List<IRule> getPrimitiveRules() {
-		def cl = this.class
-
-		def primitiveTypes = [
+		this.primitiveRulesTypes = [
 			cl.MULTILINE_COMMENT,
 			cl.SINGLELINE_COMMENT,
 			cl.STRING_DOUBLE,
@@ -151,7 +124,32 @@ class RulesStore {
 			cl.OBJECT,
 			cl.ARRAY
 		]
+	}
 
-		this.getRules primitiveTypes
+	/**
+	 *
+	 * @param type
+	 *            rule type from the static class properties
+	 * @return the rule corresponding to the specified type
+	 */
+	def getRule(type) {(this.builders[type] ?: {null})()}
+
+	/**
+	 *
+	 * @param types
+	 *            rules types from the static class properties
+	 * @return the rules corresponding to the specified types (the default rules if not specified)
+	 */
+	def getRules(types=null) {
+		types == types ?: this.defaultRulesTypes
+		types.collect { type -> this.getRule type }
+	}
+
+	/**
+	 * @return the rules corresponding to the primitive types like strings,
+	 *         arrays, objects, numbers and booleans
+	 */
+	def getPrimitiveRules() {
+		this.getRules this.primitiveRulesTypes
 	}
 }

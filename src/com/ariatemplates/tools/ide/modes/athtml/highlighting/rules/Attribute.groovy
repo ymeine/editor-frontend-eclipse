@@ -15,22 +15,16 @@ class Attribute extends Container {
 	IToken evaluate(ICharacterScanner initialScanner) {
 		super.evaluate initialScanner
 
-		char charNext = this.read()
+		def next = this.read()
 
 		if (this.buffer.matches("[\\w-_:\\s=]")) {
-			if (charNext == '=') {
-				return TokensStore.get().getToken(
-					TokensStore.TAG_ATTRIBUTE_EQUAL,
-					this.start + this.offset,
-					1
-				)
-			} else {
-				return TokensStore.get().getToken(
-					TokensStore.TAG_ATTRIBUTE,
-					this.start + this.offset,
-					1
-				)
-			}
+			def tokenType = next == '=' ? TokensStore.TAG_ATTRIBUTE_EQUAL : TokensStore.TAG_ATTRIBUTE
+
+			return this.@tokenStore.getToken(
+				tokenType,
+				this.start + this.offset,
+				1
+			)
 		}
 
 		this.rewind()

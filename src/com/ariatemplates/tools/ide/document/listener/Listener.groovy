@@ -5,22 +5,22 @@ package com.ariatemplates.tools.ide.document.listener
 import org.eclipse.jface.text.DocumentEvent
 import org.eclipse.jface.text.IDocumentListener
 
-import com.ariatemplates.tools.ide.document.document.Document
-
 
 
 class Listener implements IDocumentListener {
-	private Document document
+	private document
 
-	def Listener(Document document) {
+	Listener(document) {
 		this.document = document
 	}
 
 	void documentChanged(DocumentEvent event) {
+		def offset = event.offset
+
 		document.addSourceChange([
-			"start": event.getOffset(),
-			"end": event.getOffset() + event.getLength(),
-			"source": event.getText()
+			"start": offset,
+			"end": offset + event.length,
+			"source": event.text
 		])
 
 		document.clearMarkerAnnotations()

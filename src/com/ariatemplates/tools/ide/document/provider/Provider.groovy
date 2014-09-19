@@ -31,15 +31,15 @@ class Provider extends FileDocumentProvider {
 			return null
 		}
 
-		document.file = element.getFile() // element as FileEditorInput
+		document.file = element.file // element as FileEditorInput
 
 		// Document registration (backend side) --------------------------------
 
 		try {
 			def result = Backend.get().editor("init", [
-				"mode": mode,
+				"mode": this.class.mode,
 				"source": document.get(),
-				"extension": document.file.getFileExtension()
+				"extension": document.file.fileExtension
 			])
 
 			document.guid = result
@@ -49,7 +49,7 @@ class Provider extends FileDocumentProvider {
 
 		// Document configuration ----------------------------------------------
 
-		document.setDocumentPartitioner new Partitioner(document)
+		document.documentPartitioner = new Partitioner(document)
 		document.addDocumentListener new Listener(document)
 
 		// Return --------------------------------------------------------------

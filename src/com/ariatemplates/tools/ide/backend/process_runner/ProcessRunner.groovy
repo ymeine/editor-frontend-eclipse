@@ -3,13 +3,13 @@ package com.ariatemplates.tools.ide.backend.process_runner
 
 
 class ProcessRunner {
-	def one_instance = true
+	def oneInstance = true
 
-	def process_path
+	def processPath
 	def arguments = []
 
 	def process
-	def exit_value
+	def exitValue
 
 
 
@@ -20,18 +20,18 @@ class ProcessRunner {
 	// Run ---------------------------------------------------------------------
 
 	def start() {
-		def is_running = this.is_running()
-		def one_instance = this.one_instance
+		def isRunning = this.isRunning()
+		def oneInstance = this.oneInstance
 
 		// Early termination ---------------------------------------------------
 
-		if (one_instance && is_running) {
+		if (oneInstance && isRunning) {
 			return this.process
 		}
 
 		// Pre-processing ------------------------------------------------------
 
-		if (!one_instance && is_running) {
+		if (!oneInstance && isRunning) {
 			this.stop()
 		}
 
@@ -40,7 +40,7 @@ class ProcessRunner {
 		// ------------------------------------------------------------- Command
 
 		def processBuilder = new ProcessBuilder([
-			this.process_path,
+			this.processPath,
 			*this.arguments
 		])
 
@@ -62,25 +62,25 @@ class ProcessRunner {
 		// Stopping if indeed still running ------------------------------------
 		// Note that it could already have stopped by itself without we knew it
 
-		if (this.is_running()) {
+		if (this.isRunning()) {
 			this.process.destroy()
 		}
 
 		// ---------------------------------------------------------------------
 
 		if (this.process != null) {
-			this.exit_value = this.process.exitValue()
+			this.exitValue = this.process.exitValue()
 			this.process = null
 		}
 
-		this.exit_value
+		this.exitValue
 	}
 
 	def abort = this.&stop
 
 	// Check -------------------------------------------------------------------
 
-	def is_running() {
+	def isRunning() {
 		if (this.process == null) {
 			return false
 		}

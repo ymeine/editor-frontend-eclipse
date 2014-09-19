@@ -22,14 +22,16 @@ class Object extends Container {
 	IToken evaluate(ICharacterScanner initialScanner) {
 		super.evaluate initialScanner
 		def cl = this.class
+		def tokenStore = this.tokenStore
 
-		int next = this.read()
+		def next = this.read()
+
 		if (next != '{' || next == ICharacterScanner.EOF) {
 			this.rewind()
 			return Rich.UNDEFINED
 		}
 
-		this.addToken this.tokenStore.getToken(
+		this.addToken tokenStore.getToken(
 			TokensStore.OBJECT,
 			this.start + this.offset,
 			1
@@ -40,9 +42,12 @@ class Object extends Container {
 		def isObjectOver = false
 		def status = cl.LOOKING_FOR_KEY
 
-		def valueRules = RulesStore.get().getPrimitiveRules()
+		def rulesStore = RulesStore.get()
+		def valueRules = rulesStore.primitiveRules
 		def keyRulesTypes = [RulesStore.KEY]
-		def keyRules = RulesStore.get().getRules keyRulesTypes
+		def keyRules = rulesStore.getRules keyRulesTypes
+		def document = this.scanner.document
+
 		def tokenizedLentgh = 0
 		def nextToken
 
@@ -50,29 +55,27 @@ class Object extends Container {
 			next = this.read()
 			def subscanner
 
+			def rules
 			if (status == cl.LOOKING_FOR_KEY) {
-				subscanner = new SpecificRuleBasedScanner(
-					TokensStore.DEFAULT,
-					keyRules,
-					this.scanner.getDocument(),
-					this.start + this.offset
-				);
-
-				nextToken = subscanner.getToken true
-				tokenizedLentgh = subscanner.getTokenizedLength() - 1
+				rules = keyRules
 			} else if (status == cl.LOOKING_FOR_VALUE) {
-				subscanner = new SpecificRuleBasedScanner(
+				rules = valueRules
+			}
+
+			if (rules != null) {
+				def subscanner = new SpecificRuleBasedScanner(
 					TokensStore.DEFAULT,
-					valueRules,
-					this.scanner.getDocument(),
+					rules,
+					document,
 					this.start + this.offset
 				);
 
 				nextToken = subscanner.getToken true
-				tokenizedLentgh = subscanner.getTokenizedLength() - 1
+				tokenizedLentgh = subscanner.tokenizedLength - 1
 			} else {
 				tokenizedLentgh = 0
 			}
+
 			if (tokenizedLentgh > 0) {
 				this.addToken nextToken
 				this.read(tokenizedLentgh - 1)
@@ -93,13 +96,14 @@ class Object extends Container {
 						break
 				}
 
-				this.addToken this.tokenStore.getToken(
+				this.addToken tokenStore.getToken(
 					TokensStore.OBJECT,
 					this.start + this.offset,
 					1
 				)
 			}
 		}
+
 		if (next == ICharacterScanner.EOF) {
 			this.unread()
 		}

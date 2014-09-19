@@ -17,7 +17,6 @@ import com.ariatemplates.tools.ide.editor.annotations.markers.hover.Hover
 
 
 class Source extends org.eclipse.jface.text.source.SourceViewerConfiguration {
-
 	// FIXME Should be taken from somewhere. But I don't see, as a mode is
 	// related to a document, and here the viewer configuration is agnostic of
 	// the document.
@@ -85,5 +84,4 @@ class Source extends org.eclipse.jface.text.source.SourceViewerConfiguration {
 	IAnnotationHover getAnnotationHover(ISourceViewer sourceViewer) {
 		new Hover()
 	}
-
 }

@@ -12,13 +12,13 @@ import com.ariatemplates.tools.ide.backend.backend.Backend
 class Activator extends AbstractUIPlugin {
 	static final PLUGIN_ID = "POC"
 
-	private static Activator plugin
+	private static plugin
 
 	static Activator getDefault() {
 		this.plugin
 	}
 
-	
+
 
 	void start(BundleContext context) {
 		super.start context

@@ -22,7 +22,6 @@ import com.ariatemplates.tools.ide.document.provider.Provider
 import com.ariatemplates.tools.ide.outline.outline.Outline
 import com.google.gson.JsonSyntaxException
 import com.ariatemplates.tools.ide.editor.configuration.view.source.Source
-import com.ariatemplates.tools.ide.editor.editor.Editor
 
 
 
@@ -32,14 +31,12 @@ class Editor extends TextEditor {
 	 * Building
 	 **************************************************************************/
 
-	def Editor() {
-		super()
-
-		this.setDocumentProvider new Provider()
+	Editor() {
+		this.documentProvider = new Provider()
 	}
 
 	protected ISourceViewer createSourceViewer(Composite parent, IVerticalRuler ruler, int styles) {
-		def viewer = new ProjectionViewer(parent, ruler, this.getOverviewRuler(), this.isOverviewRulerVisible(), styles)
+		def viewer = new ProjectionViewer(parent, ruler, this.overviewRuler, this.isOverviewRulerVisible(), styles)
 		this.getSourceViewerDecorationSupport viewer
 
 		viewer
@@ -50,19 +47,19 @@ class Editor extends TextEditor {
 
 		// Folding -------------------------------------------------------------
 
-		ProjectionViewer viewer = this.getSourceViewer();
+		def viewer = this.sourceViewer
 
-		this.projectionSupport = new ProjectionSupport(viewer, this.getAnnotationAccess(), this.getSharedColors())
+		this.projectionSupport = new ProjectionSupport(viewer, this.annotationAccess, this.sharedColors)
 		this.projectionSupport.install()
 
 		viewer.doOperation ProjectionViewer.TOGGLE
-		this.annotationModel = viewer.getProjectionAnnotationModel()
+		this.annotationModel = viewer.projectionAnnotationModel
 	}
 
 	protected void initializeEditor() {
 		super.initializeEditor()
 
-		this.setSourceViewerConfiguration new Source()
+		this.sourceViewerConfiguration = new Source()
 	}
 
 	def getAdapter(Class required) {
@@ -71,7 +68,7 @@ class Editor extends TextEditor {
 		if (required == IContentOutlinePage.class) {
 			if (this.contentOutlinePage == null) {
 				def contentOutlinePage = new Outline()
-				contentOutlinePage.setInput getEditorInput()
+				contentOutlinePage.input = this.editorInput
 				this.contentOutlinePage = contentOutlinePage
 			}
 
@@ -84,19 +81,19 @@ class Editor extends TextEditor {
 	}
 
 	def getDocument() {
-		this.getDocumentProvider().getDocument this.getEditorInput()
+		this.documentProvider.getDocument this.editorInput
 	}
 
 	/***************************************************************************
 	 * Folding
 	 **************************************************************************/
 
-	private ProjectionAnnotationModel annotationModel
-	private ProjectionSupport projectionSupport
+	private annotationModel
+	private projectionSupport
 
 	private fold() {
 		try {
-			def document = this.getDocument()
+			def document = this.document
 
 			def result = Backend.get().service(document, "fold", [
 				"0-based": true,
@@ -137,7 +134,7 @@ class Editor extends TextEditor {
 
 	protected void editorSaved() {
 		super.editorSaved()
-		this.getDocument().updateSource()
+		this.document.updateSource()
 		this.update()
 	}
 
@@ -159,30 +156,27 @@ class Editor extends TextEditor {
 
 	// TODO Process input on initialization
 
-	/*
-	 * private void format() throws IOException { Document document =
-	 * (Document)
-	 * this.getDocumentProvider().getDocument(this.getEditorInput());
-	 *
-	 * Map<String, Object> argument = new HashMap<String, Object>();
-	 * argument.put("source", document.get()); Map<String, Object> formatted =
-	 * Backend.get().rpc(document.getMode(), "format", argument);
-	 *
-	 * document.set(formatted.get("source").toString()); }
-	 */
+	// private void format() {
+	// 	def document = this.documentProvider.document this.editorInput
+
+	// 	def formatted = Backend.get().rpc(document.mode, "format", ["source": document.get()])
+
+	// 	document.set formatted["source"]
+	// }
+
 
 	/***************************************************************************
 	 * Outline
 	 **************************************************************************/
 
-	private Outline contentOutlinePage
+	private contentOutlinePage
 
 	private outline() {
-		def document = this.getDocument()
+		def document = this.document
 
 		try {
 			def outline = Backend.get().service(document, "outline")
-			this.contentOutlinePage.setInput outline
+			this.contentOutlinePage.input = outline
 		} catch (BackendException e) {
 			e.printStackTrace()
 		}
@@ -193,7 +187,7 @@ class Editor extends TextEditor {
 	 **************************************************************************/
 
 	private validate() {
-		def document = this.getDocument()
+		def document = this.document
 		document.clearMarkerAnnotations()
 
 		try {
@@ -203,6 +197,5 @@ class Editor extends TextEditor {
 			e.printStackTrace()
 		}
 	}
-
 
 }

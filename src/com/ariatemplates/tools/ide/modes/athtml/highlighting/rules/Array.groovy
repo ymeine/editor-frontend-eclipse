@@ -18,10 +18,9 @@ class Array extends Container {
 	IToken evaluate(ICharacterScanner initialScanner) {
 		super.evaluate initialScanner
 
-		int next = this.read()
-		char nextChar = next
+		def next = this.read()
 
-		if (nextChar != '[' || next == ICharacterScanner.EOF) {
+		if (next != '[' || next == ICharacterScanner.EOF) {
 			this.rewind()
 			return Rich.UNDEFINED
 		}
@@ -30,29 +29,28 @@ class Array extends Container {
 
 		next = 0
 		def isArrayOver = false
-		def valueRules = RulesStore.get().getPrimitiveRules()
-		int tokenizedLentgh = 0
+		def valueRules = RulesStore.get().primitiveRules
+		def tokenizedLentgh = 0
 		def nextToken
 
 		while (next != ICharacterScanner.EOF && !isArrayOver) {
 			next = this.read()
-			nextChar = next
 
 			def subscanner = new SpecificRuleBasedScanner(
 				TokensStore.DEFAULT,
 				valueRules,
-				this.scanner.getDocument(),
+				this.scanner.document,
 				this.start + this.offset
 			)
 
 			nextToken = subscanner.getToken true
-			tokenizedLentgh = subscanner.getTokenizedLength() - 1
+			tokenizedLentgh = subscanner.tokenizedLength - 1
 
 			if (tokenizedLentgh > 0) {
 				this.addToken nextToken
 				this.read(tokenizedLentgh - 1)
 			} else {
-				if (nextChar == ']') {
+				if (next == ']') {
 					isArrayOver = true
 				}
 
@@ -68,7 +66,7 @@ class Array extends Container {
 	}
 
 	private __addToken() {
-		this.addToken this.tokenStore.getToken(
+		this.addToken this.@tokenStore.getToken(
 			TokensStore.ARRAY,
 			this.start + this.offset,
 			1

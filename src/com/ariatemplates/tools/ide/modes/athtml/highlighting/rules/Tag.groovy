@@ -16,8 +16,9 @@ class Tag extends Container {
 
 	IToken evaluate(ICharacterScanner initialScanner) {
 		super.evaluate initialScanner
+		def tokenStore = this.tokenStore
 
-		int next = this.read()
+		def next = this.read()
 
 		if (next != '<' || next == ICharacterScanner.EOF) {
 			this.rewind()
@@ -28,7 +29,7 @@ class Tag extends Container {
 			next = this.read()
 		}
 
-		this.addToken TokensStore.get().getToken(
+		this.addToken tokenStore.getToken(
 			TokensStore.TAG,
 			this.start,
 			this.buffer.length() - 1
@@ -40,23 +41,24 @@ class Tag extends Container {
 			RulesStore.STRING_COMPLEX,
 			RulesStore.TAG_ATTRIBUTE
 		]
+		def document = this.scanner.document
 
 		while (next != ICharacterScanner.EOF) {
 			def subscanner = new SpecificRuleBasedScanner(
 				TokensStore.DEFAULT,
 				rulesTypes,
-				this.scanner.getDocument(),
+				document,
 				this.start + this.offset
 			)
 			def nextToken = subscanner.getToken true
-			def tokenizedLentgh = subscanner.getTokenizedLength() - 1
+			def tokenizedLentgh = subscanner.tokenizedLength - 1
 
 			if (tokenizedLentgh > 0) {
 				this.addToken nextToken
 				this.read(tokenizedLentgh - 1)
 			} else {
 				if (next == '>' || next == '/') {
-					this.addToken TokensStore.get().getToken(
+					this.addToken tokenStore.getToken(
 						TokensStore.TAG,
 						this.start + this.offset,
 						1
@@ -66,7 +68,7 @@ class Tag extends Container {
 						return this.containerToken
 					}
 				} else {
-					this.addToken TokensStore.get().getToken(
+					this.addToken tokenStore.getToken(
 						TokensStore.DEFAULT,
 						this.start + this.offset,
 						1

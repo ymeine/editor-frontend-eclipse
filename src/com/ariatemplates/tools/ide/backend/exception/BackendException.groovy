@@ -3,10 +3,6 @@ package com.ariatemplates.tools.ide.backend.exception
 
 
 class BackendException extends Exception {
-	private static final long serialVersionUID = 1L
-
-
-
 	static buildMessage(content) {
 		if (content instanceof Map) {
 			def msg = content["msg"]
@@ -17,7 +13,9 @@ class BackendException extends Exception {
 		}
 	}
 
+
+
 	BackendException(content) {
-		super(this.class.buildMessage(content))
+		super(this.class.buildMessage content)
 	}
 }

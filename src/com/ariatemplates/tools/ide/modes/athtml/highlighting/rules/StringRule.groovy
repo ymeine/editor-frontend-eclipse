@@ -16,9 +16,7 @@ public class StringRule extends Container {
 
 	IToken evaluate(ICharacterScanner initialScanner) {
 		super.evaluate initialScanner
-
-		def stringDelimiter
-		def previousChar = ' '
+		def tokenStore = this.tokenStore
 
 		def next = this.read()
 
@@ -26,55 +24,54 @@ public class StringRule extends Container {
 			this.rewind()
 			return Rich.UNDEFINED
 		}
+		def delimiter = next
 
-		stringDelimiter = next
-
-		def rulesTypes = [
-			RulesStore.STATEMENT,
-			RulesStore.EXPRESSION
-		]
-
-		this.addToken TokensStore.get().getToken(
+		this.addToken tokenStore.getToken(
 			TokensStore.STRING,
 			this.start + this.offset,
 			1
 		)
 
-		previousChar = next
+		def previous = next
 		next = this.read()
 
-		while (next != stringDelimiter || (next == stringDelimiter && previousChar == '\\')) {
+		def rulesTypes = [
+			RulesStore.STATEMENT,
+			RulesStore.EXPRESSION
+		]
+		def document = this.scanner.document
+
+		while (next != delimiter || (next == delimiter && previous == '\\')) {
 			def subscanner = new SpecificRuleBasedScanner(
 				TokensStore.STRING,
 				rulesTypes,
-				this.scanner.getDocument(),
+				document,
 				this.start + this.offset
 			)
 
 			def nextToken = subscanner.getToken true
-			def tokenizedLentgh = subscanner.getTokenizedLength() - 1
+			def tokenizedLentgh = subscanner.tokenizedLength - 1
 
 			if (tokenizedLentgh > 0) {
 				this.addToken nextToken
 				this.read(tokenizedLentgh - 1)
-				previousChar = ' '
 			} else {
 				if (next == ICharacterScanner.EOF) {
-					this.rewind();
-					return Rich.UNDEFINED;
+					this.rewind()
+					return Rich.UNDEFINED
 				}
-				this.addToken TokensStore.get().getToken(
+				this.addToken tokenStore.getToken(
 					TokensStore.STRING,
 					this.start + this.offset,
 					1
 				)
 			}
 
-			previousChar = next
+			previous = next
 			next = this.read()
 		}
 
-		this.addToken TokensStore.get().getToken(
+		this.addToken tokenStore.getToken(
 			TokensStore.STRING,
 			this.start + this.offset,
 			1

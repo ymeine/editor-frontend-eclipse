@@ -37,12 +37,10 @@ class Provider implements ITreeContentProvider {
 	 * We assume that once this kind of method gets called, it means that the input is accurate.
 	 * Thus, not every possible errors will be handled here.
 	 */
-	@Override
 	Object[] getChildren(parentElement) {
 		parentElement["children"] ?: []
 	}
 
-	@Override
 	boolean hasChildren(element) {
 		this.getChildren(element).length > 0
 	}
