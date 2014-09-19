@@ -20,6 +20,24 @@ Classes:
 - [`TokensStore.java`](./TokensStore.java): manages the set of tokens
 
 
+
+
+
+# Resources
+
+## Documentation
+
+### Rules
+
+- [Package `org.eclipse.jface.text.rules`](http://help.eclipse.org/luna/index.jsp?topic=%2Forg.eclipse.platform.doc.isv%2Freference%2Fapi%2Forg%2Feclipse%2Fjface%2Ftext%2Frules%2Fpackage-summary.html)
+- [Class `RuleBasedScanner`](http://help.eclipse.org/luna/index.jsp?topic=%2Forg.eclipse.platform.doc.isv%2Freference%2Fapi%2Forg%2Feclipse%2Fjface%2Ftext%2Frules%2FRuleBasedScanner.html)
+- [Interface `IRule`](http://help.eclipse.org/luna/index.jsp?topic=%2Forg.eclipse.platform.doc.isv%2Freference%2Fapi%2Forg%2Feclipse%2Fjface%2Ftext%2Frules%2FIRule.html)
+
+### Tokens
+
+- [Class `Token`](http://help.eclipse.org/luna/index.jsp?topic=%2Forg.eclipse.platform.doc.isv%2Freference%2Fapi%2Forg%2Feclipse%2Fjface%2Ftext%2Frules%2FToken.html)
+
+
 ----
 
 The section below is a WIP, and should be moved somewhere else probably.
