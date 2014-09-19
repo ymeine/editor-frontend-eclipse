@@ -27,7 +27,6 @@ import com.ariatemplates.tools.ide.document.provider.Provider;
 import com.ariatemplates.tools.ide.outline.outline.Outline;
 import com.google.gson.JsonSyntaxException;
 import com.ariatemplates.tools.ide.editor.configuration.view.source.Source;
-import com.ariatemplates.tools.ide.editor.editor.Editor;
 
 
 

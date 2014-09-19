@@ -12,6 +12,8 @@ import org.eclipse.jface.text.rules.IToken;
 import org.eclipse.jface.text.rules.RuleBasedScanner;
 
 import com.ariatemplates.tools.ide.modes.athtml.highlighting.tokens.Rich;
+import com.ariatemplates.tools.ide.modes.athtml.highlighting.RulesStore;
+import com.ariatemplates.tools.ide.modes.athtml.highlighting.TokensStore;
 
 
 
@@ -67,30 +69,36 @@ public class SpecificRuleBasedScanner extends RuleBasedScanner {
 	 */
 	@Override
 	public IToken nextToken() {
-		IToken temporaryToken = null;
+		IToken next = null;
+		
 		if (this.iteratorsStack.isEmpty()) {
-			temporaryToken = super.nextToken();
+			next = super.nextToken();
 		} else {
-			Iterator<IToken> lastIterator = this.iteratorsStack.get(this.iteratorsStack.size() - 1);
+			int lastIndex = this.iteratorsStack.size() - 1;
+			Iterator<IToken> lastIterator = this.iteratorsStack.get(lastIndex);
+			
 			if (lastIterator.hasNext()) {
-				temporaryToken = lastIterator.next();
+				next = lastIterator.next();
 			} else {
-				this.iteratorsStack.remove(this.iteratorsStack.size() - 1);
-				temporaryToken = this.nextToken();
+				this.iteratorsStack.remove(lastIndex);
+				next = this.nextToken();
 			}
 		}
 
-		Rich enhancedToken = (temporaryToken instanceof Rich) ? (Rich) temporaryToken : null;
+		Rich enhancedToken = (next instanceof Rich) ? (Rich) next : null;
+		
 		if (enhancedToken != null && enhancedToken.hasChildren()) {
 			this.iteratorsStack.add(enhancedToken.getChildren().iterator());
-			temporaryToken = this.nextToken();
+			next = this.nextToken();
 		}
 
-		if (temporaryToken.isUndefined()) {
+		if (next.isUndefined()) {
 			return this.nextToken();
 		}
-		this.currentToken = temporaryToken;
-		return temporaryToken;
+		
+		this.currentToken = next;
+		
+		return next;
 	}
 
 	/**
@@ -100,10 +108,8 @@ public class SpecificRuleBasedScanner extends RuleBasedScanner {
 	 * @return
 	 */
 	public IToken nextFlatToken() {
-		IToken temporaryToken = null;
-		temporaryToken = super.nextToken();
-		this.currentToken = temporaryToken;
-		return temporaryToken;
+		this.currentToken = super.nextToken();
+		return this.currentToken;
 	}
 
 	@Override
@@ -111,14 +117,17 @@ public class SpecificRuleBasedScanner extends RuleBasedScanner {
 		if (this.currentToken == null) {
 			return 0;
 		}
+		
 		int offset = -1;
+		
 		if (this.currentToken instanceof Rich) {
-			Rich enhancedToken = (Rich) this.currentToken;
-			offset = enhancedToken.getOffset();
+			offset = ((Rich) this.currentToken).getOffset();
 		}
+		
 		if (offset == -1) {
-			return super.getTokenOffset();
+			offset = super.getTokenOffset();
 		}
+		
 		return offset;
 	}
 
@@ -127,14 +136,17 @@ public class SpecificRuleBasedScanner extends RuleBasedScanner {
 		if (this.currentToken == null) {
 			return 0;
 		}
+		
 		int length = -1;
+		
 		if (this.currentToken instanceof Rich) {
-			Rich enhancedToken = (Rich) this.currentToken;
-			length = enhancedToken.getLength();
+			length = ((Rich) this.currentToken).getLength();
 		}
+		
 		if (length == -1) {
-			return super.getTokenLength();
+			length = super.getTokenLength();
 		}
+		
 		return length;
 	}
 
@@ -157,22 +169,25 @@ public class SpecificRuleBasedScanner extends RuleBasedScanner {
 	 */
 	public Rich getToken(boolean stopAtDefault) {
 		Rich containerToken = this.tokenStore.getToken(TokensStore.CONTAINER);
+		
 		while (this.fOffset < this.fRangeEnd) {
 			int initialOffset = this.fOffset;
-			IToken next = this.nextFlatToken();
+			Rich next = ((Rich) this.nextFlatToken()).clone();
 			int finalOffset = this.fOffset;
-			Rich pocNext = (Rich) next;
-			Rich pocNextClone = pocNext.clone();
-			if (pocNextClone.getLength() == Rich.UNDEFINED_INT && pocNextClone.getOffset() == Rich.UNDEFINED_INT) {
-				pocNextClone.setOffset(initialOffset);
-				pocNextClone.setLength(finalOffset - initialOffset);
+			
+			if (next.getLength() == Rich.UNDEFINED_INT && next.getOffset() == Rich.UNDEFINED_INT) {
+				next.setOffset(initialOffset);
+				next.setLength(finalOffset - initialOffset);
 			}
-			if (stopAtDefault && pocNextClone.getType() == this.defaultTokenType) {
+			
+			if (stopAtDefault && next.getType() == this.defaultTokenType) {
 				return containerToken;
 			}
-			this.currentToken = pocNextClone;
+			
+			this.currentToken = next;
 			containerToken.addChild(this.currentToken);
 		}
+		
 		return containerToken;
 	}
 

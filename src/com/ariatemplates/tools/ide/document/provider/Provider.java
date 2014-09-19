@@ -15,7 +15,6 @@ import com.ariatemplates.tools.ide.backend.exception.BackendException;
 import com.ariatemplates.tools.ide.document.document.Document;
 import com.ariatemplates.tools.ide.document.listener.Listener;
 import com.ariatemplates.tools.ide.document.partitioner.Partitioner;
-import com.ariatemplates.tools.ide.document.provider.Provider;
 
 
 

@@ -23,10 +23,12 @@ public class Array extends Container {
 
 		int next = this.read();
 		char nextChar = (char) next;
+		
 		if (nextChar != '[' || next == ICharacterScanner.EOF) {
 			this.rewind();
 			return Rich.UNDEFINED;
 		}
+		
 		this.addToken(this.tokenStore.getToken(TokensStore.ARRAY, this.start + this.offset, 1));
 
 		next = 0;
@@ -40,9 +42,15 @@ public class Array extends Container {
 			next = this.read();
 			nextChar = (char) next;
 			SpecificRuleBasedScanner subscanner = null;
-			subscanner = new SpecificRuleBasedScanner(TokensStore.DEFAULT, valueRules, this.scanner.getDocument(), this.start + this.offset);
+			subscanner = new SpecificRuleBasedScanner(
+				TokensStore.DEFAULT,
+				valueRules,
+				this.scanner.getDocument(),
+				this.start + this.offset
+			);
 			nextToken = subscanner.getToken(true);
 			tokenizedLentgh = subscanner.getTokenizedLength() - 1;
+			
 			if (tokenizedLentgh > 0) {
 				this.addToken(nextToken);
 				this.read(tokenizedLentgh - 1);
@@ -50,7 +58,11 @@ public class Array extends Container {
 				if (nextChar == ']') {
 					isArrayOver = true;
 				}
-				this.addToken(this.tokenStore.getToken(TokensStore.ARRAY, this.start + this.offset, 1));
+				this.addToken(this.tokenStore.getToken(
+					TokensStore.ARRAY,
+					this.start + this.offset,
+					1
+				));
 			}
 		}
 		if (next == ICharacterScanner.EOF) {

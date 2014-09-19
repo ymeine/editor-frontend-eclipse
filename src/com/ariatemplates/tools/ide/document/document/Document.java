@@ -12,7 +12,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.BadLocationException;
 
 import com.ariatemplates.tools.ide.backend.backend.Backend;
-import com.ariatemplates.tools.ide.document.document.Document;
 
 
 

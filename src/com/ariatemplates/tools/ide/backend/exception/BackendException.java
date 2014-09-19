@@ -4,8 +4,6 @@ package com.ariatemplates.tools.ide.backend.exception;
 
 import java.util.Map;
 
-import com.ariatemplates.tools.ide.backend.exception.BackendException;
-
 
 
 public class BackendException extends Exception {

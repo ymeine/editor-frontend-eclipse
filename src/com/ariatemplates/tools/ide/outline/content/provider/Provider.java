@@ -8,8 +8,6 @@ import java.util.Map;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
-import com.ariatemplates.tools.ide.outline.content.provider.Provider;
-
 
 
 public class Provider implements ITreeContentProvider {

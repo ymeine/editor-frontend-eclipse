@@ -4,6 +4,7 @@ package com.ariatemplates.tools.ide.modes.athtml.highlighting.rules;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.jface.text.rules.ICharacterScanner;
@@ -14,7 +15,7 @@ import com.ariatemplates.tools.ide.modes.athtml.highlighting.tokens.Rich;
 
 
 public class Word extends Container {
-
+	
 	private List<String> words;
 	private List<Rich> tokens = null;
 	private Rich defaultToken;
@@ -33,13 +34,13 @@ public class Word extends Container {
 	}
 
 	public int longestWordLength(String[] words) {
-		int maxLength = 0;
-		for (int i = 0; i < words.length; i++) {
-			if (words[i].length() > maxLength) {
-				maxLength = words[i].length();
-			}
+		List<Integer> lengths = new ArrayList<Integer>(words.length);
+		
+		for (String word: words) {
+			lengths.add(word.length());
 		}
-		return maxLength;
+		
+		return Collections.max(lengths);
 	}
 
 	@Override
@@ -64,11 +65,16 @@ public class Word extends Container {
 		}
 		if (index != -1) {
 			Rich returnToken = this.tokens == null ? this.defaultToken.clone() : this.tokens.get(index).clone();
+			
 			returnToken.setOffset(this.start);
 			returnToken.setLength(this.buffer.length());
+			
 			return returnToken;
 		}
+		
 		this.rewind();
+		
 		return Rich.UNDEFINED;
 	}
+	
 }

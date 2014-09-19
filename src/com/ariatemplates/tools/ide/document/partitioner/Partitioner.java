@@ -9,7 +9,6 @@ import org.eclipse.jface.text.ITypedRegion;
 import org.eclipse.jface.text.TypedRegion;
 
 import com.ariatemplates.tools.ide.document.document.Document;
-import com.ariatemplates.tools.ide.document.partitioner.Partitioner;
 
 
 

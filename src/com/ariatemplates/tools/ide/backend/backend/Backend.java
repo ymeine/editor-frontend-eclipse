@@ -14,7 +14,6 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.eclipse.core.runtime.FileLocator;
 
-import com.ariatemplates.tools.ide.backend.backend.Backend;
 import com.ariatemplates.tools.ide.backend.exception.BackendException;
 import com.ariatemplates.tools.ide.backend.http.HTTP;
 import com.ariatemplates.tools.ide.backend.process_runner.ProcessRunner;

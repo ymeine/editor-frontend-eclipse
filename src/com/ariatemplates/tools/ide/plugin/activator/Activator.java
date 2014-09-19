@@ -6,7 +6,6 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 import com.ariatemplates.tools.ide.backend.backend.Backend;
-import com.ariatemplates.tools.ide.plugin.activator.Activator;
 
 
 
@@ -32,8 +31,7 @@ public class Activator extends AbstractUIPlugin {
 			Backend.get().start();
 		} catch (Exception exception) {
 			System.err.println("No external server running, and could not start the backend server internally.");
-			System.err.println("Exception: ");
-			System.err.println(exception);
+			exception.printStackTrace();
 		}
 	}
 

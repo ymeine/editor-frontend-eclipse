@@ -20,32 +20,47 @@ public class Expression extends Container {
 	@Override
 	public IToken evaluate(ICharacterScanner initialScanner) {
 		super.evaluate(initialScanner);
+		
 		int bracketsCount = 0;
-
 		int next = this.read();
 		char nextChar = (char) next;
+		
 		if (nextChar != '$' || next == ICharacterScanner.EOF) {
 			this.rewind();
 			return Rich.UNDEFINED;
 		}
+		
 		next = this.read();
 		nextChar = (char) next;
+		
 		if (nextChar != '{' || next == ICharacterScanner.EOF) {
 			this.rewind();
 			return Rich.UNDEFINED;
 		}
+		
 		bracketsCount++;
-		this.addToken(this.tokenStore.getToken(TokensStore.EXPRESSION, this.start, 2));
-
+		this.addToken(this.tokenStore.getToken(
+			TokensStore.EXPRESSION,
+			this.start,
+			2
+		));
 
 		next = 0;
 		List<IRule> rules = RulesStore.get().getPrimitiveRules();
+		
 		while (next != ICharacterScanner.EOF && bracketsCount > 0) {
 			next = this.read();
 			nextChar = (char) next;
-			SpecificRuleBasedScanner subscanner = new SpecificRuleBasedScanner(TokensStore.DEFAULT, rules, this.scanner.getDocument(), this.start + this.offset);
+			
+			SpecificRuleBasedScanner subscanner = new SpecificRuleBasedScanner(
+				TokensStore.DEFAULT,
+				rules,
+				this.scanner.getDocument(),
+				this.start + this.offset
+			);
 			Rich nextToken = subscanner.getToken(true);
 			int tokenizedLentgh = subscanner.getTokenizedLength() - 1;
+			
 			if (tokenizedLentgh > 0) {
 				this.addToken(nextToken);
 				this.read(tokenizedLentgh - 1);
@@ -56,13 +71,23 @@ public class Expression extends Container {
 				if (nextChar == '}') {
 					bracketsCount--;
 				}
+				
 				if (bracketsCount == 0) {
-					this.addToken(this.tokenStore.getToken(TokensStore.EXPRESSION, this.start + this.offset, 1));
+					this.addToken(this.tokenStore.getToken(
+						TokensStore.EXPRESSION,
+						this.start + this.offset,
+						1
+					));
 				} else if (next != ICharacterScanner.EOF) {
-					this.addToken(this.tokenStore.getToken(TokensStore.EXPRESSION_ARGS, this.start + this.offset, 1));
+					this.addToken(this.tokenStore.getToken(
+						TokensStore.EXPRESSION_ARGS,
+						this.start + this.offset,
+						1
+					));
 				}
 			}
 		}
+		
 		if (next == ICharacterScanner.EOF) {
 			this.unread();
 		}

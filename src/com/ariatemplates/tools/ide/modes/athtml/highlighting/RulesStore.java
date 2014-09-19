@@ -62,22 +62,33 @@ public class RulesStore {
 
 	private TokensStore tokenStore = TokensStore.get();
 
-
+	private int[] defaultRulesTypes = {
+		MULTILINE_COMMENT,
+		SINGLELINE_COMMENT,
+		STATEMENT,
+		EXPRESSION,
+		STRING_COMPLEX,
+		TAG
+	};
+	
+	private int[] primitiveRulesTypes = {
+		MULTILINE_COMMENT,
+		SINGLELINE_COMMENT,
+		STRING_DOUBLE,
+		STRING_SINGLE,
+		NUMBER,
+		BOOLEAN,
+		OPERATOR,
+		FUNCTION,
+		OBJECT,
+		ARRAY
+	};
 
 	/**
 	 * @return the default rules
 	 */
 	public List<IRule> getRules() {
-		int[] defaultRules = {
-			RulesStore.MULTILINE_COMMENT,
-			RulesStore.SINGLELINE_COMMENT,
-			RulesStore.STATEMENT,
-			RulesStore.EXPRESSION,
-			RulesStore.STRING_COMPLEX,
-			RulesStore.TAG
-		};
-
-		return this.getRules(defaultRules);
+		return this.getRules(this.defaultRulesTypes);
 	}
 
 	/**
@@ -162,20 +173,7 @@ public class RulesStore {
 	 *         arrays, objects, numbers and booleans
 	 */
 	public List<IRule> getPrimitiveRules() {
-		int[] primitiveTypes = {
-			RulesStore.MULTILINE_COMMENT,
-			RulesStore.SINGLELINE_COMMENT,
-			RulesStore.STRING_DOUBLE,
-			RulesStore.STRING_SINGLE,
-			RulesStore.NUMBER,
-			RulesStore.BOOLEAN,
-			RulesStore.OPERATOR,
-			RulesStore.FUNCTION,
-			RulesStore.OBJECT,
-			RulesStore.ARRAY
-		};
-
-		return this.getRules(primitiveTypes);
+		return this.getRules(this.primitiveRulesTypes);
 	}
 
 }

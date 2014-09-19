@@ -33,7 +33,7 @@ public class Source extends org.eclipse.jface.text.source.SourceViewerConfigurat
 	// public Source() {
 	// 	super();
 	// 	try {
-	// 		this.configuration = Backend.get().rpc(mode, Source.KEY_CONFIGURATION_WIDTH);
+	// 		this.configuration = Backend.get().rpc(Source.mode, Source.KEY_CONFIGURATION_WIDTH);
 	// 	} catch (BackendException e) {
 	// 		e.printStackTrace();
 	// 	} catch (Exception e) {

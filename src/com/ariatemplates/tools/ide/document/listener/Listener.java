@@ -9,7 +9,6 @@ import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocumentListener;
 
 import com.ariatemplates.tools.ide.document.document.Document;
-import com.ariatemplates.tools.ide.document.listener.Listener;
 
 
 

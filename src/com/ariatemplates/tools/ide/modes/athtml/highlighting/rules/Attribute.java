@@ -15,16 +15,26 @@ public class Attribute extends Container {
 	@Override
 	public IToken evaluate(ICharacterScanner initialScanner) {
 		super.evaluate(initialScanner);
-		int next = this.read();
-		char charNext = (char) next;
+		
+		char charNext = (char) this.read();
+		
 		if (this.buffer.matches("[\\w-_:\\s=]")) {
+			String tokenType;
 			if (charNext == '=') {
-				return TokensStore.get().getToken(TokensStore.TAG_ATTRIBUTE_EQUAL, this.start + this.offset, 1);
+				tokenType = TokensStore.TAG_ATTRIBUTE_EQUAL;
 			} else {
-				return TokensStore.get().getToken(TokensStore.TAG_ATTRIBUTE, this.start + this.offset, 1);
+				tokenType = TokensStore.TAG_ATTRIBUTE;
 			}
+			
+			return this.tokenStore.getToken(
+				tokenType,
+				this.start + this.offset,
+				1
+			);
 		}
+		
 		this.rewind();
+		
 		return Rich.UNDEFINED;
 	}
 
