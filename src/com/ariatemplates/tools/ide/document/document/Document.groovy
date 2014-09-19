@@ -42,8 +42,8 @@ class Document extends org.eclipse.jface.text.Document {
 			marker.setAttribute IMarker.SEVERITY, severity
 
 			def location = config["location"]
-			def charStart = location["start"]["index"]
-			def charEnd = location["end"]["index"]
+			int charStart = location["start"]["index"]
+			int charEnd = location["end"]["index"]
 
 			marker.setAttribute IMarker.CHAR_START, charStart
 			marker.setAttribute IMarker.CHAR_END, charEnd

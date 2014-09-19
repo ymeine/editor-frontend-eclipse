@@ -84,7 +84,7 @@ class Backend {
 
 		def basePath = new File("")
 		try {
-			basePath = new File(FileLocator.toFileURL(Activator.default.bundle.getEntry "/").toURI())
+			basePath = new File(FileLocator.toFileURL(Activator.default.bundle.getEntry("/")).toURI())
 		} catch (e) {
 			System.err.println "Could not resolve bundle absolute path."
 			System.err.print e
@@ -308,13 +308,13 @@ class Backend {
 			"argument": argument
 		]
 
-		this.rpc.entity = new StringEntity(gson.toJson object)
+		this.rpc.entity = new StringEntity(gson.toJson(object))
 		def response = this.http.post this.rpc
 
 		def result = [:]
 		result = gson.fromJson HTTP.getString(response), Map.class
 
-		switch (HTTP.getCode response) {
+		switch (HTTP.getCode(response)) {
 			case 200:
 				return result
 			default:

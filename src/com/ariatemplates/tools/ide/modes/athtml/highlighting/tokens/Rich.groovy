@@ -37,14 +37,18 @@ class Rich extends Token {
 		this.length = length
 	}
 
-	Rich(data=null, defined=null) {
+	Rich(data=null) {
 		super(data)
-		if (defined != null) this.defined = defined
+	}
+	
+	Rich(Boolean defined) {
+		super(null)
+		this.defined = defined
 	}
 
 
 
-	def isUndefined() {!this.defined}
+	boolean isUndefined() {!this.defined}
 	def addChild(child) {this.children.add child}
 	def hasChildren() {!this.children.isEmpty()}
 

@@ -18,7 +18,7 @@ class Hover implements IAnnotationHover {
 		def iterator = sourceViewer.annotationModel.annotationIterator
 
 		while (iterator.hasNext()) {
-			def annotation = ++iterator
+			def annotation = iterator.next()
 			if (annotation instanceof MarkerAnnotation) {
 				def marker = annotation
 				try {
@@ -26,7 +26,7 @@ class Hover implements IAnnotationHover {
 
 					if (markerLine == line) {
 						def markerMessage = marker.marker.getAttribute IMarker.MESSAGE
-						hoverInfo += markerMessage
+						hoverInfo.add markerMessage
 					}
 				} catch (CoreException e) {
 					e.printStackTrace()

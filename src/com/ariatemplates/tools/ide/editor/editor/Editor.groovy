@@ -32,7 +32,7 @@ class Editor extends TextEditor {
 	 **************************************************************************/
 
 	Editor() {
-		this.documentProvider = new Provider()
+		this.setDocumentProvider(new Provider())
 	}
 
 	protected ISourceViewer createSourceViewer(Composite parent, IVerticalRuler ruler, int styles) {
@@ -141,9 +141,9 @@ class Editor extends TextEditor {
 
 	void update() {
 		try {
-			// this.format()
-			// this.fold()
-			// this.outline()
+			//this.format()
+			//this.fold()
+			//this.outline()
 			this.validate()
 		} catch (e) {
 			e.printStackTrace()

@@ -60,14 +60,14 @@ class Source extends org.eclipse.jface.text.source.SourceViewerConfiguration {
 	 * Highlighting
 	 **************************************************************************/
 
-	/*IPresentationReconciler getPresentationReconciler(ISourceViewer sourceViewer) {
+	IPresentationReconciler getPresentationReconciler(ISourceViewer sourceViewer) {
 		def reconciler = new PresentationReconciler()
 		def dr = new DefaultDamagerRepairer(new SpecificRuleBasedScanner())
 		reconciler.setDamager dr, Partitioner.PARTITION_NAME
 		reconciler.setRepairer dr, Partitioner.PARTITION_NAME
 
 		reconciler
-	}*/
+	}
 
 	/***************************************************************************
 	 * Pending implementation

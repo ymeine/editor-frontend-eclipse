@@ -56,8 +56,7 @@ class Word extends Container {
 		}
 
 		if (index != -1) {
-			// def returnToken = this.tokens == null ? this.defaultToken.clone() : this.tokens.get(index).clone()
-			def returnToken = this.tokens?.get(index).clone() ?: this.defaultToken.clone()
+			def returnToken = this.tokens == null ? this.defaultToken.clone() : this.tokens.get(index).clone()
 
 			returnToken.offset = this.start
 			returnToken.length = this.buffer.length()

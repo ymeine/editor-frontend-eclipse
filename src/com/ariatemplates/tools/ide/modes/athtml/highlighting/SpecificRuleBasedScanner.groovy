@@ -79,17 +79,15 @@ class SpecificRuleBasedScanner extends RuleBasedScanner {
 			def lastIterator = iteratorsStack[lastIndex]
 
 			if (lastIterator.hasNext()) {
-				next = lastIterator++
+				next = lastIterator.next()
 			} else {
 				iteratorsStack.remove(lastIndex)
 				next = this.nextToken()
 			}
 		}
 
-		def enhancedToken = next instanceof Rich ? next : null
-
-		if (enhancedToken != null && enhancedToken.hasChildren()) {
-			iteratorsStack.add enhancedToken.children.iterator()
+		if (next instanceof Rich && next.hasChildren()) {
+			iteratorsStack.add next.children.iterator()
 			next = this.nextToken()
 		}
 

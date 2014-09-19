@@ -51,7 +51,7 @@ class Container implements IRule {
 		count.times {
 			next = this.scanner.read()
 			this.offset++
-			this.buffer.add next
+			this.buffer += next as char
 			this.intBuffer.add next
 		}
 

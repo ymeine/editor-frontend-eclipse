@@ -53,7 +53,6 @@ class Object extends Container {
 
 		while (next != ICharacterScanner.EOF && !isObjectOver) {
 			next = this.read()
-			def subscanner
 
 			def rules
 			if (status == cl.LOOKING_FOR_KEY) {

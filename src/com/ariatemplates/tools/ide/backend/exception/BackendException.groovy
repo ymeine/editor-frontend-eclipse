@@ -16,6 +16,6 @@ class BackendException extends Exception {
 
 
 	BackendException(content) {
-		super(this.class.buildMessage content)
+		super(this.class.buildMessage(content))
 	}
 }

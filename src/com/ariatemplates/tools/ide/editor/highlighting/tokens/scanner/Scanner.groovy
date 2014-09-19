@@ -142,7 +142,7 @@ class Scanner implements ITokenScanner {
 			return Token.EOF
 		}
 
-		this.currentToken = ++this.tokensIterator
+		this.currentToken = this.tokensIterator.next()
 		def type = this.currentToken[this.class.KEY_STYLE]
 
 		if (type == "ws") {

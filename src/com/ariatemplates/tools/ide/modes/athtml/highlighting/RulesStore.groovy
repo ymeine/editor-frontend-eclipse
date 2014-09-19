@@ -108,7 +108,7 @@ class RulesStore {
 			cl.SINGLELINE_COMMENT,
 			cl.STATEMENT,
 			cl.EXPRESSION,
-			cl.STRING_COMPLEX,
+			//cl.STRING_COMPLEX//,
 			cl.TAG
 		]
 
@@ -119,10 +119,10 @@ class RulesStore {
 			cl.STRING_SINGLE,
 			cl.NUMBER,
 			cl.BOOLEAN,
-			cl.OPERATOR,
-			cl.FUNCTION,
-			cl.OBJECT,
-			cl.ARRAY
+			cl.OPERATOR
+			//cl.FUNCTION,
+			//cl.OBJECT,
+			//cl.ARRAY
 		]
 	}
 
@@ -132,7 +132,7 @@ class RulesStore {
 	 *            rule type from the static class properties
 	 * @return the rule corresponding to the specified type
 	 */
-	def getRule(type) {(this.builders[type] ?: {null})()}
+	def getRule(type) {(this.rulesBuilders[type] ?: {null})()}
 
 	/**
 	 *
@@ -141,8 +141,8 @@ class RulesStore {
 	 * @return the rules corresponding to the specified types (the default rules if not specified)
 	 */
 	def getRules(types=null) {
-		types == types ?: this.defaultRulesTypes
-		types.collect { type -> this.getRule type }
+		types = types ?: this.defaultRulesTypes
+		types.collect({ type -> this.getRule type })
 	}
 
 	/**
