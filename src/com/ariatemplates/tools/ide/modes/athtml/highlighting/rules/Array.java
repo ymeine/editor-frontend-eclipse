@@ -10,8 +10,8 @@ import org.eclipse.jface.text.rules.IToken;
 
 import com.ariatemplates.tools.ide.modes.athtml.highlighting.RulesStore;
 import com.ariatemplates.tools.ide.modes.athtml.highlighting.SpecificRuleBasedScanner;
-import com.ariatemplates.tools.ide.modes.athtml.highlighting.TokensStore;
-import com.ariatemplates.tools.ide.modes.athtml.highlighting.tokens.Rich;
+import com.ariatemplates.tools.ide.modes.athtml.highlighting.tokens.TokensStore;
+import com.ariatemplates.tools.ide.modes.athtml.highlighting.tokens.node.Node;
 
 
 
@@ -26,7 +26,7 @@ public class Array extends Container {
 		
 		if (nextChar != '[' || next == ICharacterScanner.EOF) {
 			this.rewind();
-			return Rich.UNDEFINED;
+			return Node.UNDEFINED;
 		}
 		
 		this.addToken(this.tokenStore.getToken(TokensStore.ARRAY, this.start + this.offset, 1));
@@ -36,7 +36,7 @@ public class Array extends Container {
 
 		List<IRule> valueRules = RulesStore.get().getPrimitiveRules();
 		int tokenizedLentgh = 0;
-		Rich nextToken = null;
+		Node nextToken = null;
 
 		while (next != ICharacterScanner.EOF && !isArrayOver) {
 			next = this.read();

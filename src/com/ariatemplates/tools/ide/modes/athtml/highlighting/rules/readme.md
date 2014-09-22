@@ -10,17 +10,23 @@ Rules
 
 Rules: 
 
-- [`Array.java`](./Array.java): `Array`
-- [`Attribute.java`](./Attribute.java): `Attribute`
-- [`Container.java`](./Container.java): `Container`
-- [`Expression.java`](./Expression.java): `Expression`
-- [`Function.java`](./Function.java): `Function`
-- [`Key.java`](./Key.java): `Key`
-- [`Object.java`](./Object.java): `Object`
-- [`Statement.java`](./Statement.java): `Statement`
-- [`StringRule.java`](./StringRule.java): `StringRule`
-- [`Tag.java`](./Tag.java): `Tag`
-- [`Word.java`](./Word.java): `Word`
+- Generic: 
+	- [`Container.java`](./Container.java): `Container`, the base rule
+	- [`Word.java`](./Word.java): `Word`, to parse an element which has a simple set of alternatives
+- Basic: 
+	- Literals: 
+		- [`StringRule.java`](./StringRule.java): `StringRule`
+		- [`Function.java`](./Function.java): `Function`
+		- [`Array.java`](./Array.java): `Array`
+		- Object: 
+			- [`Object.java`](./Object.java): `Object`
+			- [`Key.java`](./Key.java): `Key`
+- Specific: 
+	- [`Statement.java`](./Statement.java): `Statement`
+	- [`Expression.java`](./Expression.java): `Expression`
+	- HTML elements: 
+		- [`Tag.java`](./Tag.java): `Tag`
+		- [`Attribute.java`](./Attribute.java): `Attribute`
 
 
 

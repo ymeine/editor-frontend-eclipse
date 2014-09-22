@@ -11,9 +11,9 @@ import org.eclipse.jface.text.rules.IRule;
 import org.eclipse.jface.text.rules.IToken;
 import org.eclipse.jface.text.rules.RuleBasedScanner;
 
-import com.ariatemplates.tools.ide.modes.athtml.highlighting.tokens.Rich;
+import com.ariatemplates.tools.ide.modes.athtml.highlighting.tokens.TokensStore;
+import com.ariatemplates.tools.ide.modes.athtml.highlighting.tokens.node.Node;
 import com.ariatemplates.tools.ide.modes.athtml.highlighting.RulesStore;
-import com.ariatemplates.tools.ide.modes.athtml.highlighting.TokensStore;
 
 
 
@@ -85,7 +85,7 @@ public class SpecificRuleBasedScanner extends RuleBasedScanner {
 			}
 		}
 
-		Rich enhancedToken = (next instanceof Rich) ? (Rich) next : null;
+		Node enhancedToken = (next instanceof Node) ? (Node) next : null;
 		
 		if (enhancedToken != null && enhancedToken.hasChildren()) {
 			this.iteratorsStack.add(enhancedToken.getChildren().iterator());
@@ -120,8 +120,8 @@ public class SpecificRuleBasedScanner extends RuleBasedScanner {
 		
 		int offset = -1;
 		
-		if (this.currentToken instanceof Rich) {
-			offset = ((Rich) this.currentToken).getOffset();
+		if (this.currentToken instanceof Node) {
+			offset = ((Node) this.currentToken).getOffset();
 		}
 		
 		if (offset == -1) {
@@ -139,8 +139,8 @@ public class SpecificRuleBasedScanner extends RuleBasedScanner {
 		
 		int length = -1;
 		
-		if (this.currentToken instanceof Rich) {
-			length = ((Rich) this.currentToken).getLength();
+		if (this.currentToken instanceof Node) {
+			length = ((Node) this.currentToken).getLength();
 		}
 		
 		if (length == -1) {
@@ -167,15 +167,15 @@ public class SpecificRuleBasedScanner extends RuleBasedScanner {
 	 * @param stopAtDefault
 	 * @return
 	 */
-	public Rich getToken(boolean stopAtDefault) {
-		Rich containerToken = this.tokenStore.getToken(TokensStore.CONTAINER);
+	public Node getToken(boolean stopAtDefault) {
+		Node containerToken = this.tokenStore.getToken(TokensStore.CONTAINER);
 		
 		while (this.fOffset < this.fRangeEnd) {
 			int initialOffset = this.fOffset;
-			Rich next = ((Rich) this.nextFlatToken()).clone();
+			Node next = ((Node) this.nextFlatToken()).clone();
 			int finalOffset = this.fOffset;
 			
-			if (next.getLength() == Rich.UNDEFINED_INT && next.getOffset() == Rich.UNDEFINED_INT) {
+			if (next.getLength() == Node.UNDEFINED_INT && next.getOffset() == Node.UNDEFINED_INT) {
 				next.setOffset(initialOffset);
 				next.setLength(finalOffset - initialOffset);
 			}
@@ -191,7 +191,7 @@ public class SpecificRuleBasedScanner extends RuleBasedScanner {
 		return containerToken;
 	}
 
-	public Rich getToken() {
+	public Node getToken() {
 		return this.getToken(false);
 	}
 

@@ -10,8 +10,8 @@ import org.eclipse.jface.text.rules.IRule;
 import org.eclipse.jface.text.rules.IToken;
 
 import com.ariatemplates.tools.ide.modes.athtml.highlighting.SpecificRuleBasedScanner;
-import com.ariatemplates.tools.ide.modes.athtml.highlighting.TokensStore;
-import com.ariatemplates.tools.ide.modes.athtml.highlighting.tokens.Rich;
+import com.ariatemplates.tools.ide.modes.athtml.highlighting.tokens.TokensStore;
+import com.ariatemplates.tools.ide.modes.athtml.highlighting.tokens.node.Node;
 
 
 
@@ -32,7 +32,7 @@ public class Container implements IRule {
 	protected String buffer = "";
 	protected List<Integer> intBuffer = new ArrayList<Integer>();
 	protected int offset = -1;
-	protected Rich containerToken = null;
+	protected Node containerToken = null;
 
 	/**
 	 * Sets some properties that are useful when reading a scanner
@@ -80,7 +80,7 @@ public class Container implements IRule {
 		this.intBuffer.clear();
 	}
 
-	protected void addToken(Rich token) {
+	protected void addToken(Node token) {
 		this.containerToken.addChild(token);
 	}
 

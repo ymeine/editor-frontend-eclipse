@@ -10,24 +10,24 @@ import java.util.List;
 import org.eclipse.jface.text.rules.ICharacterScanner;
 import org.eclipse.jface.text.rules.IToken;
 
-import com.ariatemplates.tools.ide.modes.athtml.highlighting.tokens.Rich;
+import com.ariatemplates.tools.ide.modes.athtml.highlighting.tokens.node.Node;
 
 
 
 public class Word extends Container {
 	
 	private List<String> words;
-	private List<Rich> tokens = null;
-	private Rich defaultToken;
+	private List<Node> tokens = null;
+	private Node defaultToken;
 	private int maxLength = 0;
 
-	public Word(String[] words, Rich[] tokens) {
+	public Word(String[] words, Node[] tokens) {
 		this.words = new ArrayList<String>(Arrays.asList(words));
 		this.maxLength = this.longestWordLength(words);
-		this.tokens = new ArrayList<Rich>(Arrays.asList(tokens));
+		this.tokens = new ArrayList<Node>(Arrays.asList(tokens));
 	}
 
-	public Word(String[] words, Rich defaultToken) {
+	public Word(String[] words, Node defaultToken) {
 		this.words = new ArrayList<String>(Arrays.asList(words));
 		this.maxLength = this.longestWordLength(words);
 		this.defaultToken = defaultToken;
@@ -61,10 +61,10 @@ public class Word extends Container {
 
 		if (this.buffer.length() == 0) {
 			this.rewind();
-			return Rich.UNDEFINED;
+			return Node.UNDEFINED;
 		}
 		if (index != -1) {
-			Rich returnToken = this.tokens == null ? this.defaultToken.clone() : this.tokens.get(index).clone();
+			Node returnToken = this.tokens == null ? this.defaultToken.clone() : this.tokens.get(index).clone();
 			
 			returnToken.setOffset(this.start);
 			returnToken.setLength(this.buffer.length());
@@ -74,7 +74,7 @@ public class Word extends Container {
 		
 		this.rewind();
 		
-		return Rich.UNDEFINED;
+		return Node.UNDEFINED;
 	}
 	
 }

@@ -1,4 +1,4 @@
-package com.ariatemplates.tools.ide.modes.athtml.highlighting.tokens;
+package com.ariatemplates.tools.ide.modes.athtml.highlighting.tokens.node;
 
 
 
@@ -10,10 +10,10 @@ import org.eclipse.jface.text.rules.Token;
 
 
 
-public class Rich extends Token {
+public class Node extends Token {
 
 	public static int UNDEFINED_INT = -1;
-	public static Rich UNDEFINED = new Rich(false);
+	public static Node UNDEFINED = new Node(false);
 
 	private List<IToken> children = new ArrayList<IToken>();
 	private int offset = -1;
@@ -24,22 +24,22 @@ public class Rich extends Token {
 
 
 
-	public Rich(Object data, int offset, int length) {
+	public Node(Object data, int offset, int length) {
 		super(data);
 		this.offset = offset;
 		this.length = length;
 	}
 
-	public Rich() {
+	public Node() {
 		super(null);
 	}
 
-	public Rich(Boolean defined) {
+	public Node(Boolean defined) {
 		super(null);
 		this.setDefined(defined);
 	}
 
-	public Rich(Object data) {
+	public Node(Object data) {
 		super(data);
 	}
 
@@ -105,8 +105,8 @@ public class Rich extends Token {
 
 
 
-	public Rich clone() {
-		Rich newToken = new Rich();
+	public Node clone() {
+		Node newToken = new Node();
 
 		newToken.setData(this.getData());
 

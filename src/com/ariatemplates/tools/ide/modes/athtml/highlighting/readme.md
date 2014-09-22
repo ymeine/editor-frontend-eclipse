@@ -17,7 +17,18 @@ Classes:
 
 - [`SpecificRuleBasedScanner.java`](./SpecificRuleBasedScanner.java): the entry point for highlighting, the actual code doing the work and used by Eclipse
 - [`RulesStore.java`](./RulesStore.java): manages the set of rules
-- [`TokensStore.java`](./TokensStore.java): manages the set of tokens
+
+
+
+
+
+# Documentation: `RulesStore`
+
+To be used as a __singleton__.
+
+## Description
+
+This is factory to create parsing rules that return tokens.
 
 
 
@@ -29,13 +40,13 @@ Classes:
 
 ### Rules
 
-- [Package `org.eclipse.jface.text.rules`](http://help.eclipse.org/luna/index.jsp?topic=%2Forg.eclipse.platform.doc.isv%2Freference%2Fapi%2Forg%2Feclipse%2Fjface%2Ftext%2Frules%2Fpackage-summary.html)
-- [Class `RuleBasedScanner`](http://help.eclipse.org/luna/index.jsp?topic=%2Forg.eclipse.platform.doc.isv%2Freference%2Fapi%2Forg%2Feclipse%2Fjface%2Ftext%2Frules%2FRuleBasedScanner.html)
-- [Interface `IRule`](http://help.eclipse.org/luna/index.jsp?topic=%2Forg.eclipse.platform.doc.isv%2Freference%2Fapi%2Forg%2Feclipse%2Fjface%2Ftext%2Frules%2FIRule.html)
+- [Package `org.eclipse.jface.text.rules`](http://help.eclipse.org/index.jsp?topic=%2Forg.eclipse.platform.doc.isv%2Freference%2Fapi%2Forg%2Feclipse%2Fjface%2Ftext%2Frules%2Fpackage-summary.html)
+- [Class `RuleBasedScanner`](http://help.eclipse.org/index.jsp?topic=%2Forg.eclipse.platform.doc.isv%2Freference%2Fapi%2Forg%2Feclipse%2Fjface%2Ftext%2Frules%2FRuleBasedScanner.html)
+- [Interface `IRule`](http://help.eclipse.org/index.jsp?topic=%2Forg.eclipse.platform.doc.isv%2Freference%2Fapi%2Forg%2Feclipse%2Fjface%2Ftext%2Frules%2FIRule.html)
 
 ### Tokens
 
-- [Class `Token`](http://help.eclipse.org/luna/index.jsp?topic=%2Forg.eclipse.platform.doc.isv%2Freference%2Fapi%2Forg%2Feclipse%2Fjface%2Ftext%2Frules%2FToken.html)
+- [Class `Token`](http://help.eclipse.org/index.jsp?topic=%2Forg.eclipse.platform.doc.isv%2Freference%2Fapi%2Forg%2Feclipse%2Fjface%2Ftext%2Frules%2FToken.html)
 
 
 ----
@@ -60,15 +71,15 @@ First let's recap the model around a highlighted content, before explaining the 
 
 Let's start form the beginning.
 
-We first have what we call __documents__. A document is a __model__ similar to a text file, but focusing only on what it contains instead of additionally dealing with how to store it, access it, and so on.
+We first have what we call __documents__. A document is a __model__ similar to a text file, but __focusing__ only __on what it contains__ instead of additionally dealing with how to store it, access it, and so on.
 
-In our case, documents contain __text__. A text ([formal definition](https://en.wikipedia.org/wiki/Text_(literary_theory)), [_text file_ definition](https://en.wikipedia.org/wiki/Text_file)) is one __representation__ of the content of a document. We can define it as: a sequence a characters.
+In our case, documents contain __text__. A text ([formal definition](https://en.wikipedia.org/wiki/Text_(literary_theory)), [_text file_ definition](https://en.wikipedia.org/wiki/Text_file)) is one __representation__ of the content of a document. We can define it as: a __sequence a characters__.
 
-However, this representation is too generic, and someone/something reading this text will have to perform additional processing in order to make use of it.
+However, this representation is __too generic__, and someone/something reading this text will have to perform additional processing in order to make use of it.
 
-That's why we have an additional __model__, adding semantics, which is the [_(source) code_](https://en.wikipedia.org/wiki/Source_code). This is however rather complex and source code can be associated to __several__ other __models and representations__. We'll explain the main one though.
+That's why we have an __additional model__, adding semantics, which is the [_(source) code_](https://en.wikipedia.org/wiki/Source_code). This is however rather complex and source code can be associated to __several__ other __models and representations__. We'll explain the main one though.
 
-Finally, a source code is just a human representation of a [_program_](https://en.wikipedia.org/wiki/Computer_program).
+__Finally, a source code is just a human representation of a [_program_](https://en.wikipedia.org/wiki/Computer_program).__
 
 ### The model of a source code
 
@@ -84,22 +95,26 @@ Parsing can produce and/or be related to several representations/models of the s
 
 __The above is part of the common practices but we don't stick to it as is__, please read the following remarks.
 
-Why do we use a tree for the syntax? Because we have a progressive hence hierarchical level of details of how a source code is structured. Therefore children of a given node will tell with more detail how the node is structured.
+- Why do we use a tree for the syntax?
 
-Usually, only the tokens and the AST are used, the ASG being more marginal and maybe too specific although close to the AST.
+    Because we have a progressive hence hierarchical level of details of how a source code is structured. Therefore children of a given node will tell with more detail how the node is structured.
 
-Then, tokens don't really represent the source code, they are just a better way to represent the text making the source code. They will represent things that can be essential to build the actual model of the code (the AST), such as white spaces, but that can also be dropped because considered irrelevant.
+- Usually, only the tokens and the AST are used, the ASG being more marginal and maybe too specific although close to the AST.
+
+- Then, tokens don't really represent the source code, they are just a better way to represent the text making the source code.
+
+    They will represent things that can be essential to build the actual model of the code (the AST), such as white spaces, but that can also be dropped because considered irrelevant.
 
 ### Our model of a source code
 
-Our ideal model don't bother with intermediate representation or anything. It tends to be exhaustive and flexible.
+__Our ideal model don't bother with intermediate representation or anything. It tends to be exhaustive and flexible.__
 
 It is based on the AST principle, but addressing the following concerns: 
 
-- usual AST are closer to the representation of a program rather than the one of the source code. A source code can be represented as a text, so our representation should not drop any of its information, such as white spaces and so on (see a source code as being a [serialized](https://en.wikipedia.org/wiki/Serialization) form of a program).
-- an AST, as its name stands, is a _tree_. The structure is indeed hierarchical and does not require linking foreign nodes. However, we can add some convenient links, such as `parent` and so on, which turn it into a _graph_.
+- usual AST are closer to the representation of a program rather than the one of the source code. A source code can be represented as a text, so our representation should __not drop any__ of its __information__, such as white spaces and so on (think about a source code as being a [serialized](https://en.wikipedia.org/wiki/Serialization) form of a program).
+- an AST, as its name stands, is a _tree_. The structure is indeed hierarchical and does not require linking foreign nodes. However, we can add some convenient links, such as `parent` and so on, which turn it into a ___graph___.
 
-Otherwise, this is as an AST: 
+Otherwise, this is like an AST: 
 
 - a __node describes what a portion of source code represents__
 - its __children represent more specific portions__ of this whole portion
@@ -109,21 +124,17 @@ Otherwise, this is as an AST:
 
 Highlighting adds colors to each node of our graph representing source code.
 
-In order not to pollute visual space, overlapping is avoided, so naturally only leaves have highlighting information.
+In order not to pollute visual space we avoid overlapping so only leaves get highlighting information.
 
 
-----
 
-The section below is old and needs review.
-
-----
 
 
 # Documentation
 
 This package implements the highlighting concepts by using the Eclipse API. This means that models described above have to be adapted.
 
-For now, it handles highlights only Aria Templates' Atlas templates.
+For now, it highlights only Aria Templates' Atlas templates.
 
 ## The Eclipse model
 
@@ -136,7 +147,7 @@ In order to produce tokens, there are several possibilities:
 - extract it from a model produced by an external entity (the backend for instance)
 - create them by parsing the scanned document's portion, using the Eclipse API
 
-While the first solution is the best one regarding design, the second one is applied here for performances purposes. We will move to the first one when the backend can provide as much or close efficiency.
+__While the first solution is the best one regarding design, the second one is applied here for performances purposes__. We will move to the first one when the backend can provide as much or close efficiency.
 
 ### The scanner
 
@@ -145,7 +156,25 @@ Tokens have a tree structure that the scanner is able to flatten in order to pro
 
 The scanner can also be used within rules in order to tokenize a portion of the document, thus allowing a recursive analysis of the source and return the corresponding hierarchical structure of tokens.
 
-## Getting tokens using the backend
+## Highlighting using the backend
+
+Please refer to the official backend documentation regarding this task: [editor-backend/client.md at version/0.1.x · ariatemplates/editor-backend](https://github.com/ariatemplates/editor-backend/blob/version/0.1.x/client.md#request-highlighting).
+
+The following:
+
+```java
+Backend.get().service(document, "stylesheet");
+```
+
+returns the stylesheet for the document's mode. A stylesheet simply maps token types to display information, such as color and font.
+
+To get the actual ranges to be highlighted: 
+
+```java
+Backend.get().service(document, "highlight");
+```
+
+This returns a list of ranges to highlight, a range having start and end offsets and an associated token type, to match with display information using the stylesheet. 
 
 ## Getting tokens using the Eclipse API
 
@@ -161,4 +190,4 @@ Complex rules are based on class  [`ContainerRule.java`](./ContainerRule.java), 
 ## Tokens
 
 Tokens are provided by the singleton [`TokensStore.java`](./TokensStore.java). Each of them comes with a color that is used to highlight the corresponding content. Colors are hard-coded inside this class.
-Each token is an instance of [`RichToken.java`](./RichToken.java), which enhances the base class provided by existing packages in order to add features (like a children property that allows nested tokens).
+Each token is an instance of [`RichToken.java`](./RichToken.java), which enhances the base class (provided by the Eclipse API) in order to add features (like a children property that allows nested tokens).

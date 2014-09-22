@@ -20,6 +20,7 @@ import com.ariatemplates.tools.ide.modes.athtml.highlighting.rules.Object;
 import com.ariatemplates.tools.ide.modes.athtml.highlighting.rules.Statement;
 import com.ariatemplates.tools.ide.modes.athtml.highlighting.rules.Tag;
 import com.ariatemplates.tools.ide.modes.athtml.highlighting.rules.Word;
+import com.ariatemplates.tools.ide.modes.athtml.highlighting.tokens.TokensStore;
 
 
 

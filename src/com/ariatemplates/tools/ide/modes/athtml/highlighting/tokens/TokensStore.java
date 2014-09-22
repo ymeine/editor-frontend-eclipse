@@ -1,4 +1,4 @@
-package com.ariatemplates.tools.ide.modes.athtml.highlighting;
+package com.ariatemplates.tools.ide.modes.athtml.highlighting.tokens;
 
 
 
@@ -9,7 +9,7 @@ import org.eclipse.jface.text.TextAttribute;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
 
-import com.ariatemplates.tools.ide.modes.athtml.highlighting.tokens.Rich;
+import com.ariatemplates.tools.ide.modes.athtml.highlighting.tokens.node.Node;
 
 
 
@@ -112,8 +112,8 @@ public class TokensStore {
 
 
 
-	public Rich getToken(String type, int offset, int length) {
-		Rich returnToken = this.getToken(type);
+	public Node getToken(String type, int offset, int length) {
+		Node returnToken = this.getToken(type);
 
 		returnToken.setOffset(offset);
 		returnToken.setLength(length);
@@ -121,12 +121,12 @@ public class TokensStore {
 		return returnToken;
 	}
 
-	public Rich getToken(String type) {
+	public Node getToken(String type) {
 		int[] rgb = this.colorMap.get(type);
 
-		Rich returnToken;
+		Node returnToken;
 		if (rgb != null) {
-			returnToken = new Rich(
+			returnToken = new Node(
 				new TextAttribute(
 					new Color(
 						Display.getCurrent(),
@@ -135,7 +135,7 @@ public class TokensStore {
 				)
 			);
 		} else {
-			returnToken = new Rich();
+			returnToken = new Node();
 		}
 
 		returnToken.setType(type);

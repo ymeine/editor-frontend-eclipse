@@ -7,8 +7,8 @@ import org.eclipse.jface.text.rules.IToken;
 
 import com.ariatemplates.tools.ide.modes.athtml.highlighting.RulesStore;
 import com.ariatemplates.tools.ide.modes.athtml.highlighting.SpecificRuleBasedScanner;
-import com.ariatemplates.tools.ide.modes.athtml.highlighting.TokensStore;
-import com.ariatemplates.tools.ide.modes.athtml.highlighting.tokens.Rich;
+import com.ariatemplates.tools.ide.modes.athtml.highlighting.tokens.TokensStore;
+import com.ariatemplates.tools.ide.modes.athtml.highlighting.tokens.node.Node;
 
 
 
@@ -26,7 +26,7 @@ public class StringRule extends Container {
 		
 		if ((nextChar != '"' && nextChar != '\'') || next == ICharacterScanner.EOF) {
 			this.rewind();
-			return Rich.UNDEFINED;
+			return Node.UNDEFINED;
 		}
 		
 		stringDelimiter = next;
@@ -50,7 +50,7 @@ public class StringRule extends Container {
 				this.start + this.offset
 			);
 			
-			Rich nextToken = subscanner.getToken(true);
+			Node nextToken = subscanner.getToken(true);
 			int tokenizedLentgh = subscanner.getTokenizedLength() - 1;
 			
 			if (tokenizedLentgh > 0) {
@@ -61,7 +61,7 @@ public class StringRule extends Container {
 			} else {
 				if (next == ICharacterScanner.EOF) {
 					this.rewind();
-					return Rich.UNDEFINED;
+					return Node.UNDEFINED;
 				}
 				
 				this.addToken(TokensStore.get().getToken(

@@ -5,8 +5,8 @@ package com.ariatemplates.tools.ide.modes.athtml.highlighting.rules;
 import org.eclipse.jface.text.rules.ICharacterScanner;
 import org.eclipse.jface.text.rules.IToken;
 
-import com.ariatemplates.tools.ide.modes.athtml.highlighting.TokensStore;
-import com.ariatemplates.tools.ide.modes.athtml.highlighting.tokens.Rich;
+import com.ariatemplates.tools.ide.modes.athtml.highlighting.tokens.TokensStore;
+import com.ariatemplates.tools.ide.modes.athtml.highlighting.tokens.node.Node;
 
 
 
@@ -26,7 +26,7 @@ public class Key extends Container {
 		
 		if (next == ICharacterScanner.EOF || forbiddenChars.indexOf(nextChar) != -1) {
 			this.rewind();
-			return Rich.UNDEFINED;
+			return Node.UNDEFINED;
 		}
 
 		if (nextChar == '"' || nextChar == '\'') {
@@ -45,7 +45,7 @@ public class Key extends Container {
 			while (next != stringDelimiter || (next == stringDelimiter && previousChar == '\\')) {
 				if (next == ICharacterScanner.EOF) {
 					this.rewind();
-					return Rich.UNDEFINED;
+					return Node.UNDEFINED;
 				}
 				
 				this.addToken(TokensStore.get().getToken(
