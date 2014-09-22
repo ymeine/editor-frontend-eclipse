@@ -116,4 +116,4 @@ One of the thing I'm thinking about is to make a generic implementation of actua
 - manage properly default tokens and returning undefined tokens
 - take care of the EOF throughout the whole process
 
-__Procedure__: refactor all classes to extract from the main method the different steps described above. If the `evaluate` methods becomes the same for all classes, it's a win, just move it to teh base class!
+__Procedure__: refactor all classes to extract from the main method the different steps described above. If the `evaluate` methods becomes the same for all classes, it's a win, just move it to the base class!

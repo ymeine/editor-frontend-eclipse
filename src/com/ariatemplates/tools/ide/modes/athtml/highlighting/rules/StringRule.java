@@ -18,31 +18,31 @@ public class StringRule extends Container {
 	public IToken evaluate(ICharacterScanner initialScanner) {
 		super.evaluate(initialScanner);
 		
-		int stringDelimiter;
-		char previousChar = ' ';
-
-		int next = this.read();
-		char nextChar = (char) next;
 		
-		if ((nextChar != '"' && nextChar != '\'') || next == ICharacterScanner.EOF) {
+		
+		if (!this.detectRule()) {
 			this.rewind();
 			return Node.UNDEFINED;
 		}
-		
-		stringDelimiter = next;
-		int[] rulesTypes = { RulesStore.STATEMENT, RulesStore.EXPRESSION };
-
-		this.addToken(TokensStore.get().getToken(
+		this.addToken(this.tokenStore.getToken(
 			TokensStore.STRING,
 			this.start + this.offset,
 			1
 		));
-
-		previousChar = nextChar;
-		next = this.read();
-		nextChar = (char) next;
 		
-		while (next != stringDelimiter || (next == stringDelimiter && previousChar == '\\')) {
+		
+		
+		char lastCharacter = this.buffer.charAt(this.buffer.length() - 1);
+		char stringDelimiter = lastCharacter;
+		char previousChar = lastCharacter;
+		
+		char next = (char) this.read();
+		while (!(next == stringDelimiter && previousChar != '\\')) {
+			int[] rulesTypes = {
+				RulesStore.STATEMENT,
+				RulesStore.EXPRESSION
+			};
+	
 			SpecificRuleBasedScanner subscanner = new SpecificRuleBasedScanner(
 				TokensStore.STRING,
 				rulesTypes,
@@ -64,24 +64,33 @@ public class StringRule extends Container {
 					return Node.UNDEFINED;
 				}
 				
-				this.addToken(TokensStore.get().getToken(
+				this.addToken(this.tokenStore.getToken(
 					TokensStore.STRING,
 					this.start + this.offset,
 					1
 				));
 			}
 			
-			previousChar = nextChar;
-			next = this.read();
-			nextChar = (char) next;
+			previousChar = next;
+			next = (char) this.read();
 		}
 		
-		this.addToken(TokensStore.get().getToken(
+		this.addToken(this.tokenStore.getToken(
 			TokensStore.STRING,
 			this.start + this.offset,
 			1
 		));
 
 		return this.containerToken;
+	}
+	
+	protected boolean detectRule() {
+		char next = (char) this.read();
+		
+		if ((next != '"' && next != '\'') || next == ICharacterScanner.EOF) {
+			return false;
+		}
+		
+		return true;
 	}
 }

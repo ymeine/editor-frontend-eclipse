@@ -47,14 +47,12 @@ public class Word extends Container {
 	public IToken evaluate(ICharacterScanner initialScanner) {
 		super.evaluate(initialScanner);
 
-		int next = this.read();
-		char nextChar = (char) next;
+		char next = (char) this.read();
 		int counter = 1;
 		int index = this.words.indexOf(this.buffer);
 
-		while (next != ICharacterScanner.EOF && nextChar != '\r' && nextChar != '\n' && counter < this.maxLength && index == -1) {
-			next = this.read();
-			nextChar = (char) next;
+		while (next != ICharacterScanner.EOF && next != '\r' && next != '\n' && counter < this.maxLength && index == -1) {
+			next = (char) this.read();
 			counter++;
 			index = this.words.indexOf(this.buffer);
 		}
