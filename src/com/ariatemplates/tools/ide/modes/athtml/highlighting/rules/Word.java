@@ -22,17 +22,30 @@ public class Word extends BaseRule {
 	private Node defaultToken;
 	private int maxLength = 0;
 
+
+
+	private void setRuleName() {
+		this.ruleName = "Word";
+		this.__debug__ = true;
+	}
+
 	public Word(String[] words, Node[] tokens) {
+		this.setRuleName();
+
 		this.words = new ArrayList<String>(Arrays.asList(words));
 		this.maxLength = this.longestWordLength(words);
 		this.tokens = new ArrayList<Node>(Arrays.asList(tokens));
 	}
 
 	public Word(String[] words, Node defaultToken) {
+		this.setRuleName();
+
 		this.words = new ArrayList<String>(Arrays.asList(words));
 		this.maxLength = this.longestWordLength(words);
 		this.defaultToken = defaultToken;
 	}
+
+
 
 	public int longestWordLength(String[] words) {
 		List<Integer> lengths = new ArrayList<Integer>(words.length);
@@ -43,6 +56,8 @@ public class Word extends BaseRule {
 
 		return Collections.max(lengths);
 	}
+
+
 
 	@Override
 	public IToken evaluate(ICharacterScanner initialScanner) {

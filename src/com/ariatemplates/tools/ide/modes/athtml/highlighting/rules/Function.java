@@ -20,6 +20,15 @@ public class Function extends BaseRule {
 	private static final String KEYWORD = "function";
 	private static final int KEYWORD_LENGTH = KEYWORD.length();
 
+
+
+	public Function() {
+		this.ruleName = "Function";
+		this.__debug__ = true;
+	}
+
+
+
 	@Override
 	public IToken evaluate(ICharacterScanner initialScanner) {
 		super.evaluate(initialScanner);

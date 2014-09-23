@@ -24,12 +24,18 @@ public class BaseRule implements IRule {
 	protected RulesStore rulesStore = RulesStore.get();
 
 	protected int start = 0;
-	protected SpecificRuleBasedScanner scanner = null;
-	protected Buffer buffer;
 	protected int offset = -1;
+
+	protected SpecificRuleBasedScanner scanner = null;
 	protected Node containerToken = null;
+
+	protected Buffer buffer;
 	protected int current;
 
+	protected String ruleName = "BaseRule";
+	protected boolean __debug__ = false;
+	
+	
 	/**
 	 * Sets some properties that are useful when reading a scanner
 	 *
@@ -37,6 +43,10 @@ public class BaseRule implements IRule {
 	 */
 	@Override
 	public IToken evaluate(ICharacterScanner initialScanner) {
+		if (this.__debug__) {
+			System.out.println("parsing: " + this.ruleName);
+		}
+
 		this.scanner = (SpecificRuleBasedScanner) initialScanner;
 		this.containerToken = this.tokenStore.getToken(TokensStore.CONTAINER);
 

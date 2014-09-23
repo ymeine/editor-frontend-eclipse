@@ -15,15 +15,19 @@ import com.ariatemplates.tools.ide.modes.athtml.highlighting.tokens.node.Node;
 
 public class Tag extends BaseRule {
 
+	public Tag() {
+		this.ruleName = "Tag";
+		this.__debug__ = true;
+	}
+
+
 	@Override
 	public IToken evaluate(ICharacterScanner initialScanner) {
 		super.evaluate(initialScanner);
 
 		// --------------------------------------------------------- detect rule
 
-		this.read();
-
-		if (this.current != '<' || this.isEOF()) {
+		if (!this.detectRule()) {
 			this.rewind();
 			return Node.UNDEFINED;
 		}
@@ -88,6 +92,17 @@ public class Tag extends BaseRule {
 		// --------------------------------------------------------- end of rule
 
 		return this.containerToken;
+	}
+
+
+	private boolean detectRule() {
+		this.read();
+
+		if (this.current != '<' || this.isEOF()) {
+			return false;
+		}
+
+		return true;
 	}
 
 }

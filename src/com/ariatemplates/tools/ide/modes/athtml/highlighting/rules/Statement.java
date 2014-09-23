@@ -2,10 +2,7 @@ package com.ariatemplates.tools.ide.modes.athtml.highlighting.rules;
 
 
 
-import java.util.List;
-
 import org.eclipse.jface.text.rules.ICharacterScanner;
-import org.eclipse.jface.text.rules.IRule;
 import org.eclipse.jface.text.rules.IToken;
 
 import com.ariatemplates.tools.ide.modes.athtml.highlighting.BaseRule;
@@ -17,98 +14,111 @@ import com.ariatemplates.tools.ide.modes.athtml.highlighting.tokens.node.Node;
 
 public class Statement extends BaseRule {
 
+	private int bracketsCount;
+	private boolean isStatementNameOver;
+
+	public Statement() {
+		this.ruleName = "Statement";
+		this.__debug__ = true;
+
+		this.bracketsCount = 0;
+		this.isStatementNameOver = false;
+	}
+
 	@Override
 	public IToken evaluate(ICharacterScanner initialScanner) {
 		super.evaluate(initialScanner);
 
-		// ---------------------------------------------------------------------
-
-		int bracketsCount = 0;
+		// --------------------------------------------------------- detect rule
 
 		this.read();
-
-		if (this.current != '{' || this.isEOF()) {
+		if (this.isEOF() || !this.detectRule()) {
 			this.rewind();
 			return Node.UNDEFINED;
 		}
 
-		bracketsCount++;
-		this.addToken(
-			TokensStore.STATEMENT,
-			1
-		);
+		this.addToken(TokensStore.STATEMENT, 1);
 
-		// ---------------------------------------------------------------------
+		// ------------------------------------------------ parsing: sub content
 
-		boolean isStatementnameOver = false;
-		List<IRule> rules = this.rulesStore.getPrimitiveRules();
+		boolean isRuleOver = false;
+		do {
+			isRuleOver = this.continueParsing();
+		} while (!this.isEOF() && !isRuleOver);
 
-		while (!this.isEOF() && bracketsCount > 0) {
-			this.read();
-
-			SpecificRuleBasedScanner subscanner = this.createScanner(
-				TokensStore.DEFAULT,
-				rules
-			);
-
-			Node nextToken = subscanner.getToken(true);
-			int tokenizedLentgh = subscanner.getTokenizedLength() - 1;
-
-			if (tokenizedLentgh > 0) {
-				isStatementnameOver = true;
-
-				this.addToken(nextToken);
-
-				this.read(tokenizedLentgh - 1);
-			} else {
-				if (this.current == ' ') {
-					isStatementnameOver = true;
-				}
-				if (this.current == '{' && this.buffer.content.get(this.offset - 1) != '\\') {
-					isStatementnameOver = true;
-					bracketsCount++;
-				}
-				if (this.current == '}' && this.buffer.content.get(this.offset - 1) != '\\') {
-					isStatementnameOver = true;
-					bracketsCount--;
-				}
-
-				if (bracketsCount == 0) {
-					if (this.buffer.content.get(this.offset - 1) == '/') {
-						this.removeLastToken();
-
-						this.addToken(
-							TokensStore.STATEMENT,
-							this.offset - 1,
-							2
-						);
-					} else {
-						this.addToken(
-							TokensStore.STATEMENT,
-							1
-						);
-					}
-				} else if (!this.isEOF()) {
-					if (!isStatementnameOver) {
-						this.addToken(
-							TokensStore.STATEMENT,
-							1
-						);
-					} else {
-						this.addToken(
-							TokensStore.STATEMENT_ARGS,
-							1
-						);
-					}
-				}
-			}
-		}
+		// ------------------------------------------------------ end of parsing
 
 		if (this.isEOF()) {
 			this.unread();
 		}
 
 		return this.containerToken;
+	}
 
+	protected boolean detectRule() {
+		if (this.current != '{') {
+			return false;
+		}
+
+		this.bracketsCount = 1;
+		return true;
+	}
+
+	protected boolean continueParsing() {
+		boolean isRuleOver = false;
+
+		this.read();
+
+		SpecificRuleBasedScanner subscanner = this.createScanner(
+			TokensStore.DEFAULT,
+			this.rulesStore.getPrimitiveRules()
+		);
+
+		Node nextToken = subscanner.getToken(true);
+		int tokenizedLentgh = subscanner.getTokenizedLength() - 1;
+
+		if (tokenizedLentgh > 0) {
+			this.isStatementNameOver = true;
+
+			this.addToken(nextToken);
+
+			this.read(tokenizedLentgh - 1);
+		} else {
+			int previous = this.buffer.content.get(this.offset - 1);
+
+			if (this.current == ' ') {
+				this.isStatementNameOver = true;
+			} else if (this.current == '{' && previous != '\\') {
+				this.isStatementNameOver = true;
+				this.bracketsCount++;
+			} else if (this.current == '}' && previous != '\\') {
+				this.isStatementNameOver = true;
+				this.bracketsCount--;
+			}
+
+			if (this.bracketsCount == 0) {
+				isRuleOver = true;
+
+				if (previous == '/') {
+					this.removeLastToken();
+
+					this.addToken(
+						TokensStore.STATEMENT,
+						this.offset - 1,
+						2
+					);
+				} else {
+					this.addToken(TokensStore.STATEMENT, 1);
+				}
+			} else if (!this.isEOF()) {
+				if (!this.isStatementNameOver) {
+					this.addToken(TokensStore.STATEMENT, 1);
+				} else {
+					this.addToken(TokensStore.STATEMENT_ARGS, 1);
+				}
+			}
+		}
+
+		return isRuleOver;
 	}
 }

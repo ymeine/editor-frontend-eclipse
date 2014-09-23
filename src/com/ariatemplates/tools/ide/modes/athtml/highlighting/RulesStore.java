@@ -84,6 +84,10 @@ public class RulesStore {
 		OBJECT,
 		ARRAY
 	};
+	
+	public int[] getPrimitiveRulesTypes() {
+		return this.primitiveRulesTypes;
+	}
 
 	/**
 	 * @return the default rules

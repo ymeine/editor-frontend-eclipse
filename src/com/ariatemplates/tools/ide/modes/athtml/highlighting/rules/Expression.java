@@ -17,6 +17,12 @@ import com.ariatemplates.tools.ide.modes.athtml.highlighting.tokens.node.Node;
 
 public class Expression extends BaseRule {
 
+	public Expression() {
+		this.ruleName = "Expression";
+		this.__debug__ = true;
+	}
+
+
 	@Override
 	public IToken evaluate(ICharacterScanner initialScanner) {
 		super.evaluate(initialScanner);

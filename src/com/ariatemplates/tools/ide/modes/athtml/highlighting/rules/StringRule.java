@@ -15,6 +15,12 @@ import com.ariatemplates.tools.ide.modes.athtml.highlighting.tokens.node.Node;
 
 public class StringRule extends BaseRule {
 
+	public StringRule() {
+		this.ruleName = "String";
+		this.__debug__ = true;
+	}
+
+
 	@Override
 	public IToken evaluate(ICharacterScanner initialScanner) {
 		super.evaluate(initialScanner);
