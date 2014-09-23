@@ -5,6 +5,7 @@ package com.ariatemplates.tools.ide.modes.athtml.highlighting.rules;
 import org.eclipse.jface.text.rules.ICharacterScanner;
 import org.eclipse.jface.text.rules.IToken;
 
+import com.ariatemplates.tools.ide.modes.athtml.highlighting.BaseRule;
 import com.ariatemplates.tools.ide.modes.athtml.highlighting.RulesStore;
 import com.ariatemplates.tools.ide.modes.athtml.highlighting.SpecificRuleBasedScanner;
 import com.ariatemplates.tools.ide.modes.athtml.highlighting.tokens.TokensStore;
@@ -12,30 +13,34 @@ import com.ariatemplates.tools.ide.modes.athtml.highlighting.tokens.node.Node;
 
 
 
-public class Tag extends Container {
+public class Tag extends BaseRule {
 
 	@Override
 	public IToken evaluate(ICharacterScanner initialScanner) {
 		super.evaluate(initialScanner);
 
-		int next = this.read();
-		char nextChar = (char) next;
-		
-		if (nextChar != '<' || next == ICharacterScanner.EOF) {
+		// --------------------------------------------------------- detect rule
+
+		this.read();
+
+		if (this.current != '<' || this.isEOF()) {
 			this.rewind();
 			return Node.UNDEFINED;
 		}
-		
-		while (nextChar != ' ' && nextChar != '>' && next != ICharacterScanner.EOF) {
-			next = this.read();
-			nextChar = (char) next;
+
+		// ---------------------------------------------------- tokenize: tag id
+
+		while (this.current != ' ' && this.current != '>' && !this.isEOF()) {
+			this.read();
 		}
 
-		this.addToken(TokensStore.get().getToken(
+		this.addToken(
 			TokensStore.TAG,
-			this.start,
-			this.buffer.length() - 1
-		));
+			0,
+			this.buffer.lastIndex()
+		);
+
+		// ----------------------------------------------- tokenize: sub content
 
 		int[] rulesTypes = {
 			RulesStore.STATEMENT,
@@ -44,41 +49,43 @@ public class Tag extends Container {
 			RulesStore.TAG_ATTRIBUTE
 		};
 
-		while (next != ICharacterScanner.EOF) {
-			SpecificRuleBasedScanner subscanner = new SpecificRuleBasedScanner(
+		while (!this.isEOF()) {
+			SpecificRuleBasedScanner subscanner = this.createScanner(
 				TokensStore.DEFAULT,
-				rulesTypes,
-				this.scanner.getDocument(),
-				this.start + this.offset
+				rulesTypes
 			);
+
 			Node nextToken = subscanner.getToken(true);
 			int tokenizedLentgh = subscanner.getTokenizedLength() - 1;
-			
+
+		// -------------------------------------------- alternative: sub content
 			if (tokenizedLentgh > 0) {
 				this.addToken(nextToken);
 				this.read(tokenizedLentgh - 1);
 			} else {
-				if (nextChar == '>' || nextChar == '/') {
-					this.addToken(TokensStore.get().getToken(
-						TokensStore.TAG,
-						this.start + this.offset,
-						1
-					));
-					
-					if (nextChar == '>') {
-						return this.containerToken;
-					}
-				} else {
-					this.addToken(TokensStore.get().getToken(
+		// ------------------------------------ alternative: unknown sub content
+				if (this.current != '>' && this.current != '/') {
+					this.addToken(
 						TokensStore.DEFAULT,
-						this.start + this.offset,
 						1
-					));
+					);
+				} else {
+		// -------------------------------------------- alternative: end of rule
+					this.addToken(
+						TokensStore.TAG,
+						1
+					);
+
+					if (this.current == '>') {
+						return this.containerToken; // ------------------ return
+					}
 				}
 			}
-			next = this.read();
-			nextChar = (char) next;
+
+			this.read();
 		}
+
+		// --------------------------------------------------------- end of rule
 
 		return this.containerToken;
 	}
